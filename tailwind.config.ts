@@ -1,0 +1,131 @@
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  darkMode: false, // Disable dark mode selector
+  theme: {
+    extend: {
+      colors: {
+        jet_black: {
+          DEFAULT: "#1f2937",
+          100: "#06080b",
+          200: "#0c1116",
+          300: "#131921",
+          400: "#19212c",
+          500: "#1f2937",
+          600: "#3e526e",
+          700: "#5c7aa4",
+          800: "#93a6c2",
+          900: "#c9d3e1",
+        },
+        alabaster_grey: {
+          DEFAULT: "#d8dbe2",
+          100: "#262a33",
+          200: "#4b5366",
+          300: "#737e97",
+          400: "#a6adbd",
+          500: "#d8dbe2",
+          600: "#e1e3e8",
+          700: "#e8eaee",
+          800: "#f0f1f4",
+          900: "#f7f8f9",
+        },
+        ultrasonic_blue: {
+          DEFAULT: "#281fd6",
+          100: "#08062b",
+          200: "#100c56",
+          300: "#181281",
+          400: "#2018ab",
+          500: "#281fd6",
+          600: "#4d45e4",
+          700: "#7a74eb",
+          800: "#a6a2f2",
+          900: "#d3d1f8",
+        },
+        majorelle_blue: {
+          DEFAULT: "#4f46e5",
+          100: "#0a0835",
+          200: "#140f69",
+          300: "#1d179e",
+          400: "#271ed3",
+          500: "#4f46e5",
+          600: "#736dea",
+          700: "#9691ef",
+          800: "#b9b6f5",
+          900: "#dcdafa",
+        },
+        background: "rgb(var(--background) / <alpha-value>)",
+        surface: "rgb(var(--surface) / <alpha-value>)",
+        muted: "rgb(var(--muted) / <alpha-value>)",
+        border: "rgb(var(--border) / <alpha-value>)",
+        foreground: "rgb(var(--foreground) / <alpha-value>)",
+        "muted-foreground": "rgb(var(--muted-foreground) / <alpha-value>)",
+        accent: "rgb(var(--accent) / <alpha-value>)",
+        "accent-foreground": "rgb(var(--accent-foreground) / <alpha-value>)",
+        success: "rgb(var(--success) / <alpha-value>)",
+        danger: "rgb(var(--danger) / <alpha-value>)",
+      },
+      spacing: {
+        13: "3.25rem",
+        15: "3.75rem",
+        18: "4.5rem",
+        22: "5.5rem",
+        30: "7.5rem",
+      },
+      fontSize: {
+        xs: "0.75rem",
+        sm: "0.875rem",
+        base: "1rem",
+        md: "1.0625rem",
+        lg: "1.125rem",
+        xl: "1.25rem",
+        "2xl": "1.5rem",
+        "3xl": "1.875rem",
+      },
+      borderRadius: {
+        xs: "0.25rem",
+        sm: "0.375rem",
+        md: "0.5rem",
+        lg: "0.75rem",
+        xl: "1rem",
+        "2xl": "1.25rem",
+      },
+      zIndex: {
+        header: "10",
+        sidebar: "20",
+        overlay: "30",
+        modal: "40",
+        toast: "50",
+      },
+      boxShadow: {
+        soft: "0 4px 12px rgba(0,0,0,0.12)",
+        hard: "0 10px 30px rgba(0,0,0,0.18)",
+      },
+      width: {
+        sidebar: "4.5rem",
+        conversations: "20rem",
+        details: "22rem",
+      },
+      maxWidth: {
+        content: "1200px",
+      },
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: "1rem",
+          lg: "2rem",
+        },
+      },
+      fontFamily: {
+        sans: ["Inter", "system-ui", "sans-serif"],
+      },
+    },
+  },
+  plugins: [],
+};
+
+export default config;
