@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAuth } from "@/app/hooks/useAuth";
 import { Button } from "@/app/components/ui/Button";
 import { useRouter } from "next/navigation";
-import TextField from "../ui/TextFeild";
+import TextField from "../ui/TextField";
 
 // Validation Schema
 const loginSchema = yup.object({
@@ -34,35 +34,26 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 }) => {
   const { handleLogin, loading, error: authError } = useAuth();
   const { push } = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const {
+    register,
+    handleSubmit,
     formState: { errors },
-    trigger,
     setError,
   } = useForm<LoginFormData>({
     resolver: yupResolver(loginSchema),
     mode: "onChange",
   });
 
-  const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // Validate manually
-    const isValid = await trigger();
-    if (!isValid) return;
-
+  const onSubmit = async (data: LoginFormData) => {
     try {
-      const success = await handleLogin(email, password);
-
+      const success = await handleLogin(data.email, data.password);
       if (success) {
         push("/chat");
         if (onSuccess) {
           onSuccess();
         }
       }
-    } catch (error) {
+    } catch {
       setError("root", { message: "Login failed" });
     }
   };
@@ -81,29 +72,25 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmitForm} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-5">
           <TextField
             label="Email Address"
-            name="email"
             type="email"
             placeholder="name@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             error={errors.email?.message}
             required
+            {...register("email")}
           />
 
           <div className="space-y-1">
             <TextField
               label="Password"
-              name="password"
               type="password"
               placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               error={errors.password?.message}
               required
+              {...register("password")}
             />
             <div className="flex justify-end">
               <Button

@@ -1,12 +1,8 @@
 import { create } from "zustand";
 import { apiClient } from "../lib/apiClient"; // adjust path if needed
+import Cookies from "js-cookie";
 
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  username: string;
-};
+import type { User } from "../types/types";
 
 type AuthState = {
   user: User | null;
@@ -20,18 +16,15 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
 
   setAuth: (user, token) => {
-    localStorage.setItem("auth_token", token);
-    set({ user, isAuthenticated: true });
-
+    Cookies.set("token", token, { expires: 7, sameSite: "strict" });
     // Set axios default header
     apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    set({ user, isAuthenticated: true });
   },
 
   logout: () => {
-    localStorage.removeItem("auth_token");
-    set({ user: null, isAuthenticated: false });
-
-    // Clear axios header
+    Cookies.remove("token");
     delete apiClient.defaults.headers.common["Authorization"];
+    set({ user: null, isAuthenticated: false });
   },
 }));

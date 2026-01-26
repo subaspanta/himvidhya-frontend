@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAuth } from "@/app/hooks/useAuth";
 import { Button } from "@/app/components/ui/Button";
-import TextField from "../ui/TextFeild";
+import TextField from "../ui/TextField";
 
 // Validation Schema
 const registerSchema = yup.object({
@@ -36,31 +36,27 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   onSwitchToLogin,
 }) => {
   const { handleRegister, loading, error: authError } = useAuth();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const {
+    register,
+    handleSubmit,
     formState: { errors },
-    trigger,
     setError,
   } = useForm<RegisterFormData>({
     resolver: yupResolver(registerSchema),
     mode: "onChange",
   });
 
-  const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const isValid = await trigger();
-    if (!isValid) return;
-
+  const onSubmit = async (data: RegisterFormData) => {
     try {
-      const success = await handleRegister(email, password, name);
+      const success = await handleRegister(
+        data.email,
+        data.password,
+        data.name,
+      );
       if (success && onSuccess) {
         onSuccess();
       }
-    } catch (error) {
+    } catch {
       setError("root", { message: "Registration failed" });
     }
   };
@@ -76,39 +72,33 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         </p>
       </div>
 
-      <form onSubmit={handleSubmitForm} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-4">
           <TextField
             label="Full Name"
-            name="name"
             type="text"
             placeholder="John Doe"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
             error={errors.name?.message}
             required
+            {...register("name")}
           />
 
           <TextField
             label="Email Address"
-            name="email"
             type="email"
             placeholder="name@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             error={errors.email?.message}
             required
+            {...register("email")}
           />
 
           <TextField
             label="Password"
-            name="password"
             type="password"
             placeholder="Create a strong password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
             error={errors.password?.message}
             required
+            {...register("password")}
           />
         </div>
 

@@ -16,7 +16,6 @@ interface UseAuthReturn {
   ) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   user: any;
 }
 
@@ -38,13 +37,16 @@ export const useAuth = (): UseAuthReturn => {
     setSuccess(false);
 
     try {
-      const response = await loginUser({ email, password });
+      const { user, token } = await loginUser({ email, password });
 
-      // Assuming response.data contains { user, token }
-      const { user, token } = response.data;
-
-      // Update global store (which handles cookies)
-      setAuth(user, token);
+      // Ensure user object includes username property
+      setAuth(
+        {
+          ...user,
+          username: user.username ?? user.name ?? user.email, // fallback if username is missing
+        },
+        token,
+      );
 
       setSuccess(true);
       return true;
@@ -74,8 +76,14 @@ export const useAuth = (): UseAuthReturn => {
       // Assuming response.data contains { user, token }
       const { user, token } = response.data;
 
-      // Update global store
-      setAuth(user, token);
+      // Ensure user object includes username property
+      setAuth(
+        {
+          ...user,
+          username: user.username ?? user.name ?? user.email, // fallback if username is missing
+        },
+        token,
+      );
 
       setSuccess(true);
       return true;

@@ -30,6 +30,7 @@ export const Modal: React.FC<ModalProps> = ({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -96,7 +97,7 @@ export const Modal: React.FC<ModalProps> = ({
                   {title && (
                     <h2
                       id="modal-title"
-                      className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-200"
+                      className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-white to-gray-200"
                     >
                       {title}
                     </h2>

@@ -1,18 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { mockConversations, Conversation } from "@/app/data/mockData";
+import { mockConversations } from "@/app/data/mockData";
 import ChatLayout from "@/app/layouts/ChatLayout";
 import AppSidebar from "../components/AppSidebar";
 import ConversationList from "../components/ConversationList";
 import ChatArea from "../components/ChatArea";
 import ChatDetailsPanel from "../components/ChatDetailsPanel";
 
-export default function ChatPageLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function ChatPageLayout({}: { children: React.ReactNode }) {
   const [selectedConversationId, setSelectedConversationId] = useState<
     string | null
   >(mockConversations[0]?.id || null);
