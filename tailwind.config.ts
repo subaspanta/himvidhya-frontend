@@ -123,6 +123,15 @@ const config: Config = {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
       },
+      lineHeight: {
+        tight: "1.25", // For headings (already exists in Tailwind)
+        relaxed: "1.625", // For body text (already exists in Tailwind)
+      },
+      letterSpacing: {
+        tight: "-0.01em", // For large headings (already exists in Tailwind)
+        normal: "0", // Default (already exists in Tailwind)
+        wide: "0.025em", // For buttons/labels (already exists in Tailwind)
+      },
     },
   },
   plugins: [],

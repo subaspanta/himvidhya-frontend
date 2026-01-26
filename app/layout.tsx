@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Providers from "./components/Providers";
 
 export const metadata: Metadata = {
   title: "ChatApp",
@@ -13,7 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+        <div id="modal-root"></div>
+      </body>
     </html>
   );
 }

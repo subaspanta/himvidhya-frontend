@@ -28,7 +28,7 @@ export default function ChatPageLayout({
 
   return (
     <ChatLayout
-      sidebar={<AppSidebar />}
+      sidebar={<AppSidebar navItems={[]} />}
       conversationList={
         <ConversationList
           selectedId={selectedConversationId}

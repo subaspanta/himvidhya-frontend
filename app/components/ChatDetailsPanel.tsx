@@ -8,6 +8,7 @@ import {
   MediaItem,
   FileItem,
 } from "@/app/data/mockData";
+import Image from "next/image";
 
 interface ChatDetailsPanelProps {
   conversation: Conversation | null;
@@ -147,7 +148,7 @@ export default function ChatDetailsPanel({
                 key={media.id}
                 className="relative aspect-square rounded-md bg-jet_black-400 overflow-hidden"
               >
-                <img
+                <Image
                   src={media.url}
                   alt="Media"
                   className="w-full h-full object-cover"

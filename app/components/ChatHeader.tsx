@@ -24,7 +24,7 @@ export default function ChatHeader({
 
   // Count online members
   const onlineCount = conversation.participants.filter(
-    (p) => p.status === "online"
+    (p) => p.status === "online",
   ).length;
   const totalMembers = conversation.participants.length;
 
@@ -40,7 +40,9 @@ export default function ChatHeader({
         <h3 className="text-sm font-semibold text-alabaster_grey-900 truncate">
           {conversation.name}
         </h3>
-        <p className="text-xs text-jet_black-700 capitalize truncate">{statusText}</p>
+        <p className="text-xs text-jet_black-700 capitalize truncate">
+          {statusText}
+        </p>
       </div>
 
       {/* Right: Action Icons */}

@@ -1,14 +1,54 @@
-export default async function HomePage() {
-  const health = await fetch("http://localhost:5000/health").then((res) =>
-    res.json(),
-  );
+"use client";
+
+import React, { useState } from "react";
+import { AuthModals } from "@/app/components/modals/AuthModals";
+import { Button } from "./components/ui/Button";
+
+export default function Home() {
+  const [openModal, setOpenModal] = useState<"login" | "register" | null>(null);
+
+  const openLoginModal = () => setOpenModal("login");
+  const openRegisterModal = () => setOpenModal("register");
+  const closeModal = () => setOpenModal(null);
+
+  const handleSwitchToRegister = () => {
+    closeModal();
+    openRegisterModal();
+  };
+
+  const handleSwitchToLogin = () => {
+    closeModal();
+    openLoginModal();
+  };
 
   return (
-    <div className="p-10">
-      <h1 className="text-2xl font-bold">Chat App</h1>
-      <pre className="mt-4 bg-gray-100 p-4 rounded">
-        {JSON.stringify(health, null, 2)}
-      </pre>
+    <div className="flex items-center justify-center min-h-screen bg-jet_black-100">
+      <AuthModals
+        openModal={openModal}
+        onCloseModal={closeModal}
+        onSwitchToRegister={handleSwitchToRegister}
+        onSwitchToLogin={handleSwitchToLogin}
+      />
+
+      <div className="text-center">
+        <h1 className="text-4xl font-bold text-white mb-8">
+          Welcome to ChatApp
+        </h1>
+        <div className="flex gap-4 justify-center">
+          <Button
+            onClick={openLoginModal}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+          >
+            Login
+          </Button>
+          <Button
+            onClick={openRegisterModal}
+            className="px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700"
+          >
+            Register
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

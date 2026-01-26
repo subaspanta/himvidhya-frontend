@@ -1,25 +1,54 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import LogoutButton from "./LogoutButton";
 
-interface NavItem {
+export interface NavItem {
   id: string;
   icon: string;
   label: string;
-  ariaLabel: string;
+  ariaLabel?: string;
 }
 
-const navItems: NavItem[] = [
-  { id: "all-chats", icon: "💬", label: "All chats", ariaLabel: "All chats" },
-  { id: "work", icon: "💼", label: "Work", ariaLabel: "Work" },
-  { id: "meet", icon: "📋", label: "Meet", ariaLabel: "Meet" },
-  { id: "calendar", icon: "📅", label: "Calendar", ariaLabel: "Calendar" },
-  { id: "rating", icon: "⭐", label: "Rating", ariaLabel: "Rating" },
-  { id: "saved", icon: "🔖", label: "Saved", ariaLabel: "Saved" },
-];
+export interface FooterItem {
+  id: string;
+  icon: string;
+  label: string;
+  ariaLabel?: string;
+  onClick?: () => void;
+}
 
-export default function AppSidebar() {
-  const [activeNav, setActiveNav] = useState("all-chats");
+type Props = {
+  navItems: NavItem[];
+  footerItems?: FooterItem[];
+  initialActiveId?: string;
+  onNavChange?: (id: string) => void;
+};
+
+export default function AppSidebar({
+  navItems = [],
+  footerItems = [],
+  initialActiveId,
+  onNavChange,
+}: Props) {
+  const defaultActive = useMemo(
+    () => initialActiveId ?? navItems[0]?.id ?? "",
+    [initialActiveId, navItems],
+  );
+  const [activeNav, setActiveNav] = useState(defaultActive);
+
+  useEffect(() => {
+    // If current active no longer exists, pick first or empty
+    if (!navItems.find((n) => n.id === activeNav)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setActiveNav(initialActiveId ?? navItems[0]?.id ?? "");
+    }
+  }, [navItems, activeNav, initialActiveId]);
+
+  const handleNavClick = (id: string) => {
+    setActiveNav(id);
+    onNavChange?.(id);
+  };
 
   return (
     <div className="flex flex-col h-full py-4">
@@ -35,13 +64,13 @@ export default function AppSidebar() {
         {navItems.map((item) => (
           <button
             key={item.id}
-            onClick={() => setActiveNav(item.id)}
+            onClick={() => handleNavClick(item.id)}
             className={`relative flex flex-col items-center gap-1 py-2.5 transition-colors ${
               activeNav === item.id
                 ? "text-alabaster_grey-900 bg-jet_black-400"
                 : "text-jet_black-700 hover:text-alabaster_grey-800 hover:bg-jet_black-300"
             }`}
-            aria-label={item.ariaLabel}
+            aria-label={item.ariaLabel ?? item.label}
             aria-pressed={activeNav === item.id}
           >
             {/* Active indicator bar */}
@@ -56,27 +85,22 @@ export default function AppSidebar() {
         ))}
       </nav>
 
-      {/* Bottom Section: Settings & All Chats */}
+      {/* Bottom Section */}
       <div className="flex flex-col items-center gap-2 pt-4 border-t border-jet_black-600 mx-2">
-        {/* Settings */}
-        <button
-          className="flex flex-col items-center gap-1 py-2 text-jet_black-700 hover:text-alabaster_grey-800 transition-colors w-full"
-          aria-label="Settings"
-          title="Settings"
-        >
-          <span className="text-lg">⚙️</span>
-          <span className="text-[10px] font-medium">Settings</span>
-        </button>
+        {footerItems.map((item) => (
+          <button
+            key={item.id}
+            onClick={item.onClick}
+            className="flex flex-col items-center gap-1 py-2 text-jet_black-700 hover:text-alabaster_grey-800 transition-colors w-full"
+            aria-label={item.ariaLabel ?? item.label}
+            title={item.label}
+          >
+            <span className="text-lg">{item.icon}</span>
+            <span className="text-[10px] font-medium">{item.label}</span>
+          </button>
+        ))}
 
-        {/* All Chats indicator */}
-        <button
-          className="flex flex-col items-center gap-1 py-2 text-jet_black-700 hover:text-alabaster_grey-800 transition-colors w-full"
-          aria-label="All chats"
-          title="All chats"
-        >
-          <span className="text-lg">📂</span>
-          <span className="text-[10px] font-medium">All chats</span>
-        </button>
+        <LogoutButton className="flex flex-col items-center gap-1 py-2 text-jet_black-700 hover:text-alabaster_grey-800 transition-colors w-full" />
       </div>
     </div>
   );
