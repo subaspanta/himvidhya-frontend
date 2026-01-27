@@ -1,30 +1,31 @@
 import { create } from "zustand";
-import { apiClient } from "@/lib/api/apiClient";
-import Cookies from "js-cookie";
+import { User } from "../types";
 
-import type { User } from "../types";
-
-type AuthState = {
+type AuthStore = {
   user: User | null;
   isAuthenticated: boolean;
-  setAuth: (user: User, token: string) => void;
+  authChecked: boolean;
+  setUser: (user: User | null) => void;
+  setAuthChecked: (value: boolean) => void;
   logout: () => void;
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
   isAuthenticated: false,
+  authChecked: false,
 
-  setAuth: (user, token) => {
-    Cookies.set("token", token, { expires: 7, sameSite: "strict" });
-    // Set axios default header
-    apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    set({ user, isAuthenticated: true });
-  },
+  setUser: (user) =>
+    set({
+      user,
+      isAuthenticated: !!user,
+    }),
 
-  logout: () => {
-    Cookies.remove("token");
-    delete apiClient.defaults.headers.common["Authorization"];
-    set({ user: null, isAuthenticated: false });
-  },
+  setAuthChecked: (value) => set({ authChecked: value }),
+
+  logout: () =>
+    set({
+      user: null,
+      isAuthenticated: false,
+    }),
 }));

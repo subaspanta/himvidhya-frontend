@@ -1,7 +1,14 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState, ReactNode } from "react";
+import { useState, useEffect, ReactNode } from "react";
+
+// Exported queryClient singleton
+let exportedQueryClient: QueryClient | undefined;
+
+export function getQueryClient(): QueryClient | undefined {
+  return exportedQueryClient;
+}
 
 export default function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -16,6 +23,10 @@ export default function Providers({ children }: { children: ReactNode }) {
         },
       }),
   );
+
+  useEffect(() => {
+    exportedQueryClient = queryClient;
+  }, [queryClient]);
 
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>

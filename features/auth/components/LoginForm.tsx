@@ -46,8 +46,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const success = await handleLogin(data.email, data.password);
-      if (success) {
+      const result = await handleLogin(data.email, data.password);
+      if (result.success) {
         push("/chat");
         if (onSuccess) {
           onSuccess();
@@ -126,7 +126,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         Don&apos;t have an account?{" "}
         <Button
           type="button"
-          onClick={() => (onSwitchToRegister ? onSwitchToRegister() : push("/register"))}
+          onClick={() =>
+            onSwitchToRegister ? onSwitchToRegister() : push("/register")
+          }
           variant="ghost"
           className="text-blue-400 hover:text-blue-300 font-medium hover:underline p-0 h-auto"
         >

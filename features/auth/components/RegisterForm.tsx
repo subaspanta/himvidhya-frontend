@@ -15,6 +15,10 @@ const registerSchema = yup.object({
     .string()
     .min(2, "Name must be at least 2 characters")
     .required("Name is required"),
+  username: yup
+    .string()
+    .min(3, "Username must be at least 3 characters")
+    .required("Username is required"),
   email: yup
     .string()
     .email("Please enter a valid email address")
@@ -50,12 +54,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const success = await handleRegister(
+      const result = await handleRegister(
         data.email,
         data.password,
         data.name,
+        data.username,
       );
-      if (success && onSuccess) {
+      if (result && result.success) {
+        router.push("/login");
+      } else if (onSuccess) {
         onSuccess();
       }
     } catch {
@@ -83,6 +90,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
             error={errors.name?.message}
             required
             {...register("name")}
+          />
+
+          <TextField
+            label="Username"
+            type="text"
+            placeholder="yourusername"
+            error={errors.username?.message}
+            required
+            {...register("username")}
           />
 
           <TextField
@@ -124,7 +140,9 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         Already have an account?{" "}
         <button
           type="button"
-          onClick={() => (onSwitchToLogin ? onSwitchToLogin() : router.push("/login"))}
+          onClick={() =>
+            onSwitchToLogin ? onSwitchToLogin() : router.push("/login")
+          }
           className="text-blue-500 hover:text-blue-400 font-medium transition-colors hover:underline"
         >
           Login here

@@ -3,20 +3,26 @@ import { useState } from "react";
 import { registerUser, loginUser } from "@/features/auth/api/auth.api";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useRouter } from "next/navigation";
+import { apiClient } from "@/lib/api/apiClient";
+import { User } from "../types";
 
 interface UseAuthReturn {
   loading: boolean;
   error: string | null;
   success: boolean;
-  handleLogin: (email: string, password: string) => Promise<boolean>;
+  handleLogin: (
+    email: string,
+    password: string,
+  ) => Promise<{ success: boolean; user: User | null }>;
   handleRegister: (
     email: string,
     password: string,
     name: string,
-  ) => Promise<boolean>;
+    username: string,
+  ) => Promise<{ success: boolean; user: User | null }>;
   logout: () => void;
   isAuthenticated: boolean;
-  user: any;
+  user: User | null;
 }
 
 export const useAuth = (): UseAuthReturn => {
@@ -24,7 +30,7 @@ export const useAuth = (): UseAuthReturn => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const setAuth = useAuthStore((state) => state.setAuth);
+  const setUser = useAuthStore((state) => state.setUser);
   const logoutStore = useAuthStore((state) => state.logout);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
@@ -37,25 +43,16 @@ export const useAuth = (): UseAuthReturn => {
     setSuccess(false);
 
     try {
-      const { user, token } = await loginUser({ email, password });
-
-      // Ensure user object includes username property
-      setAuth(
-        {
-          ...user,
-          username: user.username ?? user.name ?? user.email, // fallback if username is missing
-        },
-        token,
-      );
-
+      const { user } = await loginUser({ email, password });
+      setUser(user);
       setSuccess(true);
-      return true;
+      return { success: true, user };
     } catch (err: any) {
       const errorMessage =
         err.response?.data?.message ||
         "Login failed. Please check your credentials.";
       setError(errorMessage);
-      return false;
+      return { success: false, user: null };
     } finally {
       setLoading(false);
     }
@@ -65,39 +62,30 @@ export const useAuth = (): UseAuthReturn => {
     email: string,
     password: string,
     name: string,
+    username: string,
   ) => {
     setLoading(true);
     setError(null);
     setSuccess(false);
 
     try {
-      const response = await registerUser({ email, password, name });
+      const { user } = await registerUser({ email, password, name, username });
 
-      // Assuming response.data contains { user, token }
-      const { user, token } = response.data;
-
-      // Ensure user object includes username property
-      setAuth(
-        {
-          ...user,
-          username: user.username ?? user.name ?? user.email, // fallback if username is missing
-        },
-        token,
-      );
-
+      setUser(user);
       setSuccess(true);
-      return true;
+      return { success: true, user };
     } catch (err: any) {
       const errorMessage =
         err.response?.data?.message || "Registration failed. Please try again.";
       setError(errorMessage);
-      return false;
+      return { success: false, user: null };
     } finally {
       setLoading(false);
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await apiClient.post("/auth/logout"); // backend clears cookie
     logoutStore();
     router.push("/");
   };

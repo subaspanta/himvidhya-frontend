@@ -1,26 +1,17 @@
 import axios from "axios";
-import Cookies from "js-cookie";
-import { useAuthStore } from "@/features/auth/store/auth.store";
+import { handleAuthEvent } from "../auth/auth-sync";
 
 export const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api",
+  withCredentials: true, // REQUIRED
 });
 
 // Response Interceptor: The "Safety Net"
 apiClient.interceptors.response.use(
-  (response) => response, // If the request succeeds, just return it
+  (res) => res,
   (error) => {
-    // Check if the error is 401 (Unauthorized)
     if (error.response?.status === 401) {
-      console.warn("Session expired or invalid token. Logging out...");
-
-      // Access the Zustand store directly to clear state
-      useAuthStore.getState().logout();
-
-      // Optional: Redirect to login page
-      if (typeof window !== "undefined") {
-        window.location.href = "/";
-      }
+      handleAuthEvent({ type: "SESSION_EXPIRED" });
     }
     return Promise.reject(error);
   },

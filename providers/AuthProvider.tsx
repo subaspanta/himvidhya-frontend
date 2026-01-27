@@ -1,4 +1,3 @@
-// app/components/providers/AuthProvider.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -8,7 +7,7 @@ import { apiClient } from "@/lib/api/apiClient";
 import { userSchema } from "@/features/auth/store/auth.schemas";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const { setAuth, logout } = useAuthStore();
+  const { setAuthChecked, logout } = useAuthStore();
   const [isHydrating, setIsHydrating] = useState(true);
 
   useEffect(() => {
@@ -26,7 +25,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
           // 3. Validate and update the store
           const validatedUser = await userSchema.validate(data);
-          
+
           // Map backend fields to frontend User type
           const mappedUser = {
             id: data._id || data.id,
@@ -34,8 +33,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             name: data.name,
             username: data.username || data.name || data.email,
           };
-          
-          setAuth(mappedUser, token);
+
+          setAuthChecked(true);
         } catch (error) {
           console.error("Hydration failed:", error);
           logout(); // Clear invalid tokens
@@ -45,7 +44,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     initAuth();
-  }, [setAuth, logout]);
+  }, [setAuthChecked, logout]);
 
   // Optional: Prevent flickering by showing a loader while checking auth
   if (isHydrating) {

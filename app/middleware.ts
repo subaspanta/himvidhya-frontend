@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get("token")?.value;
-  const isChatPage = request.nextUrl.pathname.startsWith("/chat");
+  const hasAuthCookie = request.cookies.get("token")?.value;
+  const isProtectedRoute = request.nextUrl.pathname.startsWith("/protected");
 
-  if (isChatPage && !token) {
+  if (isProtectedRoute && !hasAuthCookie) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
   return NextResponse.next();
