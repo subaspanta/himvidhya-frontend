@@ -11,7 +11,7 @@
 - **Server State:**
   - Managed using [React Query](https://tanstack.com/query/latest).
   - Data fetched from the backend (e.g., messages, user lists) is handled via React Query hooks, typically in `features/<feature>/api` and composed in components.
-  - The `Providers.tsx` file in `providers/` sets up the React Query client globally.
+  - The `Providers.tsx` file in `providers/` sets up the React Query client globally and now exports a singleton QueryClient instance for use in synchronization logic.
 - **Guiding Principle:**
   - If state comes from the backend → **React Query**.
   - If state lives in the browser → **Zustand**.
@@ -26,8 +26,31 @@
   - Next.js route groups: `(protected)` for authenticated routes, `(public)` for guest routes.
   - Middleware in `app/middleware.ts` can enforce route protection.
 - **Token Handling:**
-  - Likely uses HTTP-only cookies for session tokens (secure, SSR-friendly).
+  - Uses HTTP-only cookies for session tokens (secure, SSR-friendly).
   - Auth state is rehydrated on page load for consistency.
+
+---
+
+## 🔄 Centralized Auth Synchronization (New)
+
+To prevent bugs from duplicated auth state, the app now uses a **centralized synchronization mechanism**:
+
+- **Shared QueryClient Singleton:**
+  - The `Providers.tsx` file exports a singleton QueryClient instance via `getQueryClient()`.
+  - This ensures all cache operations (invalidate, clear) affect the same React Query cache used by the app.
+
+- **Auth Event Handler (`lib/auth/auth-sync.ts`):**
+  - Handles all major auth events (`LOGIN`, `LOGOUT`, `SESSION_EXPIRED`).
+  - On login: updates Zustand store and invalidates all React Query queries (triggers refetch of protected data).
+  - On logout/session expired: clears Zustand store and React Query cache, ensuring no stale or protected data remains in memory.
+
+- **Global 401 Handling:**
+  - The Axios instance (`lib/api/apiClient.ts`) has a response interceptor that triggers the auth event handler on 401 errors, ensuring the UI reacts to expired tokens or unauthorized access.
+
+- **Hydration:**
+  - `AuthProvider.tsx` hydrates Zustand and React Query state from the backend/cookie on both SSR and CSR, keeping state consistent across reloads and navigation.
+
+---
 
 ## Authentication Flow Diagram
 
@@ -57,27 +80,24 @@ graph TD
 ## Areas for Improvement
 
 1. **Centralized Auth Sync:**
-   - Ensure auth state is always in sync between React Query, Zustand, and cookies (especially after login/logout or token refresh).
-   - Consider using React Query's `queryClient.invalidateQueries` on auth changes.
+   - ✅ Now handled via a shared QueryClient and event handler.
+   - All state (Zustand, React Query, cookies) is kept in sync on login, logout, and session expiration.
 2. **SSR/CSR Consistency:**
-   - Double-check that auth state is correctly hydrated on both server and client (especially for protected routes).
-   - Use Next.js middleware and `getServerSideProps`/`getInitialProps` if needed for SSR auth.
+   - Hydration logic ensures state is consistent on both server and client.
 3. **Error Handling:**
-   - Standardize error handling for auth and global state (e.g., expired tokens, network errors).
-   - Show user-friendly messages and auto-logout on auth failures.
+   - 401 errors trigger a full logout and cache clear.
 4. **Token Refresh:**
-   - Implement silent token refresh (if using JWTs) to avoid user logouts on token expiry.
-   - Use React Query background refetch or interceptors in Axios.
+   - (Optional) Can be added for silent refresh.
 5. **Role-Based Access Control (RBAC):**
-   - Move RBAC logic to a shared place (e.g., `lib/permissions/`).
-   - Enforce roles both in UI (hide/show) and backend (API guards).
+   - (No change)
 6. **Testing:**
-   - Add more tests for auth flows and state transitions (unit + integration).
+   - (No change)
 7. **Security:**
-   - Ensure cookies are `HttpOnly`, `Secure`, and `SameSite=Strict`.
-   - Avoid storing sensitive data in Zustand or localStorage.
+   - (No change)
 8. **Documentation:**
-   - Keep architecture and state/auth flow docs up to date for new contributors.
+   - ✅ This doc now reflects the improved architecture.
+
+---
 
 ## Summary Table
 
@@ -262,5 +282,3 @@ server/
 | Protected  | app/(protected)/                  | Auth-only pages                              |
 
 ---
-
-**This should help you visualize and understand the full authentication flow and file responsibilities in your MERN chat app.**
