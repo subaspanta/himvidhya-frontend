@@ -59,19 +59,19 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   };
 
   return (
-    <div className="space-y-8 text-gray-200">
+    <div className="space-y-8 text-gray-700">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h2 className="text-2xl font-semibold leading-tight tracking-tight text-white">
+        <h2 className="text-2xl font-bold leading-tight tracking-tight text-gray-900">
           Welcome back
         </h2>
-        <p className="text-base leading-relaxed text-gray-400">
+        <p className="text-base leading-relaxed text-gray-600">
           Sign in to continue to{" "}
-          <span className="text-blue-400 font-medium">ChatApp</span>
+          <span className="text-blue-600 font-bold">ChatApp</span>
         </p>
       </div>
 
-      {/* Form */}
+      {/* Form */},
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-5">
           <TextField
@@ -96,7 +96,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               <Button
                 type="button"
                 variant="ghost"
-                className="text-sm text-blue-500 hover:text-blue-600 transition-colors p-0 h-auto"
+                className="text-sm text-blue-600 hover:text-blue-700 font-bold transition-colors p-0 h-auto"
               >
                 Forgot password?
               </Button>
@@ -106,14 +106,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
         {/* Auth Error */}
         {authError && (
-          <div className="px-4 py-3 bg-red-500/10 border border-red-500/20 rounded-lg text-sm text-red-400 text-center">
+          <div className="px-4 py-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-600 text-center font-medium">
             {authError}
           </div>
         )}
 
         <Button
           type="submit"
-          className="w-full h-11 text-sm font-medium"
+          className="w-full h-11 text-sm font-bold"
           variant="gradient"
           isLoading={loading}
         >
@@ -122,7 +122,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       </form>
 
       {/* Footer */}
-      <p className="text-center text-sm text-gray-400">
+      <p className="text-center text-sm text-gray-600">
         Don&apos;t have an account?{" "}
         <Button
           type="button"
@@ -130,7 +130,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             onSwitchToRegister ? onSwitchToRegister() : push("/register")
           }
           variant="ghost"
-          className="text-blue-400 hover:text-blue-300 font-medium hover:underline p-0 h-auto"
+          className="text-blue-600 hover:text-blue-700 font-bold hover:underline p-0 h-auto"
         >
           Create account
         </Button>

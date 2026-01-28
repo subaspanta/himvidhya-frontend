@@ -1,9 +1,5 @@
 @import "tailwindcss";
-/* stylelint-disable selector-class-pattern */
 
-/* ------------------------------------------------------------------
-   CSS VARIABLES — SEMANTIC THEME TOKENS
-   ------------------------------------------------------------------ */
 
 :root {
   color-scheme: light;

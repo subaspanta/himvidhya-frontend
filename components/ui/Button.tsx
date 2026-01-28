@@ -39,11 +39,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       gradient:
         "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/30 border border-transparent",
       secondary:
-        "bg-white/5 text-white hover:bg-white/10 border border-white/10 active:bg-white/5",
+        "bg-black/5 text-gray-900 hover:bg-black/10 border border-black/10 active:bg-black/20",
       outline:
-        "bg-transparent border border-gray-600 text-gray-300 hover:border-white hover:text-white transition-colors duration-300",
+        "bg-transparent border border-gray-300 text-gray-600 hover:border-gray-900 hover:text-gray-900 transition-colors duration-300",
       ghost:
-        "bg-transparent text-gray-400 hover:text-white hover:bg-white/5 border-transparent",
+        "bg-transparent text-gray-500 hover:text-gray-900 hover:bg-black/5 border-transparent",
       danger:
         "bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20",
     };
@@ -60,7 +60,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || isLoading}
         className={cn(
           "inline-flex items-center justify-center rounded-xl transition-all duration-200 transform",
-          "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#151b23] focus:ring-blue-500",
+          "focus:outline-none focus:ring-2 focus:ring-blue-500",
           variants[variant],
           sizes[size],
           "disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none",

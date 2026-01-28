@@ -38,7 +38,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             htmlFor={name}
             className={cn(
               "block text-sm font-medium transition-colors",
-              hasError ? "text-red-400" : "text-gray-300"
+              hasError ? "text-red-500" : "text-gray-700"
             )}
           >
             {labelText}
@@ -57,9 +57,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             {...rest}
             className={cn(
               "w-full h-11 px-4 rounded-xl transition-all duration-200",
-              "bg-white/5 text-white placeholder:text-gray-500",
-              "border border-white/10",
-              "focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/40 focus:bg-white/10",
+              "bg-black/5 text-gray-900 placeholder:text-gray-400 font-medium",
+              "border border-black/10",
+              "focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/40 focus:bg-white",
               "disabled:opacity-50 disabled:cursor-not-allowed",
               hasError && "border-red-500/50 focus:ring-red-500/20 focus:border-red-500/50"
             )}

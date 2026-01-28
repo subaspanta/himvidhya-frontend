@@ -24,6 +24,7 @@ export const AuthModals: React.FC<AuthModalsProps> = ({
         isOpen={openModal === "login"}
         onClose={onCloseModal}
         className="w-96"
+        closeButtonClassName="right-6 top-6"
       >
         <LoginForm onSwitchToRegister={onSwitchToRegister} />
       </Modal>
@@ -32,6 +33,7 @@ export const AuthModals: React.FC<AuthModalsProps> = ({
         isOpen={openModal === "register"}
         onClose={onCloseModal}
         className="w-96"
+        closeButtonClassName="right-6 top-6"
       >
         <RegisterForm onSwitchToLogin={onSwitchToLogin} />
       </Modal>

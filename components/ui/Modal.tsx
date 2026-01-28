@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { Button } from "./Button";
+import { FullScreenContainer } from "../layout/FullScreenContainer";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -17,38 +19,46 @@ interface ModalProps {
   children: React.ReactNode;
   className?: string;
   showCloseButton?: boolean;
+  closeButtonClassName?: string;
 }
 
-export const Modal: React.FC<ModalProps> = ({
+export const Modal: React.FC<ModalProps> = memo(({
   isOpen,
   onClose,
   title,
   children,
   className,
   showCloseButton = true,
+  closeButtonClassName,
 }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
+  }, []);
+
+  // Handle body scroll locking
+  useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
+  // Handle escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
-    document.addEventListener("keydown", handleEscape);
+    if (isOpen) {
+      document.addEventListener("keydown", handleEscape);
+    }
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [onClose]);
+  }, [isOpen, onClose]);
 
   if (!mounted) return null;
 
@@ -56,84 +66,76 @@ export const Modal: React.FC<ModalProps> = ({
   if (!modalRoot) return null;
 
   return createPortal(
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isOpen && (
-        <>
-          {/* Backdrop with Blur */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 transition-all"
-            aria-hidden="true"
-          />
-
-          {/* Modal Container */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-100"
+        >
+          <FullScreenContainer>
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{
-                type: "spring",
-                damping: 25,
-                stiffness: 300,
-                duration: 0.3,
-              }}
-              onClick={(e) => e.stopPropagation()}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ type: "spring", damping: 25, stiffness: 400 }}
               className={cn(
-                "w-full max-w-md bg-opacity-80 bg-[#151b23] backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl pointer-events-auto",
-                "flex flex-col max-h-[90vh] overflow-hidden",
-                "ring-1 ring-white/10",
-                className,
+                "relative w-full max-w-md bg-[#fdf6ee] border border-gray-200 rounded-2xl shadow-2xl pointer-events-auto flex flex-col max-h-[90vh] overflow-hidden ring-1 ring-gray-100/50",
+                className
               )}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="modal-title"
+              onClick={e => e.stopPropagation()}
             >
-              {(title || showCloseButton) && (
-                <div className="flex items-center justify-between px-8 pt-8 pb-4">
-                  {title && (
-                    <h2
-                      id="modal-title"
-                      className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-white to-gray-200"
-                    >
-                      {title}
-                    </h2>
-                  )}
-                  {showCloseButton && (
-                    <button
-                      onClick={onClose}
-                      className="text-gray-300 hover:text-white transition-colors p-2 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                      aria-label="Close modal"
-                    >
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                      </svg>
-                    </button>
-                  )}
+              {showCloseButton && (
+                <button
+                  onClick={onClose}
+                  className="absolute top-6 right-6 z-50 text-gray-400 hover:text-gray-900 transition-colors p-2 rounded-full hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                  aria-label="Close modal"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              )}
+
+              {title && (
+                <div className="px-10 pt-10 pb-4">
+                  <h2
+                    id="modal-title"
+                    className="text-3xl font-extrabold text-black tracking-tight leading-tight"
+                  >
+                    {title}
+                  </h2>
                 </div>
               )}
 
-              <div className="px-8 pb-8 pt-2 overflow-y-auto custom-scrollbar">
+              <div
+                className={cn(
+                  "px-10 pb-10 overflow-y-auto custom-scrollbar text-gray-700 text-base font-medium",
+                  title ? "pt-2" : "pt-10",
+                  !showCloseButton && !title && "pt-10"
+                )}
+              >
                 {children}
               </div>
             </motion.div>
-          </div>
-        </>
+          </FullScreenContainer>
+        </motion.div>
       )}
     </AnimatePresence>,
     modalRoot,
   );
-};
+});
+
+Modal.displayName = "Modal";

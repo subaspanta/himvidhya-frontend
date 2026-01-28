@@ -71,17 +71,18 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   };
 
   return (
-    <div className="space-y-6 text-gray-200">
+    <div className="space-y-6 text-gray-700">
       <div className="space-y-2 text-center">
-        <h2 className="text-2xl font-semibold leading-tight tracking-tight text-white">
+        <h2 className="text-2xl font-bold leading-tight tracking-tight text-gray-900">
           Create Account
         </h2>
-        <p className="text-base leading-relaxed text-gray-400">
+        <p className="text-base leading-relaxed text-gray-600">
           Join our community today
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* ... existing fields ... */}
         <div className="space-y-4">
           <TextField
             label="Full Name"
@@ -121,14 +122,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         </div>
 
         {authError && (
-          <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-sm text-red-400 text-center animate-pulse">
+          <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600 text-center font-medium animate-pulse">
             {authError}
           </div>
         )}
 
         <Button
           type="submit"
-          className="w-full"
+          className="w-full font-bold"
           variant="gradient"
           isLoading={loading}
         >
@@ -136,14 +137,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         </Button>
       </form>
 
-      <p className="text-center text-sm text-gray-400 border-t border-white/5 pt-6">
+      <p className="text-center text-sm text-gray-600 border-t border-gray-100 pt-6 font-medium">
         Already have an account?{" "}
         <button
           type="button"
           onClick={() =>
             onSwitchToLogin ? onSwitchToLogin() : router.push("/login")
           }
-          className="text-blue-500 hover:text-blue-400 font-medium transition-colors hover:underline"
+          className="text-blue-600 hover:text-blue-700 font-bold transition-colors hover:underline"
         >
           Login here
         </button>
