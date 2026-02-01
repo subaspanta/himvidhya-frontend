@@ -7,9 +7,9 @@ import { Modal } from "@/components/ui/Modal";
 
 interface AuthModalsProps {
   openModal: "login" | "register" | null;
-  onCloseModal: () => void;
-  onSwitchToRegister: () => void;
-  onSwitchToLogin: () => void;
+  onCloseModal?: () => void;
+  onSwitchToRegister?: () => void;
+  onSwitchToLogin?: () => void;
 }
 
 export const AuthModals: React.FC<AuthModalsProps> = ({
@@ -22,7 +22,7 @@ export const AuthModals: React.FC<AuthModalsProps> = ({
     <>
       <Modal
         isOpen={openModal === "login"}
-        onClose={onCloseModal}
+        onClose={onCloseModal ?? (() => {})}
         className="w-96"
         closeButtonClassName="right-6 top-6"
       >
@@ -31,7 +31,7 @@ export const AuthModals: React.FC<AuthModalsProps> = ({
 
       <Modal
         isOpen={openModal === "register"}
-        onClose={onCloseModal}
+        onClose={onCloseModal ?? (() => {})}
         className="w-96"
         closeButtonClassName="right-6 top-6"
       >
