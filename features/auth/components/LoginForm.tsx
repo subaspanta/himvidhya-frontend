@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import TextField from "@/components/ui/TextField";
 
-// Validation Schema
 const loginSchema = yup.object({
   email: yup
     .string()
@@ -70,7 +69,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <span className="text-blue-600 font-bold">ChatApp</span>
         </p>
       </div>
-
       {/* Form */},
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-5">
@@ -120,7 +118,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           Sign In
         </Button>
       </form>
-
       {/* Footer */}
       <p className="text-center text-sm text-gray-600">
         Don&apos;t have an account?{" "}
