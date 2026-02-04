@@ -2,26 +2,23 @@
 
 import React from "react";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import TextField from "@/components/ui/TextField";
 
 // Validation Schema
-const loginSchema = yup.object({
-  email: yup
+const loginSchema = z.object({
+  email: z
     .string()
-    .email("Please enter a valid email address")
-    .required("Email is required"),
-  password: yup
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .required("Password is required"),
+    .min(1, "Email is required")
+    .email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-type LoginFormData = yup.InferType<typeof loginSchema>;
+type LoginFormData = z.infer<typeof loginSchema>;
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -40,7 +37,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     formState: { errors },
     setError,
   } = useForm<LoginFormData>({
-    resolver: yupResolver(loginSchema),
+    resolver: zodResolver(loginSchema),
     mode: "onChange",
   });
 
@@ -70,7 +67,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <span className="text-blue-600 font-bold">ChatApp</span>
         </p>
       </div>
-
       {/* Form */},
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-5">
@@ -120,7 +116,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           Sign In
         </Button>
       </form>
-
       {/* Footer */}
       <p className="text-center text-sm text-gray-600">
         Don&apos;t have an account?{" "}
