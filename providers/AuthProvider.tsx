@@ -1,59 +1,46 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/features/auth/store/auth.store";
-import { apiClient } from "@/lib/api/apiClient";
-import { userSchema } from "@/features/auth/store/auth.schemas";
+import { useCurrentUser } from "@/features/auth/api/useCurrentUser";
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const { setAuthChecked, logout } = useAuthStore();
-  const [isHydrating, setIsHydrating] = useState(true);
+export default function AuthProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const router = useRouter();
+  const { isAuthenticated, authChecked, setUser, setAuthChecked } =
+    useAuthStore();
+  const { data: user, isLoading, error } = useCurrentUser();
 
+  // Initialize auth state on mount
   useEffect(() => {
-    const initAuth = async () => {
-      const token = Cookies.get("token");
+    if (isLoading) return;
 
-      if (token) {
-        try {
-          // 1. Set the token in the API client immediately
-          apiClient.defaults.headers.common["Authorization"] =
-            `Bearer ${token}`;
+    // Auth check is complete
+    if (user) {
+      setUser(user);
+      setAuthChecked(true);
+    } else {
+      setUser(null);
+      setAuthChecked(true);
+      // Redirect to login
+      router.push("/?modal=login");
+    }
+  }, [isLoading, user, setUser, setAuthChecked, router]);
 
-          // 2. Fetch the latest user profile from backend
-          const { data } = await apiClient.get("/auth/profile");
-
-          // 3. Validate and update the store
-          const validatedUser = await userSchema.validate(data);
-
-          // Map backend fields to frontend User type
-          const mappedUser = {
-            id: data._id || data.id,
-            email: data.email,
-            name: data.name,
-            username: data.username || data.name || data.email,
-          };
-
-          setAuthChecked(true);
-        } catch (error) {
-          console.error("Hydration failed:", error);
-          logout(); // Clear invalid tokens
-        }
-      }
-      setIsHydrating(false);
-    };
-
-    initAuth();
-  }, [setAuthChecked, logout]);
-
-  // Optional: Prevent flickering by showing a loader while checking auth
-  if (isHydrating) {
-    return (
-      <div className="h-screen w-screen flex items-center justify-center">
-        Loading...
-      </div>
-    );
+  // Show nothing while checking auth
+  if (!authChecked) {
+    return null;
   }
 
+  // Show nothing if not authenticated (will redirect above)
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  // User is authenticated, render protected content
   return <>{children}</>;
-};
+}

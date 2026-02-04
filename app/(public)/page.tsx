@@ -1,30 +1,39 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AuthModals } from "@/features/auth/components/AuthModals";
 import { Button } from "@/components/ui/Button";
 
 export default function Home() {
-  const [openModal, setOpenModal] = useState<"login" | "register" | null>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const modal = searchParams.get("modal") as "login" | "register" | null;
 
-  const openLoginModal = () => setOpenModal("login");
-  const openRegisterModal = () => setOpenModal("register");
-  const closeModal = () => setOpenModal(null);
+  const openLoginModal = useCallback(() => {
+    router.push("/?modal=login");
+  }, [router]);
 
-  const handleSwitchToRegister = () => {
-    closeModal();
-    openRegisterModal();
-  };
+  const openRegisterModal = useCallback(() => {
+    router.push("/?modal=register");
+  }, [router]);
 
-  const handleSwitchToLogin = () => {
-    closeModal();
-    openLoginModal();
-  };
+  const closeModal = useCallback(() => {
+    router.push("/");
+  }, [router]);
+
+  const handleSwitchToRegister = useCallback(() => {
+    router.push("/?modal=register");
+  }, [router]);
+
+  const handleSwitchToLogin = useCallback(() => {
+    router.push("/?modal=login");
+  }, [router]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-jet_black-100">
       <AuthModals
-        openModal={openModal}
+        openModal={modal}
         onCloseModal={closeModal}
         onSwitchToRegister={handleSwitchToRegister}
         onSwitchToLogin={handleSwitchToLogin}

@@ -52,15 +52,15 @@ export const loginUser = async (
 
 /* ================= PROFILE ================= */
 
-export const getProfile = async (): Promise<User> => {
-  const response = await apiClient.get("/auth/profile");
+// export const getProfile = async (): Promise<User> => {
+//   const response = await apiClient.get("/auth/profile");
 
-  const user = response.data;
+//   const user = response.data;
 
-  return {
-    id: user._id || user.id,
-    email: user.email,
-    name: user.name,
-    username: user.username || user.name || user.email,
-  };
-};
+//   return {
+//     id: user._id || user.id,
+//     email: user.email,
+//     name: user.name,
+//     username: user.username || user.name || user.email,
+//   };
+// };
