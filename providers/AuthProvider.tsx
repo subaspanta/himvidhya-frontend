@@ -13,34 +13,52 @@ export default function AuthProvider({
   const router = useRouter();
   const { isAuthenticated, authChecked, setUser, setAuthChecked } =
     useAuthStore();
-  const { data: user, isLoading, error } = useCurrentUser();
+  const { data: response, isLoading, error } = useCurrentUser();
 
   // Initialize auth state on mount
   useEffect(() => {
     if (isLoading) return;
 
     // Auth check is complete
-    if (user) {
-      setUser(user);
+    if (response) {
+      setUser(response);
       setAuthChecked(true);
     } else {
       setUser(null);
       setAuthChecked(true);
-      // Redirect to login
       router.push("/?modal=login");
     }
-  }, [isLoading, user, setUser, setAuthChecked, router]);
+  }, [isLoading, response, setUser, setAuthChecked, router]);
+
+  // Tab synchronization logic
+  useEffect(() => {
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === "auth-storage") {
+        // If auth storage changed (e.g. logout in another tab)
+        // We can either reload or trigger a refetch
+        window.location.reload();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  console.log("🎯 Current state:", { isAuthenticated, authChecked });
 
   // Show nothing while checking auth
   if (!authChecked) {
+    console.log("⏳ Auth not checked yet");
     return null;
   }
 
   // Show nothing if not authenticated (will redirect above)
   if (!isAuthenticated) {
+    console.log("🚫 Not authenticated, should redirect");
     return null;
   }
 
   // User is authenticated, render protected content
+  console.log("✨ Rendering protected content");
   return <>{children}</>;
 }

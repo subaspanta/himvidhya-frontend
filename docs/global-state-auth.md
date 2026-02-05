@@ -142,7 +142,7 @@ sequenceDiagram
     User->>UI: Enter credentials (login/register)
     UI->>useAuth: Call handleLogin/handleRegister
     useAuth->>api: Call loginUser/registerUser
-    api->>BE: POST /auth/login or /auth/register
+    api->>BE: POST /api/auth/login or /api/auth/register
     BE-->>api: Respond with user data & set cookie
     api-->>useAuth: Return user data
     useAuth->>Store: setUser(user)
@@ -192,7 +192,7 @@ sequenceDiagram
 ### **Backend (Server)**
 
 - **`routes/auth.route.js`** (or `authRoutes.js`)
-  - Defines `/auth/login`, `/auth/register`, `/auth/logout` endpoints.
+  - Defines `/api/auth/login`, `/api/auth/register`, `/api/auth/logout` endpoints.
 
 - **`controllers/auth.controller.js`**
   - Handles login/register logic.
@@ -223,7 +223,7 @@ sequenceDiagram
 
 1. **User submits login form** (`LoginForm.tsx`)
 2. **`useAuth.handleLogin`** is called (`use-auth.ts`)
-3. **`loginUser`** sends POST to `/auth/login` (`auth.api.ts` → `apiClient.ts`)
+3. **`loginUser`** sends POST to `/api/auth/login` (`auth.api.ts` → `apiClient.ts`)
 4. **Backend validates credentials** (`auth.controller.js`)
 5. **Backend sets HTTP-only cookie** and returns user data
 6. **Frontend updates Zustand store** with user info (`auth.store.ts`)

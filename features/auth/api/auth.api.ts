@@ -17,7 +17,7 @@ interface LoginCredentials {
 export const registerUser = async (
   data: RegisterData,
 ): Promise<AuthResponse> => {
-  const response = await apiClient.post("/public/register", data);
+  const response = await apiClient.post("/auth/register", data);
 
   const user = response.data.user;
 
@@ -36,7 +36,7 @@ export const registerUser = async (
 export const loginUser = async (
   credentials: LoginCredentials,
 ): Promise<AuthResponse> => {
-  const response = await apiClient.post("/public/login", credentials);
+  const response = await apiClient.post("/auth/login", credentials);
 
   const user = response.data.user;
 
