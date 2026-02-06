@@ -18,22 +18,18 @@ export const ChatLayout: React.FC<ChatLayoutProps> = ({
 }) => {
   return (
     <div className="flex h-screen w-full bg-jet_black-100">
-      {/* Panel 1: App Sidebar */}
       <aside className="w-sidebar shrink-0 bg-jet_black-200 border-r border-jet_black-600">
         {sidebar}
       </aside>
 
-      {/* Panel 2: Conversation List */}
       <aside className="w-conversations shrink-0 bg-jet_black-300 border-r border-jet_black-600 flex flex-col">
         {conversationList}
       </aside>
 
-      {/* Panel 3: Main Chat Area */}
       <main className="flex-1 flex flex-col bg-jet_black-100 min-w-0">
         {chatArea}
       </main>
 
-      {/* Panel 4: Chat Details Panel (toggleable) */}
       {showDetails && detailsPanel && (
         <aside className="w-88 max-w-88 shrink-0 bg-jet_black-300 border-l border-jet_black-600 overflow-y-auto z-10">
           {detailsPanel}

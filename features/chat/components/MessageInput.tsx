@@ -33,7 +33,6 @@ export default function MessageInput({
       onSubmit={handleSubmit}
       className="h-14 border-t border-jet_black-600 bg-jet_black-200 px-4 flex items-center gap-3"
     >
-      {/* Attachment button (left) */}
       <button
         type="button"
         className="w-8 h-8 rounded-full flex items-center justify-center text-jet_black-700 hover:text-alabaster_grey-800 hover:bg-jet_black-400 transition-colors"
@@ -44,7 +43,6 @@ export default function MessageInput({
         📎
       </button>
 
-      {/* Message input */}
       <input
         type="text"
         placeholder="Your message"
@@ -56,7 +54,6 @@ export default function MessageInput({
         aria-label="Message input"
       />
 
-      {/* Microphone button (right) */}
       <button
         type="button"
         className="w-8 h-8 rounded-full flex items-center justify-center text-jet_black-700 hover:text-alabaster_grey-800 hover:bg-jet_black-400 transition-colors"

@@ -2,34 +2,25 @@
 
 import React from "react";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useAuth } from "@/features/auth/hooks/use-auth";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import TextField from "@/components/ui/TextField";
 import { useRouter } from "next/navigation";
 
 // Validation Schema
-const registerSchema = yup.object({
-  name: yup
+const registerSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  email: z
     .string()
-    .min(2, "Name must be at least 2 characters")
-    .required("Name is required"),
-  username: yup
-    .string()
-    .min(3, "Username must be at least 3 characters")
-    .required("Username is required"),
-  email: yup
-    .string()
-    .email("Please enter a valid email address")
-    .required("Email is required"),
-  password: yup
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .required("Password is required"),
+    .min(1, "Email is required")
+    .email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-type RegisterFormData = yup.InferType<typeof registerSchema>;
+type RegisterFormData = z.infer<typeof registerSchema>;
 
 interface RegisterFormProps {
   onSuccess?: () => void;
@@ -48,7 +39,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
     formState: { errors },
     setError,
   } = useForm<RegisterFormData>({
-    resolver: yupResolver(registerSchema),
+    resolver: zodResolver(registerSchema),
     mode: "onChange",
   });
 
@@ -61,7 +52,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         data.username,
       );
       if (result && result.success) {
-        router.push("/login");
+        if (onSwitchToLogin) {
+          onSwitchToLogin();
+        } else {
+          router.push("/login");
+        }
       } else if (onSuccess) {
         onSuccess();
       }
@@ -82,7 +77,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* ... existing fields ... */}
         <div className="space-y-4">
           <TextField
             label="Full Name"
@@ -127,13 +121,8 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           </div>
         )}
 
-        <Button
-          type="submit"
-          className="w-full font-bold"
-          variant="gradient"
-          isLoading={loading}
-        >
-          Create Account
+        <Button type="submit" className="w-full font-bold" disabled={loading}>
+          {loading ? "Creating Account..." : "Create Account"}
         </Button>
       </form>
 

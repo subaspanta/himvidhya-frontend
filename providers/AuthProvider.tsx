@@ -1,59 +1,64 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/features/auth/store/auth.store";
-import { apiClient } from "@/lib/api/apiClient";
-import { userSchema } from "@/features/auth/store/auth.schemas";
+import { useCurrentUser } from "@/features/auth/api/useCurrentUser";
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const { setAuthChecked, logout } = useAuthStore();
-  const [isHydrating, setIsHydrating] = useState(true);
+export default function AuthProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const router = useRouter();
+  const { isAuthenticated, authChecked, setUser, setAuthChecked } =
+    useAuthStore();
+  const { data: response, isLoading, error } = useCurrentUser();
 
+  // Initialize auth state on mount
   useEffect(() => {
-    const initAuth = async () => {
-      const token = Cookies.get("token");
+    if (isLoading) return;
 
-      if (token) {
-        try {
-          // 1. Set the token in the API client immediately
-          apiClient.defaults.headers.common["Authorization"] =
-            `Bearer ${token}`;
+    // Auth check is complete
+    if (response) {
+      setUser(response);
+      setAuthChecked(true);
+    } else {
+      setUser(null);
+      setAuthChecked(true);
+      router.push("/?modal=login");
+    }
+  }, [isLoading, response, setUser, setAuthChecked, router]);
 
-          // 2. Fetch the latest user profile from backend
-          const { data } = await apiClient.get("/auth/profile");
-
-          // 3. Validate and update the store
-          const validatedUser = await userSchema.validate(data);
-
-          // Map backend fields to frontend User type
-          const mappedUser = {
-            id: data._id || data.id,
-            email: data.email,
-            name: data.name,
-            username: data.username || data.name || data.email,
-          };
-
-          setAuthChecked(true);
-        } catch (error) {
-          console.error("Hydration failed:", error);
-          logout(); // Clear invalid tokens
-        }
+  // Tab synchronization logic
+  useEffect(() => {
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === "auth-storage") {
+        // If auth storage changed (e.g. logout in another tab)
+        // We can either reload or trigger a refetch
+        window.location.reload();
       }
-      setIsHydrating(false);
     };
 
-    initAuth();
-  }, [setAuthChecked, logout]);
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
-  // Optional: Prevent flickering by showing a loader while checking auth
-  if (isHydrating) {
-    return (
-      <div className="h-screen w-screen flex items-center justify-center">
-        Loading...
-      </div>
-    );
+  console.log("🎯 Current state:", { isAuthenticated, authChecked });
+
+  // Show nothing while checking auth
+  if (!authChecked) {
+    console.log("⏳ Auth not checked yet");
+    return null;
   }
 
+  // Show nothing if not authenticated (will redirect above)
+  if (!isAuthenticated) {
+    console.log("🚫 Not authenticated, should redirect");
+    return null;
+  }
+
+  // User is authenticated, render protected content
+  console.log("✨ Rendering protected content");
   return <>{children}</>;
-};
+}

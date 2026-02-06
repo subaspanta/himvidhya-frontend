@@ -1,11 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
-  const hasAuthCookie = request.cookies.get("token")?.value;
-  const isProtectedRoute = request.nextUrl.pathname.startsWith("/protected");
+export function middleware(req: NextRequest) {
+  const token = req.cookies.get("token")?.value;
+  const { pathname } = req.nextUrl;
 
-  if (isProtectedRoute && !hasAuthCookie) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  const isProtected = pathname.startsWith("/chat");
+
+  if (isProtected && !token) {
+    const loginUrl = new URL("/login", req.url);
+    return NextResponse.redirect(loginUrl);
   }
+
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: ["/chat/:path*"],
+};

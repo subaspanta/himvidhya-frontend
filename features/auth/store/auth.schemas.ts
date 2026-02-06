@@ -1,15 +1,15 @@
-import * as yup from "yup";
+import { z } from "zod";
 
 // 1. Define the User Schema (for validation only)
-export const userSchema = yup.object({
-  id: yup.string().required(),
-  email: yup.string().email().required(),
-  name: yup.string().min(2).required(),
-  username: yup.string().optional(),
+export const userSchema = z.object({
+  id: z.string(),
+  email: z.string().email(),
+  name: z.string().min(2),
+  username: z.string().optional(),
 });
 
 // 2. Define the Auth Response Schema
-export const authResponseSchema = yup.object({
-  user: userSchema.required(),
-  token: yup.string().required(),
+export const authResponseSchema = z.object({
+  user: userSchema,
+  token: z.string(),
 });

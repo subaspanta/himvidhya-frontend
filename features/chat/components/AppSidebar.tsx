@@ -52,14 +52,12 @@ export default function AppSidebar({
 
   return (
     <div className="flex flex-col h-full py-4">
-      {/* Top Section: Logo */}
       <div className="flex flex-col items-center mb-6 px-2">
         <div className="text-xl font-bold text-alabaster_grey-900 tracking-tight">
           CH
         </div>
       </div>
 
-      {/* Navigation Items */}
       <nav className="flex-1 flex flex-col gap-1">
         {navItems.map((item) => (
           <button
@@ -73,7 +71,6 @@ export default function AppSidebar({
             aria-label={item.ariaLabel ?? item.label}
             aria-pressed={activeNav === item.id}
           >
-            {/* Active indicator bar */}
             {activeNav === item.id && (
               <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-8 bg-majorelle_blue-500 rounded-r-full" />
             )}
@@ -85,7 +82,6 @@ export default function AppSidebar({
         ))}
       </nav>
 
-      {/* Bottom Section */}
       <div className="flex flex-col items-center gap-2 pt-4 border-t border-jet_black-600 mx-2">
         {footerItems.map((item) => (
           <button

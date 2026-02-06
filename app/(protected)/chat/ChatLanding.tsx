@@ -1,11 +1,29 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuthStore } from "@/features/auth/store/auth.store";
 
 export default function ChatLanding() {
   const router = useRouter();
   const [isStarting, setIsStarting] = useState(false);
+  const { isAuthenticated, authChecked } = useAuthStore();
+
+  useEffect(() => {
+    // Redirect to home with login modal if not authenticated
+    if (authChecked && !isAuthenticated) {
+      router.push("/?modal=login");
+    }
+  }, [isAuthenticated, authChecked, router]);
+
+  // Show loading state while checking auth
+  if (!authChecked) {
+    return (
+      <main className="flex h-full min-h-[60vh] items-center justify-center bg-white text-black">
+        <div>Loading...</div>
+      </main>
+    );
+  }
 
   const startNewChat = async () => {
     if (isStarting) return;

@@ -1,29 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import { registerUser, loginUser } from "@/features/auth/api/auth.api";
+import {
+  registerUser,
+  loginUser,
+  forgotPassword,
+  verifyOTP,
+  resetPassword,
+} from "@/features/auth/api/auth.api";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useRouter } from "next/navigation";
 import { apiClient } from "@/lib/api/apiClient";
-import { User } from "../types";
-
-interface UseAuthReturn {
-  loading: boolean;
-  error: string | null;
-  success: boolean;
-  handleLogin: (
-    email: string,
-    password: string,
-  ) => Promise<{ success: boolean; user: User | null }>;
-  handleRegister: (
-    email: string,
-    password: string,
-    name: string,
-    username: string,
-  ) => Promise<{ success: boolean; user: User | null }>;
-  logout: () => void;
-  isAuthenticated: boolean;
-  user: User | null;
-}
+import { UseAuthReturn } from "../types";
 
 export const useAuth = (): UseAuthReturn => {
   const [loading, setLoading] = useState(false);
@@ -90,6 +77,66 @@ export const useAuth = (): UseAuthReturn => {
     router.push("/");
   };
 
+  const handleForgotPassword = async (email: string) => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+    try {
+      const { message } = await forgotPassword(email);
+      setSuccess(true);
+      return { success: true, message };
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || "Failed to send OTP";
+      setError(errorMessage);
+      return { success: false, message: errorMessage };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOTP = async (email: string, otp: string) => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+    try {
+      const { valid, message } = await verifyOTP(email, otp);
+      setSuccess(valid);
+      return { success: true, valid, message };
+    } catch (err: any) {
+      const errorMessage =
+        err.response?.data?.error || "Invalid or expired OTP";
+      setError(errorMessage);
+      return { success: false, valid: false, message: errorMessage };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (
+    email: string,
+    otp: string,
+    password: string,
+  ) => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+
+    try {
+      const { user } = await resetPassword(email, otp, password);
+      setUser(user); // Auto-login after reset
+      setSuccess(true);
+      return { success: true, user };
+    } catch (err: any) {
+      const errorMessage =
+        err.response?.data?.error ||
+        "Failed to reset password. OTP may be expired.";
+      setError(errorMessage);
+      return { success: false, user: null };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     loading,
     error,
@@ -99,5 +146,8 @@ export const useAuth = (): UseAuthReturn => {
     logout,
     isAuthenticated,
     user,
+    handleForgotPassword,
+    handleVerifyOTP,
+    handleResetPassword,
   };
 };

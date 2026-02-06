@@ -1,9 +1,4 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { AuthModals } from "@/features/auth/components/AuthModals";
-import { AuthPageLayout } from "@/components/layout/AuthPageLayout";
-import { useEffect } from "react";
-import { useAuthStore } from "@/features/auth/store/auth.store";
+import { RegisterForm } from "@/features/auth/components/RegisterForm";
 
 export default function RegisterPage() {
   const router = useRouter();

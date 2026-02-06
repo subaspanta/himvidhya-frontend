@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { User } from "../types";
 
 type AuthStore = {
@@ -10,22 +11,29 @@ type AuthStore = {
   logout: () => void;
 };
 
-export const useAuthStore = create<AuthStore>((set) => ({
-  user: null,
-  isAuthenticated: false,
-  authChecked: false,
-
-  setUser: (user) =>
-    set({
-      user,
-      isAuthenticated: !!user,
-    }),
-
-  setAuthChecked: (value) => set({ authChecked: value }),
-
-  logout: () =>
-    set({
+export const useAuthStore = create<AuthStore>()(
+  persist(
+    (set) => ({
       user: null,
       isAuthenticated: false,
+      authChecked: false,
+
+      setUser: (user: User | null) =>
+        set({
+          user,
+          isAuthenticated: !!user,
+        }),
+
+      setAuthChecked: (value: boolean) => set({ authChecked: value }),
+
+      logout: () =>
+        set({
+          user: null,
+          isAuthenticated: false,
+        }),
     }),
-}));
+    {
+      name: "auth-storage",
+    },
+  ),
+);
