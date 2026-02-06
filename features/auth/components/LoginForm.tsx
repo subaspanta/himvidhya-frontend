@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "@/features/auth/hooks/use-auth";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import TextField from "@/components/ui/TextField";
 
@@ -23,11 +23,13 @@ type LoginFormData = z.infer<typeof loginSchema>;
 interface LoginFormProps {
   onSuccess?: () => void;
   onSwitchToRegister?: () => void;
+  onSwitchToForgotPassword?: () => void;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({
   onSuccess,
   onSwitchToRegister,
+  onSwitchToForgotPassword,
 }) => {
   const { handleLogin, loading, error: authError } = useAuth();
   const { push } = useRouter();
@@ -64,7 +66,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         </h2>
         <p className="text-base leading-relaxed text-gray-600">
           Sign in to continue to{" "}
-          <span className="text-blue-600 font-bold">ChatApp</span>
+          <span className="text-blue-600 font-bold">olo</span>
         </p>
       </div>
       {/* Form */},
@@ -93,6 +95,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 type="button"
                 variant="ghost"
                 className="text-sm text-blue-600 hover:text-blue-700 font-bold transition-colors p-0 h-auto"
+                onClick={() =>
+                  onSwitchToForgotPassword
+                    ? onSwitchToForgotPassword()
+                    : push("/forget-password")
+                }
               >
                 Forgot password?
               </Button>
@@ -110,10 +117,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         <Button
           type="submit"
           className="w-full h-11 text-sm font-bold"
-          variant="gradient"
-          isLoading={loading}
+          disabled={loading}
         >
-          Sign In
+          {loading ? "Signing In..." : "Sign In"}
         </Button>
       </form>
       {/* Footer */}

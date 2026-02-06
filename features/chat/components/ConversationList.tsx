@@ -1,29 +1,33 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { mockConversations } from "@/features/chat/api/mockData";
+import { Conversation } from "@/features/chat/types";
 import ConversationItem from "./ConversationItem";
 
 interface ConversationListProps {
+  conversations?: Conversation[];
   selectedId?: string | null;
   onSelectConversation?: (id: string) => void;
+  isLoading?: boolean;
 }
 
 export default function ConversationList({
+  conversations = [],
   selectedId,
   onSelectConversation,
+  isLoading = false,
 }: ConversationListProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Use provided selectedId or default to first conversation
-  const currentSelectedId = selectedId ?? mockConversations[0]?.id ?? "";
+  const currentSelectedId = selectedId ?? conversations[0]?.id ?? "";
 
   // Filter conversations based on search query
   const filteredConversations = useMemo(() => {
-    return mockConversations.filter((conv) =>
+    return conversations.filter((conv) =>
       conv.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
-  }, [searchQuery]);
+  }, [conversations, searchQuery]);
 
   const handleSelect = (id: string) => {
     if (onSelectConversation) {
@@ -52,7 +56,16 @@ export default function ConversationList({
 
       {/* Conversations List */}
       <div className="flex-1 overflow-y-auto scrollbar-thin">
-        {filteredConversations.length > 0 ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-majorelle_blue-500 mx-auto mb-2"></div>
+              <p className="text-jet_black-700 text-sm">
+                Loading conversations...
+              </p>
+            </div>
+          </div>
+        ) : filteredConversations.length > 0 ? (
           <div className="flex flex-col">
             {filteredConversations.map((conversation) => (
               <ConversationItem
@@ -63,9 +76,29 @@ export default function ConversationList({
               />
             ))}
           </div>
+        ) : conversations.length === 0 ? (
+          <div className="flex items-center justify-center h-full px-6">
+            <div className="text-center">
+              <div className="text-4xl mb-3">💬</div>
+              <h3 className="text-alabaster_grey-900 font-medium mb-1">
+                No conversations yet
+              </h3>
+              <p className="text-jet_black-700 text-sm">
+                Start a new conversation to get chatting
+              </p>
+            </div>
+          </div>
         ) : (
-          <div className="flex items-center justify-center h-full text-jet_black-700 text-sm">
-            No conversations found
+          <div className="flex items-center justify-center h-full px-6">
+            <div className="text-center">
+              <div className="text-4xl mb-3">🔍</div>
+              <h3 className="text-alabaster_grey-900 font-medium mb-1">
+                No results found
+              </h3>
+              <p className="text-jet_black-700 text-sm">
+                Try searching with a different keyword
+              </p>
+            </div>
           </div>
         )}
       </div>

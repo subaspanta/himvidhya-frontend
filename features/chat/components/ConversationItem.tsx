@@ -1,19 +1,21 @@
 "use client";
 
 import React from "react";
-import { Conversation } from "@/features/chat/api/mockData";
+import { Conversation } from "@/features/chat/types";
 import Image from "next/image";
 
 interface ConversationItemProps {
   conversation: Conversation;
   isSelected: boolean;
   onSelect: () => void;
+  isPinned?: boolean;
 }
 
 export default function ConversationItem({
   conversation,
   isSelected,
   onSelect,
+  isPinned = false,
 }: ConversationItemProps) {
   // Format timestamp to readable time
   const formatTime = (timestamp: number): string => {
@@ -36,9 +38,6 @@ export default function ConversationItem({
       day: "numeric",
     });
   };
-
-  // Determine if conversation is pinned (mock: first 2 are pinned)
-  const isPinned = conversation.id === "conv-1" || conversation.id === "conv-2";
 
   // Get online status indicator
   const participantStatus = conversation.participants[0]?.status || "offline";

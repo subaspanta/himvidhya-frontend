@@ -1,6 +1,5 @@
 import { LoginForm } from "@/features/auth/components/LoginForm";
 
-// This page will render the login form for unauthenticated users
 export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0d1117]">

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "@/features/auth/hooks/use-auth";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import TextField from "@/components/ui/TextField";
 import { useRouter } from "next/navigation";
 
@@ -52,7 +52,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         data.username,
       );
       if (result && result.success) {
-        router.push("/login");
+        if (onSwitchToLogin) {
+          onSwitchToLogin();
+        } else {
+          router.push("/login");
+        }
       } else if (onSuccess) {
         onSuccess();
       }
@@ -118,13 +122,8 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           </div>
         )}
 
-        <Button
-          type="submit"
-          className="w-full font-bold"
-          variant="gradient"
-          isLoading={loading}
-        >
-          Create Account
+        <Button type="submit" className="w-full font-bold" disabled={loading}>
+          {loading ? "Creating Account..." : "Create Account"}
         </Button>
       </form>
 

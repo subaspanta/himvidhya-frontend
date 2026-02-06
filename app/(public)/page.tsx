@@ -1,22 +1,20 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { Suspense, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AuthModals } from "@/features/auth/components/AuthModals";
-import { Button } from "@/components/ui/Button";
+import { LandingNav } from "./components/LandingNav";
+import { HeroSection } from "./components/HeroSection";
+import { LandingFooter } from "./components/LandingFooter";
 
-export default function Home() {
+function AuthModalHandler() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const modal = searchParams.get("modal") as "login" | "register" | null;
-
-  const openLoginModal = useCallback(() => {
-    router.push("/?modal=login");
-  }, [router]);
-
-  const openRegisterModal = useCallback(() => {
-    router.push("/?modal=register");
-  }, [router]);
+  const modal = searchParams.get("modal") as
+    | "login"
+    | "register"
+    | "forgot-password"
+    | null;
 
   const closeModal = useCallback(() => {
     router.push("/");
@@ -30,34 +28,46 @@ export default function Home() {
     router.push("/?modal=login");
   }, [router]);
 
+  const handleSwitchToForgotPassword = useCallback(() => {
+    router.push("/?modal=forgot-password");
+  }, [router]);
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-jet_black-100">
-      <AuthModals
-        openModal={modal}
-        onCloseModal={closeModal}
-        onSwitchToRegister={handleSwitchToRegister}
-        onSwitchToLogin={handleSwitchToLogin}
+    <AuthModals
+      openModal={modal}
+      onCloseModal={closeModal}
+      onSwitchToRegister={handleSwitchToRegister}
+      onSwitchToLogin={handleSwitchToLogin}
+      onSwitchToForgotPassword={handleSwitchToForgotPassword}
+    />
+  );
+}
+
+export default function Home() {
+  const router = useRouter();
+
+  const openLoginModal = useCallback(() => {
+    router.push("/?modal=login");
+  }, [router]);
+
+  const openRegisterModal = useCallback(() => {
+    router.push("/?modal=register");
+  }, [router]);
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col">
+      <Suspense fallback={null}>
+        <AuthModalHandler />
+      </Suspense>
+
+      <LandingNav
+        onLoginClick={openLoginModal}
+        onSignUpClick={openRegisterModal}
       />
 
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-white mb-8">
-          Welcome to ChatApp
-        </h1>
-        <div className="flex gap-4 justify-center">
-          <Button
-            onClick={openLoginModal}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
-          >
-            Login
-          </Button>
-          <Button
-            onClick={openRegisterModal}
-            className="px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700"
-          >
-            Register
-          </Button>
-        </div>
-      </div>
+      <HeroSection onGetStartedClick={openRegisterModal} />
+
+      <LandingFooter />
     </div>
   );
 }

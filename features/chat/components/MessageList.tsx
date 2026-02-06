@@ -1,31 +1,20 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
-import { Message, currentUser, mockUsers } from "@/features/chat/api/mockData";
+import { Message, User } from "@/features/chat/types";
 
 interface MessageListProps {
   messages: Message[];
   isGroup?: boolean;
+  currentUserId?: string;
+  participants?: User[];
 }
-
-// Mock reactions for demonstration
-const mockReactions: Record<string, { emoji: string; count: number }[]> = {
-  "msg-1": [{ emoji: "😍", count: 2 }],
-  "msg-3": [
-    { emoji: "😆", count: 1 },
-    { emoji: "❤️", count: 2 },
-  ],
-};
-
-// Mock read counts
-const mockReadCounts: Record<string, number> = {
-  "msg-4": 3,
-  "msg-5": 3,
-};
 
 export default function MessageList({
   messages,
   isGroup = false,
+  currentUserId,
+  participants = [],
 }: MessageListProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -44,15 +33,23 @@ export default function MessageList({
     });
   };
 
-  // Get sender info from mock users
+  // Get sender info from participants
   const getSender = (senderId: string) => {
-    return mockUsers.find((u) => u.id === senderId);
+    return participants.find((u) => u.id === senderId);
   };
 
   if (messages.length === 0) {
     return (
       <div className="flex-1 flex items-center justify-center bg-jet_black-100">
-        <p className="text-jet_black-700 text-sm">No messages yet</p>
+        <div className="text-center px-6">
+          <div className="text-4xl mb-3">💬</div>
+          <h3 className="text-alabaster_grey-900 font-medium mb-1">
+            No messages yet
+          </h3>
+          <p className="text-jet_black-700 text-sm">
+            Be the first to send a message
+          </p>
+        </div>
       </div>
     );
   }
@@ -61,10 +58,10 @@ export default function MessageList({
     <div className="flex-1 overflow-y-auto px-4 py-3 bg-jet_black-100 scrollbar-thin">
       <div className="flex flex-col gap-3">
         {messages.map((message, index) => {
-          const isMe = message.senderId === currentUser.id;
+          const isMe = currentUserId
+            ? message.senderId === currentUserId
+            : false;
           const sender = getSender(message.senderId);
-          const reactions = mockReactions[message.id] || [];
-          const readCount = mockReadCounts[message.id];
 
           // Show sender name if group chat and different sender from previous
           const prevMessage = messages[index - 1];
@@ -81,7 +78,7 @@ export default function MessageList({
                 <div className="flex-shrink-0 self-end">
                   {showSenderName || index === 0 ? (
                     <img
-                      src={sender?.avatar || "https://i.pravatar.cc/150?img=99"}
+                      src={sender?.avatar || "/images/default-avatar.png"}
                       alt={sender?.name || "User"}
                       className="w-8 h-8 rounded-full object-cover"
                     />
@@ -115,36 +112,24 @@ export default function MessageList({
                   <p className="text-sm break-words">{message.text}</p>
                 </div>
 
-                {/* Reactions row */}
-                {reactions.length > 0 && (
-                  <div className="flex items-center gap-1 mt-0.5 ml-1">
-                    {reactions.map((r, i) => (
-                      <span key={i} className="text-xs">
-                        {r.emoji}
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                {/* Timestamp and read receipt */}
+                {/* Timestamp */}
                 <div className="flex items-center gap-1.5 mt-0.5 px-1">
                   <span className="text-[10px] text-jet_black-700">
                     {formatTime(message.timestamp)}
                   </span>
-                  {readCount && (
-                    <span className="flex items-center gap-0.5 text-[10px] text-jet_black-700">
-                      <span>👁</span>
-                      <span>{readCount}</span>
+                  {isMe && message.read && (
+                    <span className="text-[10px] text-majorelle_blue-500">
+                      ✓✓
                     </span>
                   )}
                 </div>
               </div>
 
               {/* Avatar for sent messages (on right) */}
-              {isMe && (
+              {isMe && sender && (
                 <div className="flex-shrink-0 self-end">
                   <img
-                    src={currentUser.avatar}
+                    src={sender.avatar || "/images/default-avatar.png"}
                     alt="You"
                     className="w-8 h-8 rounded-full object-cover"
                   />

@@ -1,5 +1,3 @@
-// This page will render the register form for unauthenticated users
-
 import { RegisterForm } from "@/features/auth/components/RegisterForm";
 
 export default function RegisterPage() {

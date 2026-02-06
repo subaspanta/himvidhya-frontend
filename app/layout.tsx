@@ -3,7 +3,7 @@ import "./globals.css";
 import AppProviders from "./providers";
 
 export const metadata: Metadata = {
-  title: "ChatApp",
+  title: "olo",
   description: "A modern chat application",
 };
 

@@ -1,47 +1,23 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Conversation,
-  mockMedia,
-  mockFiles,
-  MediaItem,
-  FileItem,
-} from "@/features/chat/api/mockData";
+import { Conversation, MediaItem, FileItem } from "@/features/chat/types";
 import Image from "next/image";
 
 interface ChatDetailsPanelProps {
   conversation: Conversation | null;
   onClose?: () => void;
+  media?: MediaItem[];
+  files?: FileItem[];
+  links?: LinkItem[];
 }
 
-// Mock links for demonstration
-const mockLinks = [
-  {
-    id: "link-1",
-    title: "Economic Policy",
-    url: "https://vm.tiktok.economic-policy",
-    favicon: "📊",
-  },
-  {
-    id: "link-2",
-    title: "Microsoft",
-    url: "https://www.microsoft.com/",
-    favicon: "🪟",
-  },
-  {
-    id: "link-3",
-    title: "Contact Information",
-    url: "https://vm.tiktok.economic-policy",
-    favicon: "📇",
-  },
-  {
-    id: "link-4",
-    title: "Official Guide to Government",
-    url: "https://www.usa.gov/",
-    favicon: "🏛️",
-  },
-];
+interface LinkItem {
+  id: string;
+  title: string;
+  url: string;
+  favicon?: string;
+}
 
 type TabId = "notifications" | "calendar" | "media" | "links";
 
@@ -55,6 +31,9 @@ const tabs: { id: TabId; icon: string; label: string }[] = [
 export default function ChatDetailsPanel({
   conversation,
   onClose,
+  media = [],
+  files = [],
+  links = [],
 }: ChatDetailsPanelProps) {
   const [activeTab, setActiveTab] = useState<TabId>("media");
 
@@ -134,34 +113,41 @@ export default function ChatDetailsPanel({
               <h4 className="text-sm font-medium text-alabaster_grey-900">
                 Photos and Videos
               </h4>
-              <span className="text-xs text-jet_black-700">
-                {mockMedia.length}
-              </span>
+              <span className="text-xs text-jet_black-700">{media.length}</span>
             </div>
-            <button className="text-xs text-majorelle_blue-500 hover:text-majorelle_blue-600 transition-colors">
-              See all
-            </button>
+            {media.length > 0 && (
+              <button className="text-xs text-majorelle_blue-500 hover:text-majorelle_blue-600 transition-colors">
+                See all
+              </button>
+            )}
           </div>
-          <div className="grid grid-cols-3 gap-1.5">
-            {mockMedia.slice(0, 6).map((media: MediaItem, index) => (
-              <div
-                key={media.id}
-                className="relative aspect-square rounded-md bg-jet_black-400 overflow-hidden"
-              >
-                <Image
-                  src={media.url}
-                  alt="Media"
-                  className="w-full h-full object-cover"
-                />
-                {/* Video duration overlay for last item */}
-                {media.type === "video" && (
-                  <span className="absolute bottom-1 right-1 text-[9px] bg-black/70 text-white px-1 rounded">
-                    01:56
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
+          {media.length > 0 ? (
+            <div className="grid grid-cols-3 gap-1.5">
+              {media.slice(0, 6).map((mediaItem: MediaItem) => (
+                <div
+                  key={mediaItem.id}
+                  className="relative aspect-square rounded-md bg-jet_black-400 overflow-hidden"
+                >
+                  <Image
+                    src={mediaItem.url}
+                    alt="Media"
+                    width={100}
+                    height={100}
+                    className="w-full h-full object-cover"
+                  />
+                  {mediaItem.type === "video" && (
+                    <span className="absolute bottom-1 right-1 text-[9px] bg-black/70 text-white px-1 rounded">
+                      ▶
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-xs text-jet_black-700 text-center py-4">
+              No media shared yet
+            </p>
+          )}
         </div>
 
         {/* Shared Files Section */}
@@ -171,34 +157,43 @@ export default function ChatDetailsPanel({
               <h4 className="text-sm font-medium text-alabaster_grey-900">
                 Shared Files
               </h4>
-              <span className="text-xs text-jet_black-700">
-                {mockFiles.length}
-              </span>
+              <span className="text-xs text-jet_black-700">{files.length}</span>
             </div>
-            <button className="text-xs text-majorelle_blue-500 hover:text-majorelle_blue-600 transition-colors">
-              See all
-            </button>
+            {files.length > 0 && (
+              <button className="text-xs text-majorelle_blue-500 hover:text-majorelle_blue-600 transition-colors">
+                See all
+              </button>
+            )}
           </div>
-          <div className="flex flex-col gap-2">
-            {mockFiles.slice(0, 3).map((file: FileItem) => {
-              const fileStyle = getFileIcon(file.type);
-              return (
-                <div
-                  key={file.id}
-                  className="flex items-start gap-2.5 py-1 cursor-pointer group"
-                >
-                  <span className={`text-base ${fileStyle.color}`}>
-                    {fileStyle.icon}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs text-alabaster_grey-900 truncate group-hover:text-majorelle_blue-500 transition-colors">
-                      {file.name}
-                    </p>
+          {files.length > 0 ? (
+            <div className="flex flex-col gap-2">
+              {files.slice(0, 3).map((file: FileItem) => {
+                const fileStyle = getFileIcon(file.type);
+                return (
+                  <div
+                    key={file.id}
+                    className="flex items-start gap-2.5 py-1 cursor-pointer group"
+                  >
+                    <span className={`text-base ${fileStyle.color}`}>
+                      {fileStyle.icon}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-alabaster_grey-900 truncate group-hover:text-majorelle_blue-500 transition-colors">
+                        {file.name}
+                      </p>
+                      <p className="text-[10px] text-jet_black-700">
+                        {formatFileSize(file.size)}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-xs text-jet_black-700 text-center py-4">
+              No files shared yet
+            </p>
+          )}
         </div>
 
         {/* Shared Links Section */}
@@ -208,32 +203,38 @@ export default function ChatDetailsPanel({
               <h4 className="text-sm font-medium text-alabaster_grey-900">
                 Shared Links
               </h4>
-              <span className="text-xs text-jet_black-700">
-                {mockLinks.length}
-              </span>
+              <span className="text-xs text-jet_black-700">{links.length}</span>
             </div>
-            <button className="text-xs text-majorelle_blue-500 hover:text-majorelle_blue-600 transition-colors">
-              See all
-            </button>
+            {links.length > 0 && (
+              <button className="text-xs text-majorelle_blue-500 hover:text-majorelle_blue-600 transition-colors">
+                See all
+              </button>
+            )}
           </div>
-          <div className="flex flex-col gap-2.5">
-            {mockLinks.map((link) => (
-              <div
-                key={link.id}
-                className="flex items-start gap-2.5 py-1 cursor-pointer group"
-              >
-                <span className="text-base">{link.favicon}</span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs text-alabaster_grey-900 truncate group-hover:text-majorelle_blue-500 transition-colors">
-                    {link.title}
-                  </p>
-                  <p className="text-[10px] text-jet_black-700 truncate">
-                    {link.url}
-                  </p>
+          {links.length > 0 ? (
+            <div className="flex flex-col gap-2.5">
+              {links.map((link) => (
+                <div
+                  key={link.id}
+                  className="flex items-start gap-2.5 py-1 cursor-pointer group"
+                >
+                  <span className="text-base">{link.favicon || "🔗"}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs text-alabaster_grey-900 truncate group-hover:text-majorelle_blue-500 transition-colors">
+                      {link.title}
+                    </p>
+                    <p className="text-[10px] text-jet_black-700 truncate">
+                      {link.url}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-xs text-jet_black-700 text-center py-4">
+              No links shared yet
+            </p>
+          )}
         </div>
       </div>
     </div>

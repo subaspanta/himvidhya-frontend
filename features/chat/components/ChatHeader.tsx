@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Conversation } from "@/features/chat/api/mockData";
+import { Conversation } from "@/features/chat/types";
 
 interface ChatHeaderProps {
   conversation: Conversation | null;
