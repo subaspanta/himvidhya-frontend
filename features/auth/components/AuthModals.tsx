@@ -25,7 +25,7 @@ export const AuthModals: React.FC<AuthModalsProps> = ({
     <>
       <Modal
         isOpen={openModal === "login"}
-        onClose={onCloseModal}
+        onClose={onCloseModal ?? (() => {})}
         className="w-96"
         closeButtonClassName="right-6 top-6"
       >
@@ -37,7 +37,7 @@ export const AuthModals: React.FC<AuthModalsProps> = ({
 
       <Modal
         isOpen={openModal === "register"}
-        onClose={onCloseModal}
+        onClose={onCloseModal ?? (() => {})}
         className="w-96"
         closeButtonClassName="right-6 top-6"
       >
