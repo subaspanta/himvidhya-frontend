@@ -59,7 +59,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
   return (
     <div className="space-y-8 text-gray-700">
-      {/* Header */}
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-bold leading-tight tracking-tight text-gray-900">
           Welcome back
@@ -69,7 +68,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <span className="text-blue-600 font-bold">olo</span>
         </p>
       </div>
-      {/* Form */},
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-5">
           <TextField
@@ -107,7 +105,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           </div>
         </div>
 
-        {/* Auth Error */}
         {authError && (
           <div className="px-4 py-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-600 text-center font-medium">
             {authError}
@@ -122,7 +119,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           {loading ? "Signing In..." : "Sign In"}
         </Button>
       </form>
-      {/* Footer */}
       <p className="text-center text-sm text-gray-600">
         Don&apos;t have an account?{" "}
         <Button

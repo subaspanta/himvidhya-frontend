@@ -58,7 +58,6 @@ export default function ConversationItem({
       aria-label={`Conversation with ${conversation.name}`}
       aria-pressed={isSelected}
     >
-      {/* Avatar with status indicator */}
       <div className="relative shrink-0">
         <Image
           src={conversation.avatar}
@@ -67,7 +66,6 @@ export default function ConversationItem({
           height={40}
           className="rounded-full object-cover"
         />
-        {/* Online status indicator */}
         {!conversation.isGroup && (
           <span
             className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-jet_black-300 ${statusColors[participantStatus]}`}
@@ -75,9 +73,7 @@ export default function ConversationItem({
         )}
       </div>
 
-      {/* Content */}
       <div className="flex-1 min-w-0 text-left">
-        {/* Name row */}
         <div className="flex items-center gap-2">
           <h3 className="text-sm font-medium text-alabaster_grey-900 truncate">
             {conversation.name}
@@ -89,9 +85,7 @@ export default function ConversationItem({
           )}
         </div>
 
-        {/* Last message */}
         <div className="flex items-center gap-1">
-          {/* Read indicator */}
           {conversation.unreadCount === 0 && (
             <span className="text-[10px] text-majorelle_blue-500">✓</span>
           )}
@@ -101,14 +95,11 @@ export default function ConversationItem({
         </div>
       </div>
 
-      {/* Right side: Time, Pin, Unread */}
       <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
-        {/* Time */}
         <span className="text-[11px] text-jet_black-700">
           {formatTime(conversation.lastMessageTime)}
         </span>
 
-        {/* Pin or Unread badge */}
         <div className="flex items-center gap-1.5">
           {isPinned && (
             <span className="text-[10px] text-jet_black-700">📌</span>

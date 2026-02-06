@@ -73,7 +73,6 @@ export default function MessageList({
               key={message.id}
               className={`flex gap-2 ${isMe ? "justify-end" : "justify-start"}`}
             >
-              {/* Avatar for received messages */}
               {!isMe && (
                 <div className="flex-shrink-0 self-end">
                   {showSenderName || index === 0 ? (
@@ -88,20 +87,17 @@ export default function MessageList({
                 </div>
               )}
 
-              {/* Message bubble */}
               <div
                 className={`flex flex-col max-w-xs md:max-w-sm lg:max-w-md ${
                   isMe ? "items-end" : "items-start"
                 }`}
               >
-                {/* Sender name for group chats */}
                 {showSenderName && (
                   <span className="text-xs text-jet_black-700 mb-1 ml-1">
                     {sender?.name || "Unknown"}
                   </span>
                 )}
 
-                {/* Message content */}
                 <div
                   className={`px-3 py-2 ${
                     isMe
@@ -112,7 +108,6 @@ export default function MessageList({
                   <p className="text-sm break-words">{message.text}</p>
                 </div>
 
-                {/* Timestamp */}
                 <div className="flex items-center gap-1.5 mt-0.5 px-1">
                   <span className="text-[10px] text-jet_black-700">
                     {formatTime(message.timestamp)}
@@ -125,7 +120,6 @@ export default function MessageList({
                 </div>
               </div>
 
-              {/* Avatar for sent messages (on right) */}
               {isMe && sender && (
                 <div className="flex-shrink-0 self-end">
                   <img

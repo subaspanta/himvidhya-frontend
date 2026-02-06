@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 import TextField from "@/components/ui/TextField";
 import { toast } from "react-hot-toast";
 
-// Step 1: Email Schema
 const emailSchema = z.object({
   email: z
     .string()
@@ -18,7 +17,6 @@ const emailSchema = z.object({
     .email("Please enter a valid email address"),
 });
 
-// Step 2: OTP + Password Schema
 const resetSchema = z
   .object({
     otp: z
@@ -114,7 +112,6 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   if (step === "reset") {
     return (
       <div className="space-y-8 text-gray-700">
-        {/* Header */}
         <div className="text-center space-y-2">
           <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
             <svg
@@ -140,13 +137,11 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
           </p>
         </div>
 
-        {/* Form */}
         <form
           onSubmit={resetForm.handleSubmit(onResetSubmit)}
           className="space-y-6"
         >
           <div className="space-y-5">
-            {/* OTP Input */}
             <div>
               <TextField
                 label="OTP Code"
@@ -170,7 +165,6 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
               </div>
             </div>
 
-            {/* Password Fields */}
             <TextField
               label="New Password"
               type="password"
@@ -189,7 +183,6 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
               {...resetForm.register("confirmPassword")}
             />
 
-            {/* Password Requirements */}
             <div className="px-4 py-3 bg-blue-50 border border-blue-100 rounded-lg text-xs text-gray-600">
               <p className="font-semibold mb-2">Password must include:</p>
               <ul className="space-y-1 list-disc list-inside">
@@ -210,7 +203,6 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
           </Button>
         </form>
 
-        {/* Back Button */}
         <p className="text-center text-sm text-gray-600">
           <Button
             type="button"
@@ -230,7 +222,6 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
 
   return (
     <div className="space-y-8 text-gray-700">
-      {/* Header */}
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-bold leading-tight tracking-tight text-gray-900">
           Forgot Password?
@@ -241,7 +232,6 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
         </p>
       </div>
 
-      {/* Form */}
       <form
         onSubmit={emailForm.handleSubmit(onEmailSubmit)}
         className="space-y-6"
@@ -266,7 +256,6 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
         </Button>
       </form>
 
-      {/* Footer */}
       <p className="text-center text-sm text-gray-600">
         Remember your password?{" "}
         <Button

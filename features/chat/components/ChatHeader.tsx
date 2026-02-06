@@ -35,7 +35,6 @@ export default function ChatHeader({
 
   return (
     <header className="h-14 border-b border-jet_black-600 bg-jet_black-200 px-4 flex items-center justify-between gap-2 min-w-0">
-      {/* Left: Name and Status */}
       <div className="flex flex-col min-w-0 flex-1">
         <h3 className="text-sm font-semibold text-alabaster_grey-900 truncate">
           {conversation.name}
@@ -45,9 +44,7 @@ export default function ChatHeader({
         </p>
       </div>
 
-      {/* Right: Action Icons */}
       <div className="flex items-center gap-1 flex-shrink-0">
-        {/* Search */}
         <button
           className="w-8 h-8 rounded-lg flex items-center justify-center text-jet_black-700 hover:bg-jet_black-400 hover:text-alabaster_grey-800 transition-colors"
           aria-label="Search in conversation"
@@ -56,7 +53,6 @@ export default function ChatHeader({
           🔍
         </button>
 
-        {/* Phone call */}
         <button
           className="w-8 h-8 rounded-lg flex items-center justify-center text-jet_black-700 hover:bg-jet_black-400 hover:text-alabaster_grey-800 transition-colors"
           aria-label="Voice call"
@@ -65,7 +61,6 @@ export default function ChatHeader({
           📞
         </button>
 
-        {/* Video call */}
         <button
           className="w-8 h-8 rounded-lg flex items-center justify-center text-jet_black-700 hover:bg-jet_black-400 hover:text-alabaster_grey-800 transition-colors"
           aria-label="Video call"
@@ -74,7 +69,6 @@ export default function ChatHeader({
           📹
         </button>
 
-        {/* Screen share */}
         <button
           className="w-8 h-8 rounded-lg flex items-center justify-center text-jet_black-700 hover:bg-jet_black-400 hover:text-alabaster_grey-800 transition-colors"
           aria-label="Screen share"
@@ -83,7 +77,6 @@ export default function ChatHeader({
           🖥️
         </button>
 
-        {/* Toggle details */}
         <button
           onClick={onToggleDetails}
           className="w-8 h-8 rounded-lg flex items-center justify-center text-jet_black-700 hover:bg-jet_black-400 hover:text-alabaster_grey-800 transition-colors"

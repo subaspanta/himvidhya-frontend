@@ -77,7 +77,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* ... existing fields ... */}
         <div className="space-y-4">
           <TextField
             label="Full Name"

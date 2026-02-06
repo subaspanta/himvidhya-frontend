@@ -50,13 +50,11 @@ export default function ChatArea({
 
   return (
     <div className="flex flex-col h-full">
-      {/* Chat Header */}
       <ChatHeader
         conversation={conversation}
         onToggleDetails={onToggleDetails}
       />
 
-      {/* Messages List */}
       <MessageList
         messages={conversation.messages || []}
         isGroup={conversation.isGroup}
@@ -64,7 +62,6 @@ export default function ChatArea({
         participants={conversation.participants}
       />
 
-      {/* Message Input */}
       <MessageInput
         onSendMessage={handleSendMessage}
         disabled={!conversation}

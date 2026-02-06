@@ -37,7 +37,6 @@ export default function ConversationList({
 
   return (
     <div className="flex flex-col h-full bg-jet_black-300">
-      {/* Search Section */}
       <div className="flex-shrink-0 p-3">
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-jet_black-700 text-sm">
@@ -54,7 +53,6 @@ export default function ConversationList({
         </div>
       </div>
 
-      {/* Conversations List */}
       <div className="flex-1 overflow-y-auto scrollbar-thin">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">

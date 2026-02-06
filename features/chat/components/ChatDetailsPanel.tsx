@@ -71,7 +71,6 @@ export default function ChatDetailsPanel({
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      {/* Header with close button */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-jet_black-600">
         <h3 className="text-sm font-semibold text-alabaster_grey-900">
           Chat Details
@@ -85,7 +84,6 @@ export default function ChatDetailsPanel({
         </button>
       </div>
 
-      {/* Tab Navigation */}
       <div className="flex items-center justify-center gap-2 px-4 py-3 border-b border-jet_black-600">
         {tabs.map((tab) => (
           <button
@@ -104,9 +102,7 @@ export default function ChatDetailsPanel({
         ))}
       </div>
 
-      {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto scrollbar-thin">
-        {/* Photos and Videos Section */}
         <div className="p-4 border-b border-jet_black-600">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
@@ -150,7 +146,6 @@ export default function ChatDetailsPanel({
           )}
         </div>
 
-        {/* Shared Files Section */}
         <div className="p-4 border-b border-jet_black-600">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
@@ -196,7 +191,6 @@ export default function ChatDetailsPanel({
           )}
         </div>
 
-        {/* Shared Links Section */}
         <div className="p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
