@@ -1,11 +1,17 @@
-import { LoginForm } from "@/features/auth/components/LoginForm";
+"use client";
+import { useRouter } from "next/navigation";
+import { AuthModals } from "@/features/auth/components/AuthModals";
+import { AuthPageLayout } from "@/components/layout/AuthPageLayout";
 
 export default function LoginPage() {
+  const router = useRouter();
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0d1117]">
-      <div className="max-w-md w-full p-8 bg-[#151b23] border border-white/10 rounded-2xl shadow-2xl">
-        <LoginForm />
-      </div>
-    </div>
+    <AuthPageLayout>
+      <AuthModals
+        openModal="login"
+        onCloseModal={() => router.push("/")}
+        onSwitchToRegister={() => router.push("/register")}
+      />
+    </AuthPageLayout>
   );
 }
