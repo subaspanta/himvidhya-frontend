@@ -3,8 +3,11 @@ import "./globals.css";
 import AppProviders from "./providers";
 
 export const metadata: Metadata = {
-  title: "olo",
+  title: "Mitva",
   description: "A modern chat application",
+  icons: {
+    icon: "/Mitva.svg",
+  },
 };
 
 export default function RootLayout({

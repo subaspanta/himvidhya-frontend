@@ -15,7 +15,6 @@ export const LandingNav: React.FC<LandingNavProps> = ({
     <nav className="w-full px-6 py-4 flex justify-between items-center bg-surface border-b border-border">
       <div className="flex items-center gap-3">
         <AppLogo size="sm" />
-        <span className="text-xl font-bold text-foreground">olo</span>
       </div>
 
       <div className="flex items-center gap-3">

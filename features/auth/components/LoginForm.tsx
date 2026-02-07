@@ -65,7 +65,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         </h2>
         <p className="text-base leading-relaxed text-gray-600">
           Sign in to continue to{" "}
-          <span className="text-blue-600 font-bold">olo</span>
+          <span className="text-blue-600 font-bold">Mitva</span>
         </p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

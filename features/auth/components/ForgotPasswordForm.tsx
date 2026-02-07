@@ -228,7 +228,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
         </h2>
         <p className="text-base leading-relaxed text-gray-600">
           No worries, we&apos;ll send you an OTP to reset it for{" "}
-          <span className="text-blue-600 font-bold">olo</span>
+          <span className="text-blue-600 font-bold">Mitva</span>
         </p>
       </div>
 
