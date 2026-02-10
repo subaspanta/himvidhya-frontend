@@ -14,7 +14,7 @@ import { Conversation, Message, User } from "../types";
 export async function getConversations(): Promise<Conversation[]> {
   try {
     const response = await apiClient.get("/conversations");
-    return response.data;
+    return response.data.conversations;
   } catch (error) {
     console.error("Failed to fetch conversations:", error);
     throw error;
@@ -27,7 +27,7 @@ export async function getConversations(): Promise<Conversation[]> {
 export async function getConversation(id: string): Promise<Conversation> {
   try {
     const response = await apiClient.get(`/conversations/${id}`);
-    return response.data;
+    return response.data.conversation;
   } catch (error) {
     console.error(`Failed to fetch conversation ${id}:`, error);
     throw error;
@@ -42,7 +42,7 @@ export async function getMessages(conversationId: string): Promise<Message[]> {
     const response = await apiClient.get(
       `/conversations/${conversationId}/messages`,
     );
-    return response.data;
+    return response.data.messages;
   } catch (error) {
     console.error(
       `Failed to fetch messages for conversation ${conversationId}:`,
@@ -66,7 +66,7 @@ export async function sendMessage(
         text,
       },
     );
-    return response.data;
+    return response.data.message;
   } catch (error) {
     console.error("Failed to send message:", error);
     throw error;
@@ -87,7 +87,7 @@ export async function createConversation(
       isGroup,
       name,
     });
-    return response.data;
+    return response.data.conversation;
   } catch (error) {
     console.error("Failed to create conversation:", error);
     throw error;
@@ -114,7 +114,7 @@ export async function searchUsers(query: string): Promise<User[]> {
     const response = await apiClient.get("/users/search", {
       params: { q: query },
     });
-    return response.data;
+    return response.data.users;
   } catch (error) {
     console.error("Failed to search users:", error);
     throw error;

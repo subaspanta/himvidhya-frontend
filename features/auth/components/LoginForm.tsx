@@ -73,7 +73,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <TextField
             label="Email Address"
             type="email"
-            placeholder="name@example.com"
+            placeholder="Enter your email"
             error={errors.email?.message}
             required
             {...register("email")}
@@ -83,7 +83,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             <TextField
               label="Password"
               type="password"
-              placeholder="••••••••"
+              placeholder="Enter your password"
               error={errors.password?.message}
               required
               {...register("password")}
@@ -94,9 +94,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 variant="ghost"
                 className="text-sm text-blue-600 hover:text-blue-700 font-bold transition-colors p-0 h-auto"
                 onClick={() =>
-                  onSwitchToForgotPassword
-                    ? onSwitchToForgotPassword()
-                    : push("/forget-password")
+                  onSwitchToForgotPassword ? onSwitchToForgotPassword() : null
                 }
               >
                 Forgot password?

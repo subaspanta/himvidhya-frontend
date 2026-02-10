@@ -13,52 +13,64 @@ export default function AuthProvider({
   const router = useRouter();
   const { isAuthenticated, authChecked, setUser, setAuthChecked } =
     useAuthStore();
-  const { data: response, isLoading, error } = useCurrentUser();
+  const { data: response, isLoading, error, refetch } = useCurrentUser();
 
-  // Initialize auth state on mount
   useEffect(() => {
+    console.debug("[auth] AuthProvider state", {
+      isLoading,
+      authChecked,
+      isAuthenticated,
+      hasResponse: !!response,
+      error,
+    });
+
     if (isLoading) return;
 
     // Auth check is complete
     if (response) {
+      console.debug("[auth] AuthProvider: user resolved", response);
       setUser(response);
       setAuthChecked(true);
     } else {
+      console.debug("[auth] AuthProvider: no user, redirecting to login");
       setUser(null);
       setAuthChecked(true);
       router.push("/?modal=login");
     }
-  }, [isLoading, response, setUser, setAuthChecked, router]);
+  }, [
+    isLoading,
+    response,
+    setUser,
+    setAuthChecked,
+    router,
+    authChecked,
+    isAuthenticated,
+    error,
+  ]);
 
-  // Tab synchronization logic
   useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === "auth-storage") {
-        // If auth storage changed (e.g. logout in another tab)
-        // We can either reload or trigger a refetch
-        window.location.reload();
+        refetch();
       }
     };
 
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
+  }, [refetch]);
 
   console.log("🎯 Current state:", { isAuthenticated, authChecked });
 
-  // Show nothing while checking auth
   if (!authChecked) {
     console.log("⏳ Auth not checked yet");
     return null;
   }
 
-  // Show nothing if not authenticated (will redirect above)
   if (!isAuthenticated) {
     console.log("🚫 Not authenticated, should redirect");
     return null;
   }
 
-  // User is authenticated, render protected content
   console.log("✨ Rendering protected content");
   return <>{children}</>;
 }

@@ -1,7 +1,7 @@
 import ChatLanding from "./ChatLanding";
 
 export const metadata = {
-  title: "Chat",
+  title: "Mitva - Chat",
   description: "Conversations",
 };
 

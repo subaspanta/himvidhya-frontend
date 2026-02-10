@@ -3,7 +3,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, useEffect, ReactNode } from "react";
 
-// Exported queryClient singleton
 let exportedQueryClient: QueryClient | undefined;
 
 export function getQueryClient(): QueryClient | undefined {
