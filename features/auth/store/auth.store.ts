@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 import { User } from "../types";
 
 type AuthStore = {
@@ -17,23 +17,20 @@ export const useAuthStore = create<AuthStore>()(
       user: null,
       isAuthenticated: false,
       authChecked: false,
-
-      setUser: (user: User | null) =>
-        set({
-          user,
-          isAuthenticated: !!user,
-        }),
-
-      setAuthChecked: (value: boolean) => set({ authChecked: value }),
-
-      logout: () =>
-        set({
-          user: null,
-          isAuthenticated: false,
-        }),
+      setUser: (user) => set({ user, isAuthenticated: !!user }),
+      setAuthChecked: (authChecked) => set({ authChecked }),
+      logout: () => set({ user: null, isAuthenticated: false }),
     }),
     {
       name: "auth-storage",
+      storage:
+        typeof window !== "undefined"
+          ? createJSONStorage(() => localStorage)
+          : undefined,
+      partialize: (state) => ({
+        user: state.user,
+        isAuthenticated: state.isAuthenticated,
+      }),
     },
   ),
 );

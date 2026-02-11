@@ -1,4 +1,4 @@
-import AuthProvider from "@/providers/AuthProvider";
+import AuthProvider from "@/providers/auth-provider";
 
 export default function ProtectedLayout({
   children,

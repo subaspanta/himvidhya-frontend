@@ -1,6 +1,6 @@
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { AuthEvent } from "./auth-event";
-import { getQueryClient } from "@/providers/Providers";
+import { getQueryClient } from "@/providers/query-provider";
 
 export function handleAuthEvent(event: AuthEvent) {
   const { setUser, logout } = useAuthStore.getState();

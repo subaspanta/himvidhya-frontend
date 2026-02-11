@@ -7,9 +7,9 @@ import { z } from "zod";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import TextField from "@/components/ui/TextField";
+import PasswordField from "@/features/landing/components/PasswordField";
 import { useRouter } from "next/navigation";
 
-// Validation Schema
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -105,9 +105,8 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
             {...register("email")}
           />
 
-          <TextField
+          <PasswordField
             label="Password"
-            type="password"
             placeholder="Create a strong password"
             error={errors.password?.message}
             required

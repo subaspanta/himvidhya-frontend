@@ -1,11 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { AppLogo } from "./AppLogo";
-
-interface LandingNavProps {
-  onLoginClick: () => void;
-  onSignUpClick: () => void;
-}
+import { LandingNavProps } from "../types";
 
 export const LandingNav: React.FC<LandingNavProps> = ({
   onLoginClick,

@@ -8,8 +8,8 @@ import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import TextField from "@/components/ui/TextField";
+import PasswordField from "@/features/landing/components/PasswordField";
 
-// Validation Schema
 const loginSchema = z.object({
   email: z
     .string()
@@ -80,9 +80,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           />
 
           <div className="space-y-1">
-            <TextField
+            <PasswordField
               label="Password"
-              type="password"
               placeholder="Enter your password"
               error={errors.password?.message}
               required

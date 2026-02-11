@@ -1,10 +1,6 @@
 import React from "react";
 import Image from "next/image";
-
-interface AppLogoProps {
-  size?: "sm" | "lg";
-  className?: string;
-}
+import { AppLogoProps } from "../types";
 
 export const AppLogo: React.FC<AppLogoProps> = ({
   size = "sm",

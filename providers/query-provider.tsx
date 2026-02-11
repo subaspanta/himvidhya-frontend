@@ -9,7 +9,7 @@ export function getQueryClient(): QueryClient | undefined {
   return exportedQueryClient;
 }
 
-export default function Providers({ children }: { children: ReactNode }) {
+export default function QueryProvider({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
