@@ -22,15 +22,7 @@ interface ModalProps {
 }
 
 export const Modal: React.FC<ModalProps> = memo(
-  ({
-    isOpen,
-    onClose,
-    title,
-    children,
-    className,
-    showCloseButton = true,
-    closeButtonClassName,
-  }) => {
+  ({ isOpen, onClose, title, children, className, showCloseButton = true }) => {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {

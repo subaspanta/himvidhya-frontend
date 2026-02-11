@@ -8,6 +8,7 @@ import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import TextField from "@/components/ui/TextField";
+import PasswordField from "@/features/landing/components/PasswordField";
 import { toast } from "react-hot-toast";
 
 const emailSchema = z.object({
@@ -165,18 +166,16 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
               </div>
             </div>
 
-            <TextField
+            <PasswordField
               label="New Password"
-              type="password"
               placeholder="••••••••"
               error={resetForm.formState.errors.password?.message}
               required
               {...resetForm.register("password")}
             />
 
-            <TextField
+            <PasswordField
               label="Confirm Password"
-              type="password"
               placeholder="••••••••"
               error={resetForm.formState.errors.confirmPassword?.message}
               required
@@ -228,7 +227,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
         </h2>
         <p className="text-base leading-relaxed text-gray-600">
           No worries, we&apos;ll send you an OTP to reset it for{" "}
-          <span className="text-blue-600 font-bold">olo</span>
+          <span className="text-blue-600 font-bold">Mitva</span>
         </p>
       </div>
 

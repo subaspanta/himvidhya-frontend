@@ -38,7 +38,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             htmlFor={name}
             className={cn(
               "block text-sm font-medium transition-colors",
-              hasError ? "text-red-500" : "text-gray-700"
+              hasError ? "text-red-500" : "text-gray-700",
             )}
           >
             {labelText}
@@ -61,19 +61,23 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
               "border border-black/10",
               "focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/40 focus:bg-white",
               "disabled:opacity-50 disabled:cursor-not-allowed",
-              hasError && "border-red-500/50 focus:ring-red-500/20 focus:border-red-500/50"
+              hasError &&
+                "border-red-500/50 focus:ring-red-500/20 focus:border-red-500/50",
             )}
           />
         </div>
 
         {hasError && typeof error === "string" && (
-          <p id={`${name}-error`} className="text-xs text-red-400 mt-1 animate-in fade-in slide-in-from-top-1">
+          <p
+            id={`${name}-error`}
+            className="text-xs text-red-400 mt-1 animate-in fade-in slide-in-from-top-1"
+          >
             {error}
           </p>
         )}
       </div>
     );
-  }
+  },
 );
 
 TextField.displayName = "TextField";

@@ -1,11 +1,11 @@
 "use client";
 
-import Providers from "@/providers/Providers";
+import QueryProvider from "@/providers/query-provider";
 
 export default function AppProviders({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <Providers>{children}</Providers>;
+  return <QueryProvider>{children}</QueryProvider>;
 }

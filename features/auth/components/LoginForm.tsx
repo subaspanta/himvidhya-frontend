@@ -8,8 +8,8 @@ import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import TextField from "@/components/ui/TextField";
+import PasswordField from "@/features/landing/components/PasswordField";
 
-// Validation Schema
 const loginSchema = z.object({
   email: z
     .string()
@@ -65,7 +65,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         </h2>
         <p className="text-base leading-relaxed text-gray-600">
           Sign in to continue to{" "}
-          <span className="text-blue-600 font-bold">olo</span>
+          <span className="text-blue-600 font-bold">Mitva</span>
         </p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -73,17 +73,16 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <TextField
             label="Email Address"
             type="email"
-            placeholder="name@example.com"
+            placeholder="Enter your email"
             error={errors.email?.message}
             required
             {...register("email")}
           />
 
           <div className="space-y-1">
-            <TextField
+            <PasswordField
               label="Password"
-              type="password"
-              placeholder="••••••••"
+              placeholder="Enter your password"
               error={errors.password?.message}
               required
               {...register("password")}
@@ -94,9 +93,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 variant="ghost"
                 className="text-sm text-blue-600 hover:text-blue-700 font-bold transition-colors p-0 h-auto"
                 onClick={() =>
-                  onSwitchToForgotPassword
-                    ? onSwitchToForgotPassword()
-                    : push("/forget-password")
+                  onSwitchToForgotPassword ? onSwitchToForgotPassword() : null
                 }
               >
                 Forgot password?

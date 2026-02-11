@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
-import LogoutButton from "@/components/ui/LogoutButton";
+import { useEffect, useMemo, useState } from "react";
+import LogoutButton from "@/features/chat/components/LogoutButton";
 
 export interface NavItem {
   id: string;
@@ -96,7 +96,7 @@ export default function AppSidebar({
           </button>
         ))}
 
-        <LogoutButton className="flex flex-col items-center gap-1 py-2 text-jet_black-700 hover:text-alabaster_grey-800 transition-colors w-full" />
+        <LogoutButton showLabel variant="ghost" />
       </div>
     </div>
   );

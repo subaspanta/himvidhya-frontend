@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { AppLogo } from "./AppLogo";
 import { FeaturesList } from "./FeaturesList";
 
 interface HeroSectionProps {
@@ -13,12 +12,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <main className="flex-1 flex items-center justify-center px-6 py-12">
       <div className="max-w-2xl mx-auto text-center space-y-8">
-        <div className="flex justify-center mb-6">
-          <AppLogo size="lg" />
-        </div>
-
         <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight">
-          olo
+          Mitva
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto leading-relaxed">
