@@ -1,4 +1,3 @@
-// AuthPageLayout.tsx
 "use client";
 import React from "react";
 import Image from "next/image";
@@ -9,7 +8,6 @@ export const AuthPageLayout = ({ children }: { children: React.ReactNode }) => (
     style={{ minHeight: "100vh" }}
   >
     <div className="mb-8 flex flex-col items-center">
-      {/* Replace with your logo image or SVG */}
       <Image
         src="/logo.svg"
         alt="ChatApp Logo"

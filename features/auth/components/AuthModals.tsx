@@ -11,7 +11,7 @@ interface AuthModalsProps {
   onCloseModal: () => void;
   onSwitchToRegister: () => void;
   onSwitchToLogin: () => void;
-  onSwitchToForgotPassword: () => void;
+  onSwitchToForgotPassword?: () => void;
 }
 
 export const AuthModals: React.FC<AuthModalsProps> = ({
