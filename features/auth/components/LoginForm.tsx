@@ -47,7 +47,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     try {
       const result = await handleLogin(data.email, data.password);
       if (result.success) {
-        push("/chat");
+        push("/dashboard");
         if (onSuccess) {
           onSuccess();
         }
