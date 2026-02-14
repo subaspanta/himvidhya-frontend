@@ -35,9 +35,7 @@ export default function DashboardPage() {
     }
   };
 
-  const handleCreateClass = () => {
-    console.log("Create class clicked");
-  };
+  const handleCreateClass = () => {};
 
   const filteredClasses = (classes || []).filter(
     (cls) =>
@@ -48,7 +46,6 @@ export default function DashboardPage() {
   console.log({ user });
   return (
     <div className="px-6 py-8">
-      {/* Header Section */}
       <div className="mb-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div>
@@ -74,7 +71,6 @@ export default function DashboardPage() {
           </Button>
         </div>
 
-        {/* Search and Filter Bar */}
         <div className="flex flex-col md:flex-row gap-3 items-start md:items-center md:justify-between">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 z-10 text-gray-400 pointer-events-none" />
@@ -105,7 +101,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Classes Display */}
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
           <div className="text-muted-foreground">Loading classes...</div>
@@ -116,7 +111,6 @@ export default function DashboardPage() {
         <ClassList classes={filteredClasses} />
       )}
 
-      {/* Empty State */}
       {!isLoading && filteredClasses.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <div className="text-4xl mb-4">🔍</div>
