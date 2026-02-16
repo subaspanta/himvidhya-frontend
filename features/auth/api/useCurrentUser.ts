@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api/apiClient";
+import { apiClient } from "@/shared/api/apiClient";
 import { useQuery } from "@tanstack/react-query";
 
 export const useCurrentUser = () => {

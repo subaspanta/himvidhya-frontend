@@ -15,5 +15,4 @@ export { RegisterForm } from "./components/RegisterForm";
 export { useAuth } from "./hooks/use-auth";
 
 // Store
-export * from "./store/auth.schemas";
 export { useAuthStore } from "./store/auth.store";

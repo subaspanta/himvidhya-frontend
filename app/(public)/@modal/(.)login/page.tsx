@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Modal } from "@/components/ui/Modal";
+import { Modal } from "@/shared/ui/Modal";
 import { LoginForm } from "@/features/auth/components/LoginForm";
 
 export default function LoginModal() {

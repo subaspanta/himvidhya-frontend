@@ -4,7 +4,7 @@ import React from "react";
 import { LoginForm } from "@/features/auth/components/LoginForm";
 import { RegisterForm } from "@/features/auth/components/RegisterForm";
 import { ForgotPasswordForm } from "@/features/auth/components/ForgotPasswordForm";
-import { Modal } from "@/components/ui/Modal";
+import { Modal } from "@/shared/ui/Modal";
 
 interface AuthModalsProps {
   openModal: "login" | "register" | "forgot-password" | null;
