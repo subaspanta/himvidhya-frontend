@@ -72,18 +72,11 @@ components/
 │   ├── IconButton.tsx
 │   ├── Readme.md
 │   └── index.tsx
-├── layout/
-│   ├── AppNavbar.tsx
-│   ├── AuthPageLayout.tsx
-│   ├── ChatLayout.tsx
-│   ├── FullScreenContainer.tsx
-│   ├── LoggedInLayout.tsx
-│   └── index.ts
-└── ui/
-    ├── Modal.tsx
-    ├── TextField.tsx
-    ├── button.tsx
-    ├── dropdown-menu.tsx
+└── layout/
+    ├── AppNavbar.tsx
+    ├── AuthPageLayout.tsx
+    ├── FullScreenContainer.tsx
+    ├── LoggedInLayout.tsx
     └── index.ts
 ```
 
@@ -118,39 +111,7 @@ features/auth/
 ├── hooks/
 │   └── use-auth.ts
 └── store/
-    ├── auth.schemas.ts
     └── auth.store.ts
-```
-
-### `features/chat/` - Chat Feature
-
-```
-features/chat/
-├── index.ts
-├── types.ts
-├── api/
-│   ├── chatApi.ts
-│   └── index.ts
-├── components/
-│   ├── AppSidebar.tsx
-│   ├── ChatArea.tsx
-│   ├── ChatDetailsPanel.tsx
-│   ├── ChatHeader.tsx
-│   ├── ChatLanding.tsx
-│   ├── ConversationItem.tsx
-│   ├── ConversationList.tsx
-│   ├── LogoutButton.tsx
-│   ├── MessageInput.tsx
-│   ├── MessageList.tsx
-│   └── index.ts
-├── hooks/
-│   └── (empty)
-├── socket/
-│   └── (empty)
-├── store/
-│   └── (empty)
-└── utils/
-    └── (empty)
 ```
 
 ### `features/classes/` - Classes Feature
@@ -191,15 +152,15 @@ shared/
 ├── utils.ts
 ├── api/
 │   ├── api.ts
-│   └── apiClient.ts
+│   ├── apiClient.ts
+│   └── error.ts
 ├── auth/
 │   ├── auth-event.ts
 │   └── auth-sync.ts
 ├── hooks/
 │   ├── use-click-away.ts
 │   ├── use-modal.ts
-│   ├── use-prevent-body-scroll.ts
-│   └── useErrorResponse.ts
+│   └── use-prevent-body-scroll.ts
 └── ui/
     ├── Modal.tsx
     ├── TextField.tsx
@@ -215,6 +176,7 @@ shared/
 ```
 providers/
 ├── auth-provider.tsx
+├── layout-provider.tsx
 ├── query-provider.tsx
 └── root-provider.tsx
 ```
@@ -247,7 +209,9 @@ This project follows a **feature-based architecture** with the following organiz
 
 - **`(protected)/`**: Routes requiring authentication (dashboard, etc.)
 - **`(public)/`**: Public routes (landing, login, register, forgot-password)
-- **`@modal/`**: Parallel routes for modal intercepts using Next.js intercepting routes
+- **`@modal/`**: Parallel routes for **auth-only** modal intercepts (login, register, forgot-password)
+  - **Note**: This pattern is frozen for MVP - only use for authentication flows
+  - For in-app actions (create class, announcements, etc.), use normal component modals
 
 ### Feature Module Structure
 
@@ -364,7 +328,7 @@ export const useAuth = () => {
 
 ### Error Handling
 
-**Three-Layer Error Handling System**:
+**Two-Layer Error Handling System**:
 
 1. **API Interceptor Level** (`shared/api/apiClient.ts`)
    - Catches 401 errors globally
@@ -376,23 +340,6 @@ export const useAuth = () => {
    - Extracts error messages from response
    - Sets local error state
    - Returns error information to components
-
-3. **Component Level** (`useErrorResponse` hook)
-   - Optional centralized error handling
-   - Automatic toast notifications based on status codes
-   - Configurable error callbacks
-   - Development logging
-
-**Error Hook Usage** (`shared/hooks/useErrorResponse.ts`):
-
-```typescript
-useErrorResponse(error, {
-  showToast: true,
-  onError: (error) => {
-    // Custom error handling
-  },
-});
-```
 
 **Status Code Handling**:
 
@@ -431,7 +378,6 @@ const { handleLogin, loading, error } = useAuth();
 
 - Used for **client state** (auth, UI state)
 - Persisted using localStorage
-- Schema validation with Zod
 
 **React Query**:
 
@@ -444,6 +390,8 @@ const { handleLogin, loading, error } = useAuth();
 - Form state (React Hook Form)
 - Temporary UI state
 - Loading/error states for mutations
+
+**Note**: Frontend validation with Zod has been removed for MVP simplicity. Backend handles all validation.
 
 ### API Call Flow
 
@@ -474,6 +422,7 @@ Component Re-renders
 5. **Use try-catch-finally** pattern in mutation hooks
 6. **Normalize responses** at interceptor level
 7. **Return structured data** from hooks (`{ success, data, message }`)
+8. **Backend validates all inputs** - frontend validation can be added later if needed
 
 ---
 
@@ -613,6 +562,7 @@ const LoginForm = () => {
 3. **Type errors properly**: Know error.type to handle validation vs. auth
 4. **Show spinners directly**: `isPending` boolean instead of loading state
 5. **Skip success flags**: Components handle success implicitly (redirect, data update)
+6. **Backend validates inputs**: Frontend validation is optional for MVP
 
 ### Updated Best Practices
 
@@ -626,4 +576,4 @@ const LoginForm = () => {
 
 ---
 
-_Last Updated: February 15, 2026_
+_Last Updated: February 16, 2026_

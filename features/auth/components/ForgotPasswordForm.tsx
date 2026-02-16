@@ -2,8 +2,6 @@
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Button } from "@/shared/ui/button";
 import { useRouter } from "next/navigation";
@@ -11,34 +9,15 @@ import TextField from "@/shared/ui/TextField";
 import PasswordField from "@/features/landing/components/PasswordField";
 import { toast } from "react-hot-toast";
 
-const emailSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
-});
+type EmailFormData = {
+  email: string;
+};
 
-const resetSchema = z
-  .object({
-    otp: z
-      .string()
-      .length(6, "OTP must be 6 digits")
-      .regex(/^\d{6}$/, "OTP must contain only numbers"),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .regex(/[A-Z]/, "Must include uppercase letter")
-      .regex(/[0-9]/, "Must include a number")
-      .regex(/[^A-Za-z0-9]/, "Must include special character"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
-
-type EmailFormData = z.infer<typeof emailSchema>;
-type ResetFormData = z.infer<typeof resetSchema>;
+type ResetFormData = {
+  otp: string;
+  password: string;
+  confirmPassword: string;
+};
 
 type Step = "email" | "reset";
 
@@ -56,13 +35,11 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
 
   // Email form
   const emailForm = useForm<EmailFormData>({
-    resolver: zodResolver(emailSchema),
     mode: "onChange",
   });
 
   // Reset form
   const resetForm = useForm<ResetFormData>({
-    resolver: zodResolver(resetSchema),
     mode: "onChange",
   });
 

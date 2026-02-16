@@ -2,25 +2,18 @@
 
 import React from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Button } from "@/shared/ui/button";
 import TextField from "@/shared/ui/TextField";
 import PasswordField from "@/features/landing/components/PasswordField";
 import { useRouter } from "next/navigation";
 
-const registerSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  username: z.string().min(3, "Username must be at least 3 characters"),
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
-
-type RegisterFormData = z.infer<typeof registerSchema>;
+type RegisterFormData = {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+};
 
 interface RegisterFormProps {
   onSuccess?: () => void;
@@ -39,7 +32,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
     formState: { errors },
     setError,
   } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
     mode: "onChange",
   });
 

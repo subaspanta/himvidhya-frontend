@@ -2,23 +2,16 @@
 
 import React from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Button } from "@/shared/ui/button";
 import { useRouter } from "next/navigation";
 import TextField from "@/shared/ui/TextField";
 import PasswordField from "@/features/landing/components/PasswordField";
 
-const loginSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
+type LoginFormData = {
+  email: string;
+  password: string;
+};
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -39,7 +32,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     formState: { errors },
     setError,
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
     mode: "onChange",
   });
 
