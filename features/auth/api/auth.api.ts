@@ -19,7 +19,6 @@ export const registerUser = async (
     id: user._id || user.id,
     email: user.email,
     name: user.name,
-    username: user.username || user.name || user.email,
   };
 
   return { user: mappedUser };
@@ -38,7 +37,6 @@ export const loginUser = async (
     id: user._id || user.id,
     email: user.email,
     name: user.name,
-    username: user.username || user.name || user.email,
   };
 
   return { user: mappedUser };
@@ -82,7 +80,6 @@ export const resetPassword = async (
     id: user._id || user.id,
     email: user.email,
     name: user.name,
-    username: user.username || user.name || user.email,
   };
 
   return { user: mappedUser };
@@ -99,6 +96,5 @@ export const getProfile = async (): Promise<User> => {
     id: user._id || user.id,
     email: user.email,
     name: user.name,
-    username: user.username || user.name || user.email,
   };
 };
