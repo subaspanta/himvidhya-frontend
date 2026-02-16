@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import AppProviders from "@/providers/root-provider";
+import { LayoutProvider } from "@/providers/layout-provider";
 
 export const metadata: Metadata = {
   title: "Mitva",
@@ -19,7 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AppProviders>
-          {children}
+          <LayoutProvider>{children}</LayoutProvider>
           <div id="modal-root"></div>
         </AppProviders>
       </body>

@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "@/features/auth/hooks/use-auth";
-import { Button } from "@/components/ui/button";
-import TextField from "@/components/ui/TextField";
+import { Button } from "@/shared/ui/button";
+import TextField from "@/shared/ui/TextField";
 import PasswordField from "@/features/landing/components/PasswordField";
 import { useRouter } from "next/navigation";
 

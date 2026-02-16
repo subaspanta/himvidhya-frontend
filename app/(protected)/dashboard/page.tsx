@@ -1,18 +1,19 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import TextField from "@/components/ui/TextField";
+import { Button } from "@/shared/ui/button";
+import TextField from "@/shared/ui/TextField";
 import { Search, Plus, Grid, List } from "lucide-react";
 import { ClassCard } from "@/features/classes/types";
 import { ClassGrid } from "@/features/classes/components/ClassGrid";
 import { ClassList } from "@/features/classes/components/ClassList";
 import { getEnrolledClasses } from "@/features/classes/api/classApi";
 import { useAuthStore } from "@/features/auth/store/auth.store";
+import { useLayout } from "@/providers/layout-provider";
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const { viewMode, setViewMode } = useLayout();
   const [searchQuery, setSearchQuery] = useState("");
   const [classes, setClasses] = useState<ClassCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,7 +44,6 @@ export default function DashboardPage() {
       cls.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
       cls.creator.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
-  console.log({ user });
   return (
     <div className="px-6 py-8">
       <div className="mb-8">

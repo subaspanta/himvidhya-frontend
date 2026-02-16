@@ -9,7 +9,7 @@ import {
 } from "@/features/auth/api/auth.api";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useRouter } from "next/navigation";
-import { apiClient } from "@/lib/api/apiClient";
+import { apiClient } from "@/shared/api/apiClient";
 import { UseAuthReturn } from "../types";
 
 export const useAuth = (): UseAuthReturn => {

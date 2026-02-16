@@ -5,7 +5,7 @@
  * TODO: Implement actual API calls to the backend
  */
 
-import { apiClient } from "@/lib/api/apiClient";
+import { apiClient } from "@/shared/api/apiClient";
 import { Conversation, Message, User } from "../types";
 
 /**

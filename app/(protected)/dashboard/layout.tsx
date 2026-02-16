@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { AppNavbar } from "@/components/layout/AppNavbar";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useRouter } from "next/navigation";
+import { useLayout } from "@/providers/layout-provider";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -14,22 +15,18 @@ export default function DashboardLayoutWrapper({
 }: DashboardLayoutProps) {
   const { user, logout } = useAuthStore();
   const router = useRouter();
-  const [notificationCount, setNotificationCount] = useState(0);
+  const { viewMode, setViewMode, notificationCount, setNotificationCount } =
+    useLayout();
 
-  // TODO: Fetch notification count from API
   useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        // const count = await notificationApi.getUnreadCount();
-        // setNotificationCount(count);
-        setNotificationCount(0); // Placeholder
-      } catch (error) {
-        console.error("Failed to fetch notifications:", error);
-      }
-    };
+    setViewMode("grid");
+  }, [setViewMode]);
 
-    fetchNotifications();
-  }, []);
+  // TODO: Fetch real notification count (can stay here or move to a hook)
+  useEffect(() => {
+    // Placeholder — replace with real API call later
+    setNotificationCount(3); // example
+  }, [setNotificationCount]);
 
   const handleLogout = async () => {
     try {
