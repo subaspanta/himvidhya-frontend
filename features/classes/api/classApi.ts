@@ -5,7 +5,7 @@ import { ClassCard, ClassDetails } from "../types";
  * Fetch all classes the user is enrolled in
  */
 export async function getEnrolledClasses(): Promise<ClassCard[]> {
-  const response = await apiClient.get("/classes/my");
+  const response = await apiClient.get("/class/my");
   return response.data || [];
 }
 
@@ -13,7 +13,7 @@ export async function getEnrolledClasses(): Promise<ClassCard[]> {
  * Fetch a specific class by ID
  */
 export async function getClassDetails(id: string): Promise<ClassDetails> {
-  const response = await apiClient.get(`/classes/${id}`);
+  const response = await apiClient.get(`/class/${id}`);
   return response.data.class;
 }
 
@@ -25,7 +25,7 @@ export async function createClass(data: {
   description: string;
   subject: string;
 }): Promise<ClassCard> {
-  const response = await apiClient.post("/classes", data);
+  const response = await apiClient.post("/class", data);
   return response.data.class;
 }
 
@@ -34,7 +34,7 @@ export async function createClass(data: {
  */
 export async function joinClass(code: string): Promise<ClassCard> {
   try {
-    const response = await apiClient.post("/classes/join", { code });
+    const response = await apiClient.post("/class/join", { code });
     return response.data.class;
   } catch (error) {
     console.error("Failed to join class:", error);

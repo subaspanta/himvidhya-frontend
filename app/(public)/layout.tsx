@@ -1,3 +1,5 @@
+import AuthProvider from "@/providers/auth-provider";
+
 export default function PublicLayout({
   children,
   modal,
@@ -6,9 +8,9 @@ export default function PublicLayout({
   modal: React.ReactNode;
 }) {
   return (
-    <>
+    <AuthProvider>
       {children}
       {modal}
-    </>
+    </AuthProvider>
   );
 }
