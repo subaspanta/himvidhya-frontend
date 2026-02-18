@@ -1,45 +1,37 @@
 "use client";
 
-import { useEffect } from "react";
-import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useCurrentUser } from "@/features/auth/api/useCurrentUser";
+import { useAuthStore } from "@/features/auth/store/auth.store";
+import { useEffect, useRef } from "react";
 
 export default function AuthProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { setUser, setAuthChecked } = useAuthStore();
-  const { data: response, isLoading, refetch } = useCurrentUser();
+  const { data: user, isLoading, isError } = useCurrentUser();
+  const { setUser, setAuthChecked, authChecked } = useAuthStore();
+  const updatingFromHere = useRef(false);
 
   useEffect(() => {
-    console.debug("[auth] AuthProvider state", {
-      isLoading,
-      hasResponse: !!response,
-    });
-
     if (isLoading) return;
 
-    if (response) {
-      console.debug("[auth] AuthProvider: syncing user to Zustand", response);
-      setUser(response);
-    } else {
-      console.debug("[auth] AuthProvider: clearing user from Zustand");
+    updatingFromHere.current = true;
+
+    if (user) {
+      setUser(user);
+    } else if (isError) {
       setUser(null);
     }
-    setAuthChecked(true);
-  }, [isLoading, response, setUser, setAuthChecked]);
 
-  useEffect(() => {
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === "auth-storage") {
-        refetch();
-      }
-    };
+    if (!authChecked) {
+      setAuthChecked(true);
+    }
 
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, [refetch]);
+    setTimeout(() => {
+      updatingFromHere.current = false;
+    }, 100);
+  }, [user, isLoading, isError, setUser, setAuthChecked, authChecked]);
 
   return <>{children}</>;
 }
