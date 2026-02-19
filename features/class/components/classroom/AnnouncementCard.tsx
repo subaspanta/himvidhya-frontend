@@ -25,7 +25,7 @@ export default function AnnouncementCard({ announcement }: Props) {
             <p className="font-semibold text-sm">
               {announcement.author.name}
               {announcement.author.role === "teacher" && (
-                <span className="ml-2 px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded-full">
+                <span className="ml-2 px-2 py-0.5 bg-accent/10 text-accent text-xs rounded-md font-mono">
                   Teacher
                 </span>
               )}

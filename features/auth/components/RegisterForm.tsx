@@ -58,12 +58,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   };
 
   return (
-    <div className="space-y-6 text-gray-700">
+    <div className="space-y-6 text-foreground">
       <div className="space-y-2 text-center">
-        <h2 className="text-2xl font-bold leading-tight tracking-tight text-gray-900">
+        <h2 className="text-2xl font-bold font-heading leading-tight tracking-tight text-foreground">
           Create Account
         </h2>
-        <p className="text-base leading-relaxed text-gray-600">
+        <p className="text-base leading-relaxed text-muted-foreground">
           Join our community today
         </p>
       </div>
@@ -107,7 +107,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         </div>
 
         {authError && (
-          <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600 text-center font-medium animate-pulse">
+          <div className="p-4 bg-danger/10 border border-danger/20 rounded-md text-sm text-danger text-center font-medium">
             {authError}
           </div>
         )}
@@ -117,14 +117,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         </Button>
       </form>
 
-      <p className="text-center text-sm text-gray-600 border-t border-gray-100 pt-6 font-medium">
+      <p className="text-center text-sm text-muted-foreground border-t border-border pt-6 font-medium">
         Already have an account?{" "}
         <button
           type="button"
           onClick={() =>
             onSwitchToLogin ? onSwitchToLogin() : router.push("/login")
           }
-          className="text-blue-600 hover:text-blue-700 font-bold transition-colors hover:underline"
+          className="text-accent hover:text-accent/80 font-bold transition-colors hover:underline"
         >
           Login here
         </button>

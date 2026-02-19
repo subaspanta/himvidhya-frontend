@@ -43,7 +43,7 @@ export function CreateClassForm({
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium mb-1">
-            Class Name <span className="text-red-500">*</span>
+            Class Name <span className="text-danger">*</span>
           </label>
           <TextField
             id="name"
@@ -59,7 +59,7 @@ export function CreateClassForm({
 
         <div>
           <label htmlFor="subject" className="block text-sm font-medium mb-1">
-            Subject <span className="text-red-500">*</span>
+            Subject <span className="text-danger">*</span>
           </label>
           <TextField
             id="subject"

@@ -5,7 +5,7 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   const { pathname } = req.nextUrl;
 
-  const isProtected = pathname.startsWith("/chat");
+  const isProtected = pathname.startsWith("/dashboard");
 
   if (isProtected && !token) {
     const loginUrl = new URL("/login", req.url);

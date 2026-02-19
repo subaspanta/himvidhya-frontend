@@ -43,7 +43,7 @@ export function JoinClassForm({
             required
             disabled={isLoading}
           />
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-sm text-muted-foreground mt-2">
             Ask your CR or teacher for the code
           </p>
         </div>

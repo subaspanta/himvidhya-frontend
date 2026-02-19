@@ -111,7 +111,7 @@ export default function DashboardPage() {
           {user?.role === "teacher" && (
             <Button
               onClick={() => setIsCreateModalOpen(true)}
-              className="shadow-lg gap-2 w-full md:w-auto "
+              className="shadow-sm hover:shadow-md gap-2 w-full md:w-auto "
             >
               <Plus className="w-4 h-4" />
               Create Class
@@ -120,7 +120,7 @@ export default function DashboardPage() {
           {user?.role === "student" && (
             <Button
               onClick={() => setIsJoinModalOpen(true)}
-              className="shadow-lg gap-2 w-full md:w-auto "
+              className="shadow-sm hover:shadow-md gap-2 w-full md:w-auto "
             >
               <Plus className="w-4 h-4" />
               Join Class
@@ -130,13 +130,13 @@ export default function DashboardPage() {
 
         <div className="flex flex-col md:flex-row gap-3 items-start md:items-center md:justify-between">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 z-20 text-gray-400 pointer-events-none" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 z-20 text-muted-foreground pointer-events-none" />
             <input
               type="text"
               placeholder="Search classes, subjects, or teachers..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-11 w-full pl-10 pr-4 rounded-xl transition-all duration-200 bg-black/5 text-gray-900 placeholder:text-gray-400 font-medium border border-black/10 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/40 focus:bg-white"
+              className="h-11 w-full pl-10 pr-4 rounded-md transition-all duration-200 bg-surface text-foreground placeholder:text-muted-foreground font-medium border border-border shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
             />
           </div>
 

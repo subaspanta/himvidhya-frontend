@@ -40,17 +40,17 @@ const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
     };
 
     return (
-      <div className={cn("space-y-1.5", className)}>
+      <div className={cn("space-y-2", className)}>
         {labelText && (
           <label
             htmlFor={name}
             className={cn(
               "block text-sm font-medium transition-colors",
-              hasError ? "text-red-500" : "text-gray-700",
+              hasError ? "text-danger" : "text-foreground",
             )}
           >
             {labelText}
-            {required && <span className="ml-1 text-red-500">*</span>}
+            {required && <span className="ml-1 text-danger">*</span>}
           </label>
         )}
 
@@ -64,13 +64,12 @@ const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
             aria-describedby={hasError ? `${name}-error` : undefined}
             {...rest}
             className={cn(
-              "w-full h-11 px-4 pr-12 rounded-xl transition-all duration-200",
-              "bg-black/5 text-gray-900 placeholder:text-gray-400 font-medium",
-              "border border-black/10",
-              "focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/40 focus:bg-white",
+              "w-full h-11 px-4 pr-12 rounded-md transition-all duration-200",
+              "bg-surface text-foreground placeholder:text-muted-foreground font-medium",
+              "border border-border shadow-sm",
+              "focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent",
               "disabled:opacity-50 disabled:cursor-not-allowed",
-              hasError &&
-                "border-red-500/50 focus:ring-red-500/20 focus:border-red-500/50",
+              hasError && "border-danger focus:ring-danger focus:border-danger",
             )}
           />
           <button
@@ -78,16 +77,16 @@ const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
             onClick={togglePasswordVisibility}
             className={cn(
               "absolute right-3 top-1/2 -translate-y-1/2",
-              "p-1.5 rounded-lg transition-all duration-200",
-              "text-gray-400 hover:text-gray-600 hover:bg-black/5",
-              "focus:outline-none focus:ring-2 focus:ring-blue-500/20",
+              "p-1.5 rounded-md transition-all duration-200",
+              "text-muted-foreground hover:text-foreground hover:bg-accent",
+              "focus:outline-none focus:ring-2 focus:ring-accent",
             )}
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
             <Icon
               name={showPassword ? "eyeOff" : "eye"}
               size="md"
-              className="text-current bg-transparent rounded-lg"
+              className="text-current bg-transparent rounded-md"
             />
           </button>
         </div>
@@ -95,7 +94,7 @@ const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
         {hasError && typeof error === "string" && (
           <p
             id={`${name}-error`}
-            className="text-xs text-red-400 mt-1 animate-in fade-in slide-in-from-top-1"
+            className="text-sm text-danger mt-1 animate-in fade-in slide-in-from-top-1"
           >
             {error}
           </p>
