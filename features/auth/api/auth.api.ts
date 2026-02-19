@@ -98,3 +98,17 @@ export const getProfile = async (): Promise<User> => {
     name: user.name,
   };
 };
+
+/* ================= CURRENT USER ================= */
+
+export const getCurrentUser = async (): Promise<User> => {
+  const response = await apiClient.get("/auth/me");
+
+  const user = response.data;
+
+  return {
+    id: user._id || user.id,
+    email: user.email,
+    name: user.name,
+  };
+};

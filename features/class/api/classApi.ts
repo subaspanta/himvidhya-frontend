@@ -1,25 +1,16 @@
 import { apiClient } from "@/shared/api/apiClient";
 import { ClassCard, ClassDetails } from "../types";
 
-/**
- * Fetch all classes the user is enrolled in
- */
 export async function getEnrolledClasses(): Promise<ClassCard[]> {
   const response = await apiClient.get("/class/my");
   return response.data || [];
 }
 
-/**
- * Fetch a specific class by ID
- */
 export async function getClassDetails(id: string): Promise<ClassDetails> {
   const response = await apiClient.get(`/class/${id}`);
-  return response.data.class;
+  return response.data;
 }
 
-/**
- * Create a new class
- */
 export async function createClass(data: {
   name: string;
   description: string;
@@ -29,9 +20,6 @@ export async function createClass(data: {
   return response.data.class;
 }
 
-/**
- * Join a class with a code
- */
 export async function joinClass(code: string): Promise<ClassCard> {
   try {
     const response = await apiClient.post("/class/join", { code });

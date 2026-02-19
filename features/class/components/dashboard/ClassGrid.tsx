@@ -1,5 +1,5 @@
 import React from "react";
-import { ClassCard } from "../types";
+import { ClassCard } from "../../types";
 import { ClassCardItem } from "./ClassCardItem";
 
 interface ClassGridProps {

@@ -1,6 +1,6 @@
 import React from "react";
-import { ClassCard } from "../types";
 import { ClassCardItem } from "./ClassCardItem";
+import { ClassCard } from "../../types";
 
 interface ClassListProps {
   classes: ClassCard[];

@@ -1,6 +1,4 @@
-export { ClassGrid } from "./components/ClassGrid";
-export { ClassList } from "./components/ClassList";
-export { ClassCardItem } from "./components/ClassCardItem";
+export { ClassCardItem } from "./components/dashboard/ClassCardItem";
 export {
   getEnrolledClasses,
   getClassDetails,

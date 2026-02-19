@@ -3,13 +3,8 @@
 import React, { useEffect, useState, memo } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-import { FullScreenContainer } from "../../components/layout/FullScreenContainer";
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+import { cn } from "@/shared/utils";
+import { FullScreenContainer } from "@/components/layout/FullScreenContainer";
 
 interface ModalProps {
   isOpen: boolean;

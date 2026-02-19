@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/features/auth/hooks/use-auth";
-import { Button } from "@/shared/ui/button";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import TextField from "@/shared/ui/TextField";
+import TextField from "@/components/ui/text-field";
 import PasswordField from "@/features/landing/components/PasswordField";
 import { toast } from "react-hot-toast";
 

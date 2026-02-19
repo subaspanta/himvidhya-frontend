@@ -7,12 +7,12 @@ export interface ClassCard {
   name: string;
   subject: string;
   code: string;
+  description?: string;
   creator: {
     _id: string;
     name: string;
     email: string;
     avatar: string | null;
-    username: string;
   };
   members: Array<{
     user: string;
@@ -22,18 +22,33 @@ export interface ClassCard {
   createdAt: string;
 }
 
-export interface ClassDetails extends ClassCard {
+export interface ClassDetails extends Omit<ClassCard, "members" | "creator"> {
+  _id: string;
+  name: string;
+  subject: string;
+  description?: string;
+  joinCode: string;
+  creator: {
+    _id: string;
+    name: string;
+    email: string;
+    role: string;
+    avatar: string | null;
+  };
+  members: ClassMember[];
+  announcements?: Announcement;
+  membersCount: number;
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
-  members: ClassMember[];
-  announcements: Announcement[];
 }
 
 export interface ClassMember {
-  user: string;
-  id: string;
-  name: string;
-  email: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
   role: "teacher" | "student";
   joinedAt: string;
 }

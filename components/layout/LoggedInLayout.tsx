@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { AppNavbar } from "./AppNavbar";
-import TextField from "@/shared/ui/TextField";
-import { Button } from "@/shared/ui/button";
+import TextField from "@/components/ui/text-field";
+import { Button } from "@/components/ui/button";
 import { Search, Plus, Grid, List } from "lucide-react";
 
 interface LoggedInLayoutProps {

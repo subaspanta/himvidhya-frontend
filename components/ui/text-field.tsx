@@ -1,10 +1,6 @@
 import React, { ForwardedRef, InputHTMLAttributes } from "react";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+import { Input } from "@/components/ui/input";
+import { cn } from "@/shared/utils";
 
 function friendlyName(name?: string) {
   if (!name) return "";
@@ -47,7 +43,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         )}
 
         <div className="relative">
-          <input
+          <Input
             id={name}
             name={name}
             type={type}
@@ -56,7 +52,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             aria-describedby={hasError ? `${name}-error` : undefined}
             {...rest}
             className={cn(
-              "w-full h-11 px-4 rounded-xl transition-all duration-200",
+              "h-11 px-4 rounded-xl transition-all duration-200",
               "bg-black/5 text-gray-900 placeholder:text-gray-400 font-medium",
               "border border-black/10",
               "focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/40 focus:bg-white",

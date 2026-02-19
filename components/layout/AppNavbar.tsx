@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { AppLogo } from "@/features/landing/components/AppLogo";
-import { Button } from "@/shared/ui/button";
+import { Button } from "@/components/ui/button";
 import { Bell, LogOut, Settings } from "lucide-react";
 import {
   DropdownMenu,
@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/shared/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 interface AppNavbarProps {
   isLoggedIn: boolean;

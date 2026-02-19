@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Modal } from "@/shared/ui/Modal";
+import { Modal } from "@/components/ui/modal";
 import { ForgotPasswordForm } from "@/features/auth/components/ForgotPasswordForm";
 
 export default function ForgotPasswordModal() {
