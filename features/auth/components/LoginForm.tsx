@@ -1,12 +1,13 @@
 "use client";
+import { AxiosError } from "axios";
 
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import TextField from "@/components/ui/text-field";
 import PasswordField from "@/features/landing/components/PasswordField";
+import { useLogin } from "../hooks/useLogin";
 
 type LoginFormData = {
   email: string;
@@ -24,7 +25,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   onSwitchToRegister,
   onSwitchToForgotPassword,
 }) => {
-  const { handleLogin, loading, error: authError } = useAuth();
+  // const { handleLogin, loading, error: authError } = useAuth();
   const { push } = useRouter();
   const {
     register,
@@ -35,18 +36,21 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     mode: "onChange",
   });
 
+  const { mutate, isPending: isLoading, error: authError } = useLogin();
+
   const onSubmit = async (data: LoginFormData) => {
-    try {
-      const result = await handleLogin(data.email, data.password);
-      if (result.success) {
-        push("/dashboard");
-        if (onSuccess) {
-          onSuccess();
-        }
-      }
-    } catch {
-      setError("root", { message: "Login failed" });
-    }
+    mutate(
+      { email: data.email, password: data.password },
+      {
+        onSuccess: () => {
+          push("/dashboard");
+          if (onSuccess) onSuccess();
+        },
+        onError: () => {
+          setError("root", { message: "Login failed" });
+        },
+      },
+    );
   };
 
   return (
@@ -96,16 +100,18 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
         {authError && (
           <div className="px-4 py-3 bg-danger/10 border border-danger/20 rounded-md text-sm text-danger text-center font-medium">
-            {authError}
+            {authError instanceof AxiosError
+              ? authError.response?.data?.message || authError.message
+              : "An unexpected error occurred"}
           </div>
         )}
 
         <Button
           type="submit"
           className="w-full h-11 text-sm font-bold"
-          disabled={loading}
+          disabled={isLoading}
         >
-          {loading ? "Signing In..." : "Sign In"}
+          {isLoading ? "Signing In..." : "Sign In"}
         </Button>
       </form>
       <p className="text-center text-sm text-muted-foreground">

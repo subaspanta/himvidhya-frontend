@@ -1,9 +1,9 @@
 // Types
-export * from "./types";
+export * from "./types/auth.types";
 
 // API
 export * from "./api/auth.api";
-export { useCurrentUser } from "./api/useCurrentUser";
+export { useCurrentUser } from "./hooks/useCurrentUser";
 
 // Components
 export { AuthModals } from "./components/AuthModals";

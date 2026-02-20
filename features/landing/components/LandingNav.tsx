@@ -1,6 +1,6 @@
 import React from "react";
-import { AppNavbar, NavLink } from "@/components/layout/AppNavbar";
 import { LandingNavProps } from "../types";
+import { Navbar, NavLink } from "@/components/layout";
 
 export const LandingNav: React.FC<LandingNavProps> = ({
   onLoginClick,
@@ -13,7 +13,7 @@ export const LandingNav: React.FC<LandingNavProps> = ({
   ];
 
   return (
-    <AppNavbar
+    <Navbar
       variant="landing"
       navLinks={landingLinks}
       isLoggedIn={false}

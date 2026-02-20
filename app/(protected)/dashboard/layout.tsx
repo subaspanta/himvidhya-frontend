@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { AppNavbar } from "@/components/layout/AppNavbar";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useRouter } from "next/navigation";
 import { useLayout } from "@/providers/layout-provider";
+import { Navbar } from "@/components/layout";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -47,14 +47,15 @@ export default function DashboardLayoutWrapper({
 
   return (
     <div className="min-h-screen bg-background">
-      <AppNavbar
+      <Navbar
+        variant="dashboard"
         isLoggedIn={true}
         onLogoutClick={handleLogout}
         onSettingsClick={handleSettings}
         onNotificationClick={handleNotification}
         userEmail={user?.email || "user@example.com"}
         userName={user?.name || "Student"}
-        userRole={user?.role || "student"}
+        // userRole={user?.role || "student"}
         avatarUrl={user?.avatar}
         notificationCount={notificationCount}
       />

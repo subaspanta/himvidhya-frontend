@@ -1,4 +1,4 @@
-import { User } from "@/features/auth/types";
+import { User } from "@/features/auth/types/auth.types";
 
 export type AuthEvent =
   | { type: "LOGIN"; user: User }

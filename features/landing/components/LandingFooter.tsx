@@ -5,7 +5,7 @@ import { AppLogo } from "@/features/landing/components/AppLogo";
 export const LandingFooter: React.FC = () => {
   return (
     <footer className="w-full bg-gradient-to-b from-[#0F172A] to-[#1E293B] px-0 py-10 md:py-12">
-      <div className="w-full max-w-[1200px] mx-auto flex flex-col md:flex-row gap-10 md:gap-0 justify-center items-center px-6 md:px-8 text-center">
+      <div className="w-full max-w-[1200px] mx-auto flex flex-col md:flex-row gap-10 md:gap-4 justify-center items-center px-6 md:px-8 text-center">
         {/* Left: Logo, Tagline */}
         <div className="flex-1 min-w-[220px] flex flex-col gap-3 items-center">
           <div className="flex items-center gap-2 mb-1 justify-center">
@@ -32,30 +32,6 @@ export const LandingFooter: React.FC = () => {
                 Features
               </Link>
             </li>
-            <li>
-              <Link
-                href="#pricing"
-                className="text-slate-300 text-[14px] hover:text-white transition"
-              >
-                Pricing
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#teachers"
-                className="text-slate-300 text-[14px] hover:text-white transition"
-              >
-                For Teachers
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#students"
-                className="text-slate-300 text-[14px] hover:text-white transition"
-              >
-                For Students
-              </Link>
-            </li>
           </ul>
         </div>
 
@@ -73,22 +49,7 @@ export const LandingFooter: React.FC = () => {
                 About Us
               </Link>
             </li>
-            <li>
-              <Link
-                href="#careers"
-                className="text-slate-300 text-[14px] hover:text-white transition"
-              >
-                Careers
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#blog"
-                className="text-slate-300 text-[14px] hover:text-white transition"
-              >
-                Blog
-              </Link>
-            </li>
+
             <li>
               <Link
                 href="#contact"

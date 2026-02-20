@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { AppNavbar } from "./AppNavbar";
 import TextField from "@/components/ui/text-field";
 import { Button } from "@/components/ui/button";
 import { Search, Plus, Grid, List } from "lucide-react";
+import { Navbar } from "./navbar";
 
 interface LoggedInLayoutProps {
   children?: React.ReactNode;
@@ -90,7 +90,7 @@ export const LoggedInLayout: React.FC<LoggedInLayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen bg-background">
       {/* Navbar */}
-      <AppNavbar
+      <Navbar
         isLoggedIn={true}
         onLogoutClick={handleLogout}
         onSettingsClick={handleSettings}

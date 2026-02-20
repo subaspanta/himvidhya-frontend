@@ -4,9 +4,13 @@ import type {
   AuthResponse,
   RegisterData,
   LoginCredentials,
-} from "../types";
+} from "../types/auth.types";
 
-/* ================= REGISTER ================= */
+const mapUser = (user: User): User => ({
+  id: user.id,
+  email: user.email,
+  name: user.name,
+});
 
 export const registerUser = async (
   data: RegisterData,
@@ -15,16 +19,8 @@ export const registerUser = async (
 
   const user = response.data.user;
 
-  const mappedUser: User = {
-    id: user._id || user.id,
-    email: user.email,
-    name: user.name,
-  };
-
-  return { user: mappedUser };
+  return { user: mapUser(user) };
 };
-
-/* ================= LOGIN ================= */
 
 export const loginUser = async (
   credentials: LoginCredentials,
@@ -33,16 +29,8 @@ export const loginUser = async (
 
   const user = response.data.user;
 
-  const mappedUser: User = {
-    id: user._id || user.id,
-    email: user.email,
-    name: user.name,
-  };
-
-  return { user: mappedUser };
+  return { user: mapUser(user) };
 };
-
-/* ================= FORGOT PASSWORD ================= */
 
 export const forgotPassword = async (
   email: string,
@@ -61,8 +49,6 @@ export const verifyOTP = async (
   return { valid: response.data.valid, message: response.data.message };
 };
 
-/* ================= RESET PASSWORD ================= */
-
 export const resetPassword = async (
   email: string,
   otp: string,
@@ -76,16 +62,8 @@ export const resetPassword = async (
 
   const user = response.data.user;
 
-  const mappedUser: User = {
-    id: user._id || user.id,
-    email: user.email,
-    name: user.name,
-  };
-
-  return { user: mappedUser };
+  return { user: mapUser(user) };
 };
-
-/* ================= PROFILE ================= */
 
 export const getProfile = async (): Promise<User> => {
   const response = await apiClient.get("/auth/profile");
@@ -99,8 +77,6 @@ export const getProfile = async (): Promise<User> => {
   };
 };
 
-/* ================= CURRENT USER ================= */
-
 export const getCurrentUser = async (): Promise<User> => {
   const response = await apiClient.get("/auth/me");
 
@@ -111,4 +87,12 @@ export const getCurrentUser = async (): Promise<User> => {
     email: user.email,
     name: user.name,
   };
+};
+
+/**
+ * Logs out the current user.
+ * Calls the backend logout endpoint.
+ */
+export const logoutUser = async (): Promise<void> => {
+  await apiClient.post("/auth/logout");
 };

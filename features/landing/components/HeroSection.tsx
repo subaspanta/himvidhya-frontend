@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowRight, PlayCircle } from "lucide-react";
 interface HeroSectionProps {
   onGetStartedClick: () => void;
@@ -42,12 +41,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       {/* 2. Content Container */}
       <div className="relative z-10 w-full max-w-[1200px] px-6 py-12 flex flex-col items-center text-center">
-        {/* A. Top Label / Feature Badge */}
-        {/* <div className="mb-8 inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-sm font-medium text-blue-300 backdrop-blur-sm animate-in fade-in slide-in-from-top-4 duration-700">
-          <span className="flex h-2 w-2 rounded-full bg-blue-400 mr-2 animate-pulse"></span>
-          New Feature: AI-Powered Routine Generation
-        </div> */}
-
         {/* B. Main Headline */}
         <h1 className="max-w-4xl text-5xl font-bold tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[5rem] leading-[1.1]">
           <span className="block mb-2">
@@ -78,8 +71,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
         {/* C. Subheadline */}
         <p className="mt-8 max-w-2xl text-lg text-slate-300 md:text-xl md:leading-relaxed">
-          Streamline your classroom management with Nepal's first AI-powered
-          education tool designed for students and teachers in the Himalayas.
+          Streamline your classroom management with Nepal&apos;s first
+          AI-powered education tool designed for students and teachers in the
+          Himalayas.
         </p>
 
         {/* D. CTA Buttons */}
