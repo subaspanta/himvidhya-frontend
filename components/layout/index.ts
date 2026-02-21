@@ -1,4 +1,4 @@
 export { AuthPageLayout } from "./AuthPageLayout";
 export { FullScreenContainer } from "./FullScreenContainer";
-export { AppNavbar } from "./AppNavbar";
+export * from "./navbar";
 export { default as LoggedInLayout } from "./LoggedInLayout";

@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { AppNavbar } from "./AppNavbar";
-import TextField from "@/shared/ui/TextField";
-import { Button } from "@/shared/ui/button";
+import TextField from "@/components/ui/text-field";
+import { Button } from "@/components/ui/button";
 import { Search, Plus, Grid, List } from "lucide-react";
+import { Navbar } from "./navbar";
 
 interface LoggedInLayoutProps {
   children?: React.ReactNode;
@@ -90,7 +90,7 @@ export const LoggedInLayout: React.FC<LoggedInLayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen bg-background">
       {/* Navbar */}
-      <AppNavbar
+      <Navbar
         isLoggedIn={true}
         onLogoutClick={handleLogout}
         onSettingsClick={handleSettings}
@@ -123,7 +123,7 @@ export const LoggedInLayout: React.FC<LoggedInLayoutProps> = ({ children }) => {
 
                 <Button
                   onClick={handleCreateClass}
-                  className="shadow-lg gap-2 w-full md:w-auto"
+                  className="shadow-sm hover:shadow-md gap-2 w-full md:w-auto"
                 >
                   <Plus className="w-4 h-4" />
                   Create Class
@@ -133,7 +133,7 @@ export const LoggedInLayout: React.FC<LoggedInLayoutProps> = ({ children }) => {
               {/* Search and Filter Bar */}
               <div className="flex flex-col md:flex-row gap-3 items-start md:items-center md:justify-between">
                 <div className="relative flex-1 max-w-md">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 z-10 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 z-10 text-muted-foreground" />
                   <TextField
                     placeholder="Search classes, subjects, or teachers..."
                     value={searchQuery}
@@ -186,28 +186,28 @@ export const LoggedInLayout: React.FC<LoggedInLayoutProps> = ({ children }) => {
                   <div
                     key={cls.id}
                     className={`
-                      group cursor-pointer rounded-lg border border-border bg-card p-4 transition-all hover:shadow-md hover:border-primary
+                      group cursor-pointer rounded-md border border-border bg-surface p-6 transition-all shadow-sm hover:shadow-md hover:border-accent
                       ${viewMode === "list" ? "flex items-center justify-between" : ""}
                     `}
                   >
-                    <div className="flex items-start gap-3 flex-1">
+                    <div className="flex items-start gap-4 flex-1">
                       {/* Avatar */}
-                      <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                        <span className="text-xs font-bold text-primary">
+                      <div className="w-12 h-12 rounded-md bg-accent/10 flex items-center justify-center shrink-0">
+                        <span className="text-sm font-bold text-accent font-mono">
                           {cls.avatar}
                         </span>
                       </div>
 
                       {/* Class Info */}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-foreground truncate">
+                        <h3 className="font-semibold text-foreground truncate font-heading">
                           {cls.name}
                         </h3>
                         <p className="text-sm text-muted-foreground truncate">
                           {cls.description}
                         </p>
                         <div className="flex items-center gap-2 mt-2">
-                          <span className="inline-block px-2 py-1 rounded bg-primary/10 text-xs font-medium text-primary">
+                          <span className="inline-block px-2 py-1 rounded-md bg-accent/10 text-xs font-medium text-accent">
                             {cls.subject}
                           </span>
                           <span className="text-xs text-muted-foreground">

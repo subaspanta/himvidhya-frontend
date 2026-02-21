@@ -1,34 +1,25 @@
 "use client";
 
 import React, { useState } from "react";
+import { useForgetPassword } from "@/features/auth/hooks/useForgetPassword";
+import { useResetPassword } from "@/features/auth/hooks/useResetPassword";
+import { useVerifyOTP } from "@/features/auth/hooks/useVerifyOTP";
 import { useForm } from "react-hook-form";
-import { useAuth } from "@/features/auth/hooks/use-auth";
-import { Button } from "@/shared/ui/button";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import TextField from "@/shared/ui/TextField";
+import TextField from "@/components/ui/text-field";
 import PasswordField from "@/features/landing/components/PasswordField";
 import { toast } from "react-hot-toast";
-
-type EmailFormData = {
-  email: string;
-};
-
-type ResetFormData = {
-  otp: string;
-  password: string;
-  confirmPassword: string;
-};
-
-type Step = "email" | "reset";
-
-interface ForgotPasswordFormProps {
-  onBackToLogin?: () => void;
-}
+import {
+  EmailFormData,
+  ForgotPasswordFormProps,
+  ResetFormData,
+  Step,
+} from "../types/auth.types";
 
 export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   onBackToLogin,
 }) => {
-  const { handleForgotPassword, handleResetPassword, loading } = useAuth();
   const { push } = useRouter();
   const [step, setStep] = useState<Step>("email");
   const [userEmail, setUserEmail] = useState("");
@@ -43,40 +34,82 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
     mode: "onChange",
   });
 
+  const forgetPasswordMutation = useForgetPassword();
+  const resetPasswordMutation = useResetPassword();
+  const verifyOTPMutation = useVerifyOTP();
+
   const onEmailSubmit = async (data: EmailFormData) => {
-    const result = await handleForgotPassword(data.email);
-
-    if (result.success) {
-      setUserEmail(data.email);
-      setStep("reset");
-      toast.success("OTP sent to your email!");
-    } else {
-      toast.error(result.message);
-    }
-  };
-
-  const onResetSubmit = async (data: ResetFormData) => {
-    const result = await handleResetPassword(
-      userEmail,
-      data.otp,
-      data.password,
+    forgetPasswordMutation.mutate(
+      { email: data.email },
+      {
+        onSuccess: () => {
+          setUserEmail(data.email);
+          setStep("reset");
+        },
+        onError: (error) => {
+          toast.error(error?.response?.data?.message || error.message);
+        },
+      },
     );
-
-    if (result.success) {
-      toast.success("Password reset successful!");
-      push("/chat"); // Auto-logged in
-    } else {
-      toast.error("Reset failed. OTP may be expired.");
-    }
   };
 
-  const handleResendOTP = async () => {
-    const result = await handleForgotPassword(userEmail);
-    if (result.success) {
-      toast.success("New OTP sent!");
-    } else {
-      toast.error("Failed to resend OTP");
-    }
+  const onResetSubmit = (data: ResetFormData) => {
+    verifyOTPMutation.mutate(
+      { email: userEmail, otp: data.otp },
+      {
+        onSuccess: (verifyData) => {
+          if (verifyData.valid) {
+            resetPasswordMutation.mutate(
+              {
+                email: userEmail,
+                otp: data.otp,
+                password: data.password,
+              },
+              {
+                onSuccess: () => {
+                  toast.success("Password reset successful!");
+                  push("/dashboard"); // Auto-logged in
+                },
+                onError: (error) => {
+                  toast.error(
+                    error?.response?.data?.message ||
+                      error.message ||
+                      "Reset failed. OTP may be expired.",
+                  );
+                },
+              },
+            );
+          } else {
+            toast.error(verifyData.message || "Invalid OTP. Please try again.");
+          }
+        },
+        onError: (error) => {
+          toast.error(
+            error?.response?.data?.message ||
+              error.message ||
+              "OTP verification failed.",
+          );
+        },
+      },
+    );
+  };
+
+  const handleResendOTP = () => {
+    forgetPasswordMutation.mutate(
+      { email: userEmail },
+      {
+        onSuccess: () => {
+          toast.success("New OTP sent!");
+        },
+        onError: (error) => {
+          toast.error(
+            error?.response?.data?.message ||
+              error.message ||
+              "Failed to resend OTP",
+          );
+        },
+      },
+    );
   };
 
   const handleBackToLogin = () => {
@@ -89,11 +122,11 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
 
   if (step === "reset") {
     return (
-      <div className="space-y-8 text-gray-700">
+      <div className="space-y-8 text-foreground">
         <div className="text-center space-y-2">
-          <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+          <div className="mx-auto w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mb-4">
             <svg
-              className="w-8 h-8 text-blue-600"
+              className="w-8 h-8 text-accent"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -106,12 +139,12 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold leading-tight tracking-tight text-gray-900">
+          <h2 className="text-2xl font-bold font-heading leading-tight tracking-tight text-foreground">
             Enter OTP & New Password
           </h2>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             We sent a 6-digit code to{" "}
-            <span className="font-semibold text-blue-600">{userEmail}</span>
+            <span className="font-semibold text-accent">{userEmail}</span>
           </p>
         </div>
 
@@ -135,8 +168,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
                   type="button"
                   variant="ghost"
                   onClick={handleResendOTP}
-                  className="text-sm text-blue-600 hover:text-blue-700 font-semibold p-0 h-auto"
-                  disabled={loading}
+                  className="text-sm text-accent hover:text-accent/80 font-semibold p-0 h-auto"
                 >
                   Resend OTP
                 </Button>
@@ -159,9 +191,9 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
               {...resetForm.register("confirmPassword")}
             />
 
-            <div className="px-4 py-3 bg-blue-50 border border-blue-100 rounded-lg text-xs text-gray-600">
+            <div className="px-4 py-3 bg-accent/10 border border-accent/20 rounded-md text-sm text-foreground">
               <p className="font-semibold mb-2">Password must include:</p>
-              <ul className="space-y-1 list-disc list-inside">
+              <ul className="space-y-1 list-disc list-inside text-muted-foreground">
                 <li>At least 8 characters</li>
                 <li>One uppercase letter (A-Z)</li>
                 <li>One number (0-9)</li>
@@ -173,13 +205,17 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
           <Button
             type="submit"
             className="w-full h-11 text-sm font-bold"
-            disabled={loading}
+            disabled={
+              resetPasswordMutation.isPending || verifyOTPMutation.isPending
+            }
           >
-            {loading ? "Resetting Password..." : "Reset Password"}
+            {resetPasswordMutation.isPending || verifyOTPMutation.isPending
+              ? "Resetting Password..."
+              : "Reset Password"}
           </Button>
         </form>
 
-        <p className="text-center text-sm text-gray-600">
+        <p className="text-center text-sm text-muted-foreground">
           <Button
             type="button"
             onClick={() => {
@@ -187,7 +223,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
               resetForm.reset();
             }}
             variant="ghost"
-            className="text-blue-600 hover:text-blue-700 font-bold hover:underline p-0 h-auto"
+            className="text-accent hover:text-accent/80 font-bold hover:underline p-0 h-auto"
           >
             ← Use different email
           </Button>
@@ -197,14 +233,14 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   }
 
   return (
-    <div className="space-y-8 text-gray-700">
+    <div className="space-y-8 text-foreground">
       <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold leading-tight tracking-tight text-gray-900">
+        <h2 className="text-2xl font-bold font-heading leading-tight tracking-tight text-foreground">
           Forgot Password?
         </h2>
-        <p className="text-base leading-relaxed text-gray-600">
+        <p className="text-base leading-relaxed text-muted-foreground">
           No worries, we&apos;ll send you an OTP to reset it for{" "}
-          <span className="text-blue-600 font-bold">Mitva</span>
+          <span className="text-accent font-bold">HimVidhya</span>
         </p>
       </div>
 
@@ -223,22 +259,18 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
           />
         </div>
 
-        <Button
-          type="submit"
-          className="w-full h-11 text-sm font-bold"
-          disabled={loading}
-        >
-          {loading ? "Sending OTP..." : "Send OTP"}
+        <Button type="submit" className="w-full h-11 text-sm font-bold">
+          {"Send OTP"}
         </Button>
       </form>
 
-      <p className="text-center text-sm text-gray-600">
+      <p className="text-center text-sm text-muted-foreground">
         Remember your password?{" "}
         <Button
           type="button"
           onClick={handleBackToLogin}
           variant="ghost"
-          className="text-blue-600 hover:text-blue-700 font-bold hover:underline p-0 h-auto"
+          className="text-accent hover:text-accent/80 font-bold hover:underline p-0 h-auto"
         >
           Back to Login
         </Button>

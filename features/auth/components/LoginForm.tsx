@@ -1,30 +1,21 @@
 "use client";
+import { AxiosError } from "axios";
 
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "@/features/auth/hooks/use-auth";
-import { Button } from "@/shared/ui/button";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import TextField from "@/shared/ui/TextField";
+import TextField from "@/components/ui/text-field";
 import PasswordField from "@/features/landing/components/PasswordField";
-
-type LoginFormData = {
-  email: string;
-  password: string;
-};
-
-interface LoginFormProps {
-  onSuccess?: () => void;
-  onSwitchToRegister?: () => void;
-  onSwitchToForgotPassword?: () => void;
-}
+import { useLogin } from "../hooks/useLogin";
+import { LoginFormData, LoginFormProps } from "../types/auth.types";
+import toast from "react-hot-toast";
 
 export const LoginForm: React.FC<LoginFormProps> = ({
   onSuccess,
   onSwitchToRegister,
   onSwitchToForgotPassword,
 }) => {
-  const { handleLogin, loading, error: authError } = useAuth();
   const { push } = useRouter();
   const {
     register,
@@ -35,29 +26,33 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     mode: "onChange",
   });
 
+  const { mutate, isPending: isLoading, error: authError } = useLogin();
+
   const onSubmit = async (data: LoginFormData) => {
-    try {
-      const result = await handleLogin(data.email, data.password);
-      if (result.success) {
-        push("/dashboard");
-        if (onSuccess) {
-          onSuccess();
-        }
-      }
-    } catch {
-      setError("root", { message: "Login failed" });
-    }
+    mutate(
+      { email: data.email, password: data.password },
+      {
+        onSuccess: () => {
+          push("/dashboard");
+          if (onSuccess) onSuccess();
+          toast.success("Logged in successfully");
+        },
+        onError: () => {
+          setError("root", { message: "Login failed" });
+        },
+      },
+    );
   };
 
   return (
-    <div className="space-y-8 text-gray-700">
+    <div className="space-y-8 text-foreground">
       <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold leading-tight tracking-tight text-gray-900">
+        <h2 className="text-2xl font-bold font-heading leading-tight tracking-tight text-foreground">
           Welcome back
         </h2>
-        <p className="text-base leading-relaxed text-gray-600">
+        <p className="text-base leading-relaxed text-muted-foreground">
           Sign in to continue to{" "}
-          <span className="text-blue-600 font-bold">Mitva</span>
+          <span className="text-accent font-bold">HimVidhya</span>
         </p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -83,7 +78,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               <Button
                 type="button"
                 variant="ghost"
-                className="text-sm text-blue-600 hover:text-blue-700 font-bold transition-colors p-0 h-auto"
+                className="text-sm text-accent hover:text-accent/80 font-bold transition-colors p-0 h-auto"
                 onClick={() =>
                   onSwitchToForgotPassword ? onSwitchToForgotPassword() : null
                 }
@@ -95,20 +90,22 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         </div>
 
         {authError && (
-          <div className="px-4 py-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-600 text-center font-medium">
-            {authError}
+          <div className="px-4 py-3 bg-danger/10 border border-danger/20 rounded-md text-sm text-danger text-center font-medium">
+            {authError instanceof AxiosError
+              ? authError.response?.data?.message || authError.message
+              : "An unexpected error occurred"}
           </div>
         )}
 
         <Button
           type="submit"
           className="w-full h-11 text-sm font-bold"
-          disabled={loading}
+          disabled={isLoading}
         >
-          {loading ? "Signing In..." : "Sign In"}
+          {isLoading ? "Signing In..." : "Sign In"}
         </Button>
       </form>
-      <p className="text-center text-sm text-gray-600">
+      <p className="text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}
         <Button
           type="button"
@@ -116,7 +113,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             onSwitchToRegister ? onSwitchToRegister() : push("/register")
           }
           variant="ghost"
-          className="text-blue-600 hover:text-blue-700 font-bold hover:underline p-0 h-auto"
+          className="text-accent hover:text-accent/80 font-bold hover:underline p-0 h-auto"
         >
           Create account
         </Button>

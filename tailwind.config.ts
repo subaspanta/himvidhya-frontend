@@ -9,70 +9,39 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./providers/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  darkMode: false, // Disable dark mode selector
+  darkMode: "class" as const,
   theme: {
     extend: {
       colors: {
-        jet_black: {
-          DEFAULT: "#1f2937",
-          100: "#06080b",
-          200: "#0c1116",
-          300: "#131921",
-          400: "#19212c",
-          500: "#1f2937",
-          600: "#3e526e",
-          700: "#5c7aa4",
-          800: "#93a6c2",
-          900: "#c9d3e1",
-        },
-        alabaster_grey: {
-          DEFAULT: "#d8dbe2",
-          100: "#262a33",
-          200: "#4b5366",
-          300: "#737e97",
-          400: "#a6adbd",
-          500: "#d8dbe2",
-          600: "#e1e3e8",
-          700: "#e8eaee",
-          800: "#f0f1f4",
-          900: "#f7f8f9",
-        },
-        ultrasonic_blue: {
-          DEFAULT: "#281fd6",
-          100: "#08062b",
-          200: "#100c56",
-          300: "#181281",
-          400: "#2018ab",
-          500: "#281fd6",
-          600: "#4d45e4",
-          700: "#7a74eb",
-          800: "#a6a2f2",
-          900: "#d3d1f8",
-        },
-        majorelle_blue: {
-          DEFAULT: "#4f46e5",
-          100: "#0a0835",
-          200: "#140f69",
-          300: "#1d179e",
-          400: "#271ed3",
-          500: "#4f46e5",
-          600: "#736dea",
-          700: "#9691ef",
-          800: "#b9b6f5",
-          900: "#dcdafa",
-        },
-        background: "rgb(var(--background) / <alpha-value>)",
-        surface: "rgb(var(--surface) / <alpha-value>)",
-        muted: "rgb(var(--muted) / <alpha-value>)",
-        border: "rgb(var(--border) / <alpha-value>)",
-        foreground: "rgb(var(--foreground) / <alpha-value>)",
-        "muted-foreground": "rgb(var(--muted-foreground) / <alpha-value>)",
+        // Semantic design tokens
+        primary: "rgb(var(--primary) / <alpha-value>)",
+        "primary-foreground": "rgb(var(--primary-foreground) / <alpha-value>)",
         accent: "rgb(var(--accent) / <alpha-value>)",
         "accent-foreground": "rgb(var(--accent-foreground) / <alpha-value>)",
+        background: "rgb(var(--background) / <alpha-value>)",
+        "background-dark": "rgb(var(--background-dark) / <alpha-value>)",
+        surface: "rgb(var(--surface) / <alpha-value>)",
+        border: "rgb(var(--border) / <alpha-value>)",
+        foreground: "rgb(var(--foreground) / <alpha-value>)",
+        muted: "rgb(var(--muted) / <alpha-value>)",
+        "muted-foreground": "rgb(var(--muted-foreground) / <alpha-value>)",
         success: "rgb(var(--success) / <alpha-value>)",
+        warning: "rgb(var(--warning) / <alpha-value>)",
         danger: "rgb(var(--danger) / <alpha-value>)",
+        destructive: "rgb(var(--danger) / <alpha-value>)",
+        "destructive-foreground":
+          "rgb(var(--primary-foreground) / <alpha-value>)",
+        input: "rgb(var(--border) / <alpha-value>)",
+        ring: "rgb(var(--accent) / <alpha-value>)",
+        card: "rgb(var(--surface) / <alpha-value>)",
+        "card-foreground": "rgb(var(--foreground) / <alpha-value>)",
+        popover: "rgb(var(--surface) / <alpha-value>)",
+        "popover-foreground": "rgb(var(--foreground) / <alpha-value>)",
+        secondary: "rgb(var(--muted) / <alpha-value>)",
+        "secondary-foreground": "rgb(var(--foreground) / <alpha-value>)",
       },
       spacing: {
+        // 8px grid system
         13: "3.25rem",
         15: "3.75rem",
         18: "4.5rem",
@@ -80,22 +49,25 @@ const config: Config = {
         30: "7.5rem",
       },
       fontSize: {
-        xs: "0.75rem",
-        sm: "0.875rem",
-        base: "1rem",
-        md: "1.0625rem",
-        lg: "1.125rem",
-        xl: "1.25rem",
-        "2xl": "1.5rem",
-        "3xl": "1.875rem",
+        // Typography scale
+        xs: "0.75rem", // 12px
+        sm: "0.875rem", // 14px - Small
+        base: "1rem", // 16px - Body
+        lg: "1.125rem", // 18px
+        xl: "1.25rem", // 20px
+        "2xl": "1.5rem", // 24px - H2 start
+        "3xl": "1.75rem", // 28px - H2 end
+        "4xl": "2rem", // 32px - H1 start
+        "5xl": "2.5rem", // 40px - H1 end
       },
       borderRadius: {
-        xs: "0.25rem",
-        sm: "0.375rem",
-        md: "0.5rem",
-        lg: "0.75rem",
-        xl: "1rem",
-        "2xl": "1.25rem",
+        // 12px border radius system
+        DEFAULT: "0.75rem", // 12px - standard
+        sm: "0.5rem", // 8px
+        md: "0.75rem", // 12px
+        lg: "1rem", // 16px
+        xl: "1.25rem", // 20px
+        "2xl": "1.5rem", // 24px
       },
       zIndex: {
         header: "10",
@@ -105,8 +77,13 @@ const config: Config = {
         toast: "50",
       },
       boxShadow: {
-        soft: "0 4px 12px rgba(0,0,0,0.12)",
-        hard: "0 10px 30px rgba(0,0,0,0.18)",
+        // Subtle shadows
+        sm: "0 1px 2px 0 rgba(0, 0, 0, 0.05)", // Default subtle
+        DEFAULT:
+          "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)",
+        md: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)", // Hover state
+        lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)",
+        xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
       },
       width: {
         sidebar: "4.5rem",
@@ -124,16 +101,24 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
+        // Typography system
+        sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"], // Body - Inter Regular
+        heading: ["var(--font-inter)", "Inter", "sans-serif"], // Headings - Using Inter (replace with Satoshi when available)
+        mono: [
+          "var(--font-jetbrains-mono)",
+          "JetBrains Mono",
+          "Courier New",
+          "monospace",
+        ], // Code/Join Code
       },
       lineHeight: {
-        tight: "1.25", // For headings (already exists in Tailwind)
-        relaxed: "1.625", // For body text (already exists in Tailwind)
+        tight: "1.25", // For headings
+        relaxed: "1.625", // For body text
       },
       letterSpacing: {
-        tight: "-0.01em", // For large headings (already exists in Tailwind)
-        normal: "0", // Default (already exists in Tailwind)
-        wide: "0.025em", // For buttons/labels (already exists in Tailwind)
+        tight: "-0.01em", // For large headings
+        normal: "0", // Default
+        wide: "0.025em", // For buttons/labels
       },
     },
   },

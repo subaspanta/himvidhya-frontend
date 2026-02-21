@@ -4,50 +4,93 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ------------------------------------------------------------------
+   CUSTOM FONTS
+   ------------------------------------------------------------------ 
+   To use Satoshi font for headings:
+   1. Download from: https://www.fontshare.com/fonts/satoshi
+   2. Add font files to /public/fonts/
+   3. Uncomment and configure the @font-face below:
+   
+   @font-face {
+     font-family: 'Satoshi';
+     src: url('/fonts/Satoshi-Bold.woff2') format('woff2');
+     font-weight: 700;
+     font-style: normal;
+     font-display: swap;
+   }
+   
+   Then update tailwind.config.ts heading font to use Satoshi.
+   Currently using Inter for headings until Satoshi is added.
+   ------------------------------------------------------------------ */
+
 :root {
   color-scheme: light;
 
-  /* Semantic color tokens tuned for light BG */ /* bg: #f7f8f9 */
-  --surface: 255 255 255; /* cards/surfaces */
-  --muted: oklch(0.967 0.001 286.375); /* subtle fills */
-  --border: oklch(0.92 0.004 286.32); /* strokes */ /* primary text */
-  --muted-foreground: oklch(0.552 0.016 285.938); /* secondary text */
-  --accent: oklch(0.967 0.001 286.375); /* brand */
-  --accent-foreground: oklch(0.21 0.006 285.885);
-  --success: 34 197 94;
-  --danger: 239 68 68;
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.141 0.005 285.823);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.21 0.006 285.885);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --destructive: oklch(0.577 0.245 27.325);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.705 0.015 286.067);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-primary: oklch(0.21 0.006 285.885);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.705 0.015 286.067);
+  /* New Design System - Light Mode */
+  /* Primary Blue: #1E40AF */
+  --primary: 30 64 175;
+  --primary-foreground: 250 249 246;
+
+  /* Accent Blue: #60A5FA */
+  --accent: 96 165 250;
+  --accent-foreground: 15 23 42;
+
+  /* Backgrounds */
+  --background: 250 249 246; /* #FAF9F6 - Background Light */
+  --background-dark: 15 23 42; /* #0F172A - Background Dark */
+  --surface: 255 255 255; /* White cards/surfaces */
+
+  /* Borders & Subtle */
+  --border: 226 232 240; /* Light border */
+  --muted: 241 245 249; /* Subtle fills */
+
+  /* Text */
+  --foreground: 15 23 42; /* #0F172A - Text Primary (light mode) */
+  --muted-foreground: 100 116 139; /* #64748B - Text Muted */
+
+  /* Status Colors */
+  --success: 16 185 129; /* #10B981 - Success */
+  --warning: 239 68 68; /* #EF4444 - Warning/Danger */
+  --danger: 239 68 68; /* #EF4444 - Danger */
+
+  /* Radius */
+  --radius: 0.75rem; /* 12px default */
 }
 
 /* ------------------------------------------------------------------
    DARK MODE
    ------------------------------------------------------------------ */
+
+.dark {
+  color-scheme: dark;
+
+  /* Primary Blue: #1E40AF */
+  --primary: 30 64 175;
+  --primary-foreground: 241 245 249;
+
+  /* Accent Blue: #60A5FA */
+  --accent: 96 165 250;
+  --accent-foreground: 241 245 249;
+
+  /* Backgrounds */
+  --background: 15 23 42; /* #0F172A - Background Dark */
+  --background-dark: 15 23 42;
+  --surface: 30 41 59; /* Darker surface for cards */
+
+  /* Borders & Subtle */
+  --border: 51 65 85; /* Dark border */
+  --muted: 30 41 59; /* Subtle fills */
+
+  /* Text */
+  --foreground: 241 245 249; /* #F1F5F9 - Text Primary (dark mode) */
+  --muted-foreground: 148 163 184; /* Lighter muted text for dark mode */
+
+  /* Status Colors */
+  --success: 16 185 129;
+  --warning: 239 68 68;
+  --danger: 239 68 68;
+}
 
 /* ------------------------------------------------------------------
    BASE STYLES
@@ -61,9 +104,32 @@
   }
 
   body {
-    background: #fff;
-    color: #0f0f0f;
+    background: rgb(var(--background));
+    color: rgb(var(--foreground));
+    font-family: Inter, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Typography - Headings use Satoshi Bold */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: Satoshi, Inter, sans-serif;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: rgb(var(--foreground));
+  }
+
+  /* Code uses JetBrains Mono */
+  code,
+  pre,
+  .font-mono {
+    font-family: "JetBrains Mono", "Courier New", monospace;
   }
 }
 
@@ -92,8 +158,8 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px #e5e7eb inset !important; /* light fill */
-  -webkit-text-fill-color: #0f172a !important; /* dark text */
+  -webkit-box-shadow: 0 0 0 30px rgb(var(--background)) inset !important;
+  -webkit-text-fill-color: rgb(var(--foreground)) !important;
   transition: background-color 5000s ease-in-out 0s;
 }
 

@@ -1,57 +1,43 @@
-import { apiClient } from "@/shared/api/apiClient";
-import type {
-  User,
-  AuthResponse,
-  RegisterData,
-  LoginCredentials,
-} from "../types";
+import { apiClient } from "@/shared/api/axiosClient";
+import type { User, RegisterData, LoginCredentials } from "../types/auth.types";
 
-/* ================= REGISTER ================= */
+const mapUser = (user: User): User => ({
+  id: user.id,
+  email: user.email,
+  name: user.name,
+  role: user.role,
+  avatar: user.avatar,
+});
 
-export const registerUser = async (
-  data: RegisterData,
-): Promise<AuthResponse> => {
+export const registerUser = async (data: RegisterData): Promise<User> => {
   const response = await apiClient.post("/auth/register", data);
 
   const user = response.data.user;
 
-  const mappedUser: User = {
-    id: user._id || user.id,
-    email: user.email,
-    name: user.name,
-  };
-
-  return { user: mappedUser };
+  return mapUser(user);
 };
-
-/* ================= LOGIN ================= */
 
 export const loginUser = async (
   credentials: LoginCredentials,
-): Promise<AuthResponse> => {
+): Promise<User> => {
   const response = await apiClient.post("/auth/login", credentials);
 
   const user = response.data.user;
 
-  const mappedUser: User = {
-    id: user._id || user.id,
-    email: user.email,
-    name: user.name,
-  };
-
-  return { user: mappedUser };
+  return mapUser(user);
 };
 
-/* ================= FORGOT PASSWORD ================= */
+import type {
+  ForgotPasswordPayload,
+  ForgotPasswordResponse,
+} from "../types/auth.types";
 
 export const forgotPassword = async (
-  email: string,
-): Promise<{ message: string }> => {
-  const response = await apiClient.post("/auth/forget-password", { email });
+  payload: ForgotPasswordPayload,
+): Promise<ForgotPasswordResponse> => {
+  const response = await apiClient.post("/auth/forget-password", payload);
   return { message: response.data.message };
 };
-
-/* ================= VERIFY OTP ================= */
 
 export const verifyOTP = async (
   email: string,
@@ -61,13 +47,11 @@ export const verifyOTP = async (
   return { valid: response.data.valid, message: response.data.message };
 };
 
-/* ================= RESET PASSWORD ================= */
-
 export const resetPassword = async (
   email: string,
   otp: string,
   password: string,
-): Promise<AuthResponse> => {
+): Promise<User> => {
   const response = await apiClient.post("/auth/reset-password", {
     email,
     otp,
@@ -76,16 +60,8 @@ export const resetPassword = async (
 
   const user = response.data.user;
 
-  const mappedUser: User = {
-    id: user._id || user.id,
-    email: user.email,
-    name: user.name,
-  };
-
-  return { user: mappedUser };
+  return mapUser(user);
 };
-
-/* ================= PROFILE ================= */
 
 export const getProfile = async (): Promise<User> => {
   const response = await apiClient.get("/auth/profile");
@@ -97,4 +73,20 @@ export const getProfile = async (): Promise<User> => {
     email: user.email,
     name: user.name,
   };
+};
+
+export const getCurrentUser = async (): Promise<User> => {
+  const response = await apiClient.get("/auth/me");
+
+  const user = response.data;
+
+  return {
+    id: user._id || user.id,
+    email: user.email,
+    name: user.name,
+  };
+};
+
+export const logoutUser = async (): Promise<void> => {
+  await apiClient.post("/auth/logout");
 };

@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 
 type LayoutContextType = {
   viewMode: "grid" | "list";
@@ -17,33 +11,17 @@ type LayoutContextType = {
 
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
-const STORAGE_KEY = "layout-preferences";
-
 function getInitialViewMode(): "grid" | "list" {
-  if (typeof window === "undefined") return "grid";
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      return parsed.viewMode === "list" ? "list" : "grid";
-    }
-  } catch (error) {
-    console.error("Failed to load layout preferences:", error);
-  }
   return "grid";
 }
 
-export function LayoutProvider({ children }: { children: ReactNode }) {
+type LayoutProviderProps = {
+  children: ReactNode;
+};
+
+export function LayoutProvider({ children }: LayoutProviderProps) {
   const [viewMode, setViewMode] = useState<"grid" | "list">(getInitialViewMode);
   const [notificationCount, setNotificationCount] = useState(0);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ viewMode }));
-    } catch (error) {
-      console.error("Failed to save layout preferences:", error);
-    }
-  }, [viewMode]);
 
   return (
     <LayoutContext.Provider

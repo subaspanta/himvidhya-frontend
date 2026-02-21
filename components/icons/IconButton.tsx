@@ -20,10 +20,12 @@ export default function IconButton({
   ...props
 }: IconButtonProps) {
   const variantClasses = {
-    ghost: "hover:bg-gray-100 text-gray-600 hover:text-gray-900",
-    primary: "bg-blue-500 hover:bg-blue-600 text-white",
-    danger: "hover:bg-red-50 text-red-500 hover:text-red-600",
-    success: "bg-green-500 hover:bg-green-600 text-white",
+    ghost: "hover:bg-accent text-muted-foreground hover:text-foreground",
+    primary:
+      "bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm hover:shadow-md",
+    danger: "hover:bg-danger/10 text-danger hover:text-danger/80",
+    success:
+      "bg-success hover:bg-success/90 text-primary-foreground shadow-sm hover:shadow-md",
   };
 
   return (
@@ -31,9 +33,9 @@ export default function IconButton({
       aria-label={ariaLabel}
       disabled={disabled || isLoading}
       className={`
-        p-2 rounded-lg transition-colors duration-200
+        p-2 rounded-md transition-all duration-200
         disabled:opacity-50 disabled:cursor-not-allowed
-        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1
+        focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1
         ${variantClasses[variant]} 
         ${className}
       `}

@@ -1,31 +1,21 @@
 "use client";
 
 import React from "react";
+import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
-import { useAuth } from "@/features/auth/hooks/use-auth";
-import { Button } from "@/shared/ui/button";
-import TextField from "@/shared/ui/TextField";
+import { Button } from "@/components/ui/button";
+import TextField from "@/components/ui/text-field";
 import PasswordField from "@/features/landing/components/PasswordField";
 import { useRouter } from "next/navigation";
-
-type RegisterFormData = {
-  name: string;
-  username: string;
-  email: string;
-  password: string;
-};
-
-interface RegisterFormProps {
-  onSuccess?: () => void;
-  onSwitchToLogin?: () => void;
-}
+import toast from "react-hot-toast";
+import { RegisterFormData, RegisterFormProps } from "../types/auth.types";
+import { useRegister } from "../hooks/useRegister";
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({
   onSuccess,
   onSwitchToLogin,
 }) => {
   const router = useRouter();
-  const { handleRegister, loading, error: authError } = useAuth();
   const {
     register,
     handleSubmit,
@@ -34,36 +24,43 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   } = useForm<RegisterFormData>({
     mode: "onChange",
   });
+  const { push } = useRouter();
+
+  const { mutate, isPending: isLoading, error: authError } = useRegister();
 
   const onSubmit = async (data: RegisterFormData) => {
-    try {
-      const result = await handleRegister(
-        data.email,
-        data.password,
-        data.name,
-        data.username,
-      );
-      if (result && result.success) {
-        if (onSwitchToLogin) {
-          onSwitchToLogin();
-        } else {
-          router.push("/login");
-        }
-      } else if (onSuccess) {
-        onSuccess();
-      }
-    } catch {
-      setError("root", { message: "Registration failed" });
-    }
+    mutate(
+      {
+        name: data.name,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Registration successful! Please log in.");
+          push("/login");
+          if (onSuccess) onSuccess();
+        },
+        onError: (error) => {
+          setError("root", { message: "Registration failed" });
+          toast.error(
+            error instanceof AxiosError
+              ? error.response?.data?.message || error.message
+              : "Registration failed. Please try again.",
+          );
+        },
+      },
+    );
   };
 
   return (
-    <div className="space-y-6 text-gray-700">
+    <div className="space-y-6 text-foreground">
       <div className="space-y-2 text-center">
-        <h2 className="text-2xl font-bold leading-tight tracking-tight text-gray-900">
+        <h2 className="text-2xl font-bold font-heading leading-tight tracking-tight text-foreground">
           Create Account
         </h2>
-        <p className="text-base leading-relaxed text-gray-600">
+        <p className="text-base leading-relaxed text-muted-foreground">
           Join our community today
         </p>
       </div>
@@ -107,24 +104,26 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         </div>
 
         {authError && (
-          <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600 text-center font-medium animate-pulse">
-            {authError}
+          <div className="p-4 bg-danger/10 border border-danger/20 rounded-md text-sm text-danger text-center font-medium">
+            {authError instanceof AxiosError
+              ? authError.response?.data?.message || authError.message
+              : "An unexpected error occurred"}
           </div>
         )}
 
-        <Button type="submit" className="w-full font-bold" disabled={loading}>
-          {loading ? "Creating Account..." : "Create Account"}
+        <Button type="submit" className="w-full font-bold" disabled={isLoading}>
+          {isLoading ? "Creating Account..." : "Create Account"}
         </Button>
       </form>
 
-      <p className="text-center text-sm text-gray-600 border-t border-gray-100 pt-6 font-medium">
+      <p className="text-center text-sm text-muted-foreground border-t border-border pt-6 font-medium">
         Already have an account?{" "}
         <button
           type="button"
           onClick={() =>
             onSwitchToLogin ? onSwitchToLogin() : router.push("/login")
           }
-          className="text-blue-600 hover:text-blue-700 font-bold transition-colors hover:underline"
+          className="text-accent hover:text-accent/80 font-bold transition-colors hover:underline"
         >
           Login here
         </button>
