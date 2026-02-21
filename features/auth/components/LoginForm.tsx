@@ -8,24 +8,14 @@ import { useRouter } from "next/navigation";
 import TextField from "@/components/ui/text-field";
 import PasswordField from "@/features/landing/components/PasswordField";
 import { useLogin } from "../hooks/useLogin";
-
-type LoginFormData = {
-  email: string;
-  password: string;
-};
-
-interface LoginFormProps {
-  onSuccess?: () => void;
-  onSwitchToRegister?: () => void;
-  onSwitchToForgotPassword?: () => void;
-}
+import { LoginFormData, LoginFormProps } from "../types/auth.types";
+import toast from "react-hot-toast";
 
 export const LoginForm: React.FC<LoginFormProps> = ({
   onSuccess,
   onSwitchToRegister,
   onSwitchToForgotPassword,
 }) => {
-  // const { handleLogin, loading, error: authError } = useAuth();
   const { push } = useRouter();
   const {
     register,
@@ -45,6 +35,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         onSuccess: () => {
           push("/dashboard");
           if (onSuccess) onSuccess();
+          toast.success("Logged in successfully");
         },
         onError: () => {
           setError("root", { message: "Login failed" });

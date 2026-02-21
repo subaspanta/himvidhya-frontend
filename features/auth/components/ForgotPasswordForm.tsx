@@ -1,34 +1,25 @@
 "use client";
 
 import React, { useState } from "react";
+import { useForgetPassword } from "@/features/auth/hooks/useForgetPassword";
+import { useResetPassword } from "@/features/auth/hooks/useResetPassword";
+import { useVerifyOTP } from "@/features/auth/hooks/useVerifyOTP";
 import { useForm } from "react-hook-form";
-import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import TextField from "@/components/ui/text-field";
 import PasswordField from "@/features/landing/components/PasswordField";
 import { toast } from "react-hot-toast";
-
-type EmailFormData = {
-  email: string;
-};
-
-type ResetFormData = {
-  otp: string;
-  password: string;
-  confirmPassword: string;
-};
-
-type Step = "email" | "reset";
-
-interface ForgotPasswordFormProps {
-  onBackToLogin?: () => void;
-}
+import {
+  EmailFormData,
+  ForgotPasswordFormProps,
+  ResetFormData,
+  Step,
+} from "../types/auth.types";
 
 export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   onBackToLogin,
 }) => {
-  const { handleForgotPassword, handleResetPassword, loading } = useAuth();
   const { push } = useRouter();
   const [step, setStep] = useState<Step>("email");
   const [userEmail, setUserEmail] = useState("");
@@ -43,40 +34,82 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
     mode: "onChange",
   });
 
+  const forgetPasswordMutation = useForgetPassword();
+  const resetPasswordMutation = useResetPassword();
+  const verifyOTPMutation = useVerifyOTP();
+
   const onEmailSubmit = async (data: EmailFormData) => {
-    const result = await handleForgotPassword(data.email);
-
-    if (result.success) {
-      setUserEmail(data.email);
-      setStep("reset");
-      toast.success("OTP sent to your email!");
-    } else {
-      toast.error(result.message);
-    }
-  };
-
-  const onResetSubmit = async (data: ResetFormData) => {
-    const result = await handleResetPassword(
-      userEmail,
-      data.otp,
-      data.password,
+    forgetPasswordMutation.mutate(
+      { email: data.email },
+      {
+        onSuccess: () => {
+          setUserEmail(data.email);
+          setStep("reset");
+        },
+        onError: (error) => {
+          toast.error(error?.response?.data?.message || error.message);
+        },
+      },
     );
-
-    if (result.success) {
-      toast.success("Password reset successful!");
-      push("/chat"); // Auto-logged in
-    } else {
-      toast.error("Reset failed. OTP may be expired.");
-    }
   };
 
-  const handleResendOTP = async () => {
-    const result = await handleForgotPassword(userEmail);
-    if (result.success) {
-      toast.success("New OTP sent!");
-    } else {
-      toast.error("Failed to resend OTP");
-    }
+  const onResetSubmit = (data: ResetFormData) => {
+    verifyOTPMutation.mutate(
+      { email: userEmail, otp: data.otp },
+      {
+        onSuccess: (verifyData) => {
+          if (verifyData.valid) {
+            resetPasswordMutation.mutate(
+              {
+                email: userEmail,
+                otp: data.otp,
+                password: data.password,
+              },
+              {
+                onSuccess: () => {
+                  toast.success("Password reset successful!");
+                  push("/dashboard"); // Auto-logged in
+                },
+                onError: (error) => {
+                  toast.error(
+                    error?.response?.data?.message ||
+                      error.message ||
+                      "Reset failed. OTP may be expired.",
+                  );
+                },
+              },
+            );
+          } else {
+            toast.error(verifyData.message || "Invalid OTP. Please try again.");
+          }
+        },
+        onError: (error) => {
+          toast.error(
+            error?.response?.data?.message ||
+              error.message ||
+              "OTP verification failed.",
+          );
+        },
+      },
+    );
+  };
+
+  const handleResendOTP = () => {
+    forgetPasswordMutation.mutate(
+      { email: userEmail },
+      {
+        onSuccess: () => {
+          toast.success("New OTP sent!");
+        },
+        onError: (error) => {
+          toast.error(
+            error?.response?.data?.message ||
+              error.message ||
+              "Failed to resend OTP",
+          );
+        },
+      },
+    );
   };
 
   const handleBackToLogin = () => {
@@ -136,7 +169,6 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
                   variant="ghost"
                   onClick={handleResendOTP}
                   className="text-sm text-accent hover:text-accent/80 font-semibold p-0 h-auto"
-                  disabled={loading}
                 >
                   Resend OTP
                 </Button>
@@ -173,9 +205,13 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
           <Button
             type="submit"
             className="w-full h-11 text-sm font-bold"
-            disabled={loading}
+            disabled={
+              resetPasswordMutation.isPending || verifyOTPMutation.isPending
+            }
           >
-            {loading ? "Resetting Password..." : "Reset Password"}
+            {resetPasswordMutation.isPending || verifyOTPMutation.isPending
+              ? "Resetting Password..."
+              : "Reset Password"}
           </Button>
         </form>
 
@@ -223,12 +259,8 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
           />
         </div>
 
-        <Button
-          type="submit"
-          className="w-full h-11 text-sm font-bold"
-          disabled={loading}
-        >
-          {loading ? "Sending OTP..." : "Send OTP"}
+        <Button type="submit" className="w-full h-11 text-sm font-bold">
+          {"Send OTP"}
         </Button>
       </form>
 

@@ -1,3 +1,12 @@
+
+export type ForgotPasswordPayload = {
+  email: string;
+};
+
+export type ForgotPasswordResponse = {
+  message: string;
+};
+
 export type User = {
   id: string;
   name: string;
@@ -6,9 +15,6 @@ export type User = {
   avatar?: string;
 };
 
-export type AuthResponse = {
-  user: User;
-};
 export interface RegisterData {
   email: string;
   password: string;
@@ -28,33 +34,71 @@ export type AuthState =
   | { status: "unauthenticated" }
   | { status: "authenticated"; user: User };
 
-export interface UseAuthReturn {
-  loading?: boolean;
-  error?: string | null;
-  success?: boolean;
-  handleLogin?: (
-    email?: string,
-    password?: string,
-  ) => Promise<{ success?: boolean; user?: User | null }>;
-  handleRegister?: (
-    email?: string,
-    password?: string,
-    name?: string,
-    username?: string,
-  ) => Promise<{ success?: boolean; user?: User | null }>;
-  logout?: () => void;
-  isAuthenticated?: boolean;
-  user?: User | null;
-  handleForgotPassword?: (
-    email?: string,
-  ) => Promise<{ success?: boolean; message?: string }>;
-  handleVerifyOTP?: (
-    email?: string,
-    otp?: string,
-  ) => Promise<{ success?: boolean; valid?: boolean; message?: string }>;
-  handleResetPassword?: (
-    email?: string,
-    otp?: string,
-    password?: string,
-  ) => Promise<{ success?: boolean; user?: User | null }>;
+export type RegisterFormData = {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+};
+
+export interface RegisterFormProps {
+  onSuccess?: () => void;
+  onSwitchToLogin?: () => void;
+}
+
+export interface AuthModalsProps {
+  openModal: "login" | "register" | "forgot-password" | null;
+  onCloseModal: () => void;
+  onSwitchToRegister: () => void;
+  onSwitchToLogin: () => void;
+  onSwitchToForgotPassword?: () => void;
+}
+export type LoginFormData = {
+  email: string;
+  password: string;
+};
+
+export interface LoginFormProps {
+  onSuccess?: () => void;
+  onSwitchToRegister?: () => void;
+  onSwitchToForgotPassword?: () => void;
+}
+
+export type AuthStore = {
+  user: User | null;
+  role: "user" | "admin" | "teacher" | "student" | "guest" | null;
+  isAuthenticated: boolean;
+  authChecked: boolean;
+  setUser: (user: User | null, role?: AuthStore["role"]) => void;
+  setAuthChecked: (value: boolean) => void;
+  logout: () => void;
+};
+export interface VerifyOTPPayload {
+  email: string;
+  otp: string;
+}
+
+export interface VerifyOTPResponse {
+  valid: boolean;
+  message: string;
+}
+export interface ResetPasswordPayload {
+  email: string;
+  otp: string;
+  password: string;
+}
+export type EmailFormData = {
+  email: string;
+};
+
+export type ResetFormData = {
+  otp: string;
+  password: string;
+  confirmPassword: string;
+};
+
+export type Step = "email" | "reset";
+
+export interface ForgotPasswordFormProps {
+  onBackToLogin?: () => void;
 }

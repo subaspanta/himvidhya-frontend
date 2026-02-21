@@ -1,4 +1,4 @@
-import { apiClient } from "@/shared/api/apiClient";
+import { apiClient } from "@/shared/api/axiosClient";
 import { ClassCard, ClassDetails } from "../types";
 
 export async function getEnrolledClasses(): Promise<ClassCard[]> {

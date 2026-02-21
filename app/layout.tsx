@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import AppProviders from "@/providers/root-provider";
-import { LayoutProvider } from "@/providers/layout-provider";
+import { AuthInitializer } from "@/features/auth/components/AuthInitializer";
+import { AuthGate } from "@/features/auth/components/AuthGate";
 import "./globals.css";
 // Configure fonts
 const inter = Inter({
@@ -36,7 +37,12 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body className={inter.className}>
         <AppProviders>
-          <LayoutProvider>{children}</LayoutProvider>
+          {/* 1. Triggers /me query & syncs Zustand — renders nothing */}
+          <AuthInitializer />
+
+          {/* 2. Blocks UI until authChecked is true */}
+          <AuthGate>{children}</AuthGate>
+
           <div id="modal-root"></div>
         </AppProviders>
       </body>

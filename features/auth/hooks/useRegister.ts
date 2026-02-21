@@ -11,13 +11,11 @@ export const useRegister = () => {
     mutationFn: (credentials: RegisterData) => registerUser(credentials),
 
     onSuccess: (data) => {
-      // ✅ Update global auth state
-      setUser(data.user);
+      setUser(data);
     },
 
     onError: (error: AxiosError<{ message?: string }>) => {
-      // ❗ Optional: central logging (avoid UI logic here)
-      console.error("Login failed:", error?.response?.data || error.message);
+      console.error("Register failed:", error?.response?.data || error.message);
     },
   });
 };

@@ -1,31 +1,21 @@
 "use client";
 
 import React from "react";
+import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
-import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import TextField from "@/components/ui/text-field";
 import PasswordField from "@/features/landing/components/PasswordField";
 import { useRouter } from "next/navigation";
-
-type RegisterFormData = {
-  name: string;
-  username: string;
-  email: string;
-  password: string;
-};
-
-interface RegisterFormProps {
-  onSuccess?: () => void;
-  onSwitchToLogin?: () => void;
-}
+import toast from "react-hot-toast";
+import { RegisterFormData, RegisterFormProps } from "../types/auth.types";
+import { useRegister } from "../hooks/useRegister";
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({
   onSuccess,
   onSwitchToLogin,
 }) => {
   const router = useRouter();
-  const { handleRegister, loading, error: authError } = useAuth();
   const {
     register,
     handleSubmit,
@@ -34,27 +24,34 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   } = useForm<RegisterFormData>({
     mode: "onChange",
   });
+  const { push } = useRouter();
+
+  const { mutate, isPending: isLoading, error: authError } = useRegister();
 
   const onSubmit = async (data: RegisterFormData) => {
-    try {
-      const result = await handleRegister(
-        data.email,
-        data.password,
-        data.name,
-        data.username,
-      );
-      if (result && result.success) {
-        if (onSwitchToLogin) {
-          onSwitchToLogin();
-        } else {
-          router.push("/login");
-        }
-      } else if (onSuccess) {
-        onSuccess();
-      }
-    } catch {
-      setError("root", { message: "Registration failed" });
-    }
+    mutate(
+      {
+        name: data.name,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Registration successful! Please log in.");
+          push("/login");
+          if (onSuccess) onSuccess();
+        },
+        onError: (error) => {
+          setError("root", { message: "Registration failed" });
+          toast.error(
+            error instanceof AxiosError
+              ? error.response?.data?.message || error.message
+              : "Registration failed. Please try again.",
+          );
+        },
+      },
+    );
   };
 
   return (
@@ -108,12 +105,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
 
         {authError && (
           <div className="p-4 bg-danger/10 border border-danger/20 rounded-md text-sm text-danger text-center font-medium">
-            {authError}
+            {authError instanceof AxiosError
+              ? authError.response?.data?.message || authError.message
+              : "An unexpected error occurred"}
           </div>
         )}
 
-        <Button type="submit" className="w-full font-bold" disabled={loading}>
-          {loading ? "Creating Account..." : "Create Account"}
+        <Button type="submit" className="w-full font-bold" disabled={isLoading}>
+          {isLoading ? "Creating Account..." : "Create Account"}
         </Button>
       </form>
 

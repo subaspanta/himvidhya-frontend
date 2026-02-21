@@ -5,14 +5,7 @@ import { LoginForm } from "@/features/auth/components/LoginForm";
 import { RegisterForm } from "@/features/auth/components/RegisterForm";
 import { ForgotPasswordForm } from "@/features/auth/components/ForgotPasswordForm";
 import { Modal } from "@/components/ui/modal";
-
-interface AuthModalsProps {
-  openModal: "login" | "register" | "forgot-password" | null;
-  onCloseModal: () => void;
-  onSwitchToRegister: () => void;
-  onSwitchToLogin: () => void;
-  onSwitchToForgotPassword?: () => void;
-}
+import { AuthModalsProps } from "../types/auth.types";
 
 export const AuthModals: React.FC<AuthModalsProps> = ({
   openModal,
