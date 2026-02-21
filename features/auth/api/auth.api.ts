@@ -5,6 +5,8 @@ const mapUser = (user: User): User => ({
   id: user.id,
   email: user.email,
   name: user.name,
+  role: user.role,
+  avatar: user.avatar,
 });
 
 export const registerUser = async (data: RegisterData): Promise<User> => {

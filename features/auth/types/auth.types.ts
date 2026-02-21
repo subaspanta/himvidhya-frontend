@@ -1,3 +1,4 @@
+import { Role } from "@/config/constants";
 
 export type ForgotPasswordPayload = {
   email: string;
@@ -11,7 +12,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  role?: "student" | "teacher" | "admin" | "guest";
+  role?: Role;
   avatar?: string;
 };
 
