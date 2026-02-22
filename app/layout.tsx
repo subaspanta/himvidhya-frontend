@@ -4,6 +4,7 @@ import AppProviders from "@/providers/root-provider";
 import { AuthInitializer } from "@/features/auth/components/AuthInitializer";
 import { AuthGate } from "@/features/auth/components/AuthGate";
 import "./globals.css";
+
 // Configure fonts
 const inter = Inter({
   subsets: ["latin"],
@@ -39,10 +40,8 @@ export default function RootLayout({
         <AppProviders>
           {/* 1. Triggers /me query & syncs Zustand — renders nothing */}
           <AuthInitializer />
-
           {/* 2. Blocks UI until authChecked is true */}
           <AuthGate>{children}</AuthGate>
-
           <div id="modal-root"></div>
         </AppProviders>
       </body>

@@ -1,4 +1,4 @@
-import { Role } from "@/config/constants";
+import { Role } from "./rbac.types";
 
 export type ForgotPasswordPayload = {
   email: string;
@@ -12,7 +12,8 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  role?: Role;
+  role: string;
+  permissions: string[]; // <-- Add this line
   avatar?: string;
 };
 

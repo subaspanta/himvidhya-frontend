@@ -23,14 +23,25 @@ export const useCurrentUser = () => {
         id: user.id,
         email: user.email,
         name: user.name,
-        role: user.role || "guest", // default role
+        role: user.role ?? undefined,
+        permissions: user.permissions ?? [],
       };
     },
   });
 
   useEffect(() => {
     if (query.status === "success") {
-      setUser(query.data, query.data.role);
+      setUser(
+        query.data,
+        query.data.role as
+          | "user"
+          | "admin"
+          | "teacher"
+          | "student"
+          | "guest"
+          | null
+          | undefined,
+      );
       setAuthChecked(true);
     }
 

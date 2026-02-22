@@ -7,11 +7,3 @@ export const QUERY_KEYS = {
   verifyOTP: ["verifyOTP"],
   // Add more keys as needed
 };
-
-export const ROLES = {
-  USER: "user",
-  ADMIN: "admin",
-  INSTRUCTOR: "teacher",
-} as const;
-
-export type Role = (typeof ROLES)[keyof typeof ROLES];

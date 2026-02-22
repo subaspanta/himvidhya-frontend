@@ -23,8 +23,16 @@ export type AuthenticatedProps = {
 
 export type NavbarBaseProps = {
   variant?: "landing" | "dashboard";
+  /** Optional override; when not provided, links come from useNavItems (RBAC). */
   navLinks?: NavLink[];
   className?: string;
+  /** Optional guest overrides (e.g. open modal on landing). */
+  onLoginClick?: () => void;
+  onSignUpClick?: () => void;
+  /** Optional authenticated overrides. */
+  onLogoutClick?: () => void;
+  onSettingsClick?: () => void;
+  onNotificationClick?: () => void;
 };
 
-export type NavbarProps = NavbarBaseProps & (GuestProps | AuthenticatedProps);
+export type NavbarProps = NavbarBaseProps;

@@ -67,21 +67,6 @@ export const LoggedInLayout: React.FC<LoggedInLayoutProps> = ({ children }) => {
     },
   ];
 
-  const handleLogout = () => {
-    // Placeholder for logout logic
-    console.log("Logout clicked");
-  };
-
-  const handleSettings = () => {
-    // Placeholder for settings logic
-    console.log("Settings clicked");
-  };
-
-  const handleNotification = () => {
-    // Placeholder for notification logic
-    console.log("Notification clicked");
-  };
-
   const handleCreateClass = () => {
     // Placeholder for create class logic
     console.log("Create class clicked");
@@ -89,15 +74,7 @@ export const LoggedInLayout: React.FC<LoggedInLayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navbar */}
-      <Navbar
-        isLoggedIn={true}
-        onLogoutClick={handleLogout}
-        onSettingsClick={handleSettings}
-        onNotificationClick={handleNotification}
-        userEmail="subas@example.com"
-        notificationCount={0}
-      />
+      <Navbar variant="dashboard" />
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-8">
