@@ -3,32 +3,66 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Search, Plus, Grid, List } from "lucide-react";
+import {
+  Search,
+  Plus,
+  Grid,
+  List,
+  Filter,
+  BookOpen,
+  Users,
+  Layers,
+  BarChart,
+  UserPlus,
+} from "lucide-react";
+import StatsCard from "@/components/ui/StatsCard";
 import { ClassCard } from "@/features/class/types";
 import { CreateClassForm } from "@/features/class/components/dashboard/CreateClassForm";
 import { getEnrolledClasses, createClass } from "@/features/class/api/classApi";
 import { useAuthStore } from "@/features/auth/store/auth.store";
-import { useLayout } from "@/providers/layout-provider";
 import { ClassGrid } from "@/features/class/components/dashboard/ClassGrid";
 import { ClassList } from "@/features/class/components/dashboard/ClassList";
+import DashboardHeader from "@/components/DashboardHeader";
+import { TeacherStats } from "@/types/dashboard";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import BatchCard from "@/components/ui/BatchCard";
+import { Batch } from "@/types/dashboard";
 
 export default function TeacherDashboard() {
   const router = useRouter();
   const { user } = useAuthStore();
-  const { viewMode, setViewMode } = useLayout();
   const [searchQuery, setSearchQuery] = useState("");
   const [classes, setClasses] = useState<ClassCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   useEffect(() => {
     fetchClasses();
   }, []);
 
+  const stats: TeacherStats = {
+    totalStudents: 142,
+    activeBatches: 8,
+    averageAttendance: 84,
+    assignmentsPending: 12,
+    joinRequests: 3,
+  };
+
   const fetchClasses = async () => {
     setIsLoading(true);
     try {
       const enrolledClasses = await getEnrolledClasses();
+      console.log("Enrolled Classes:", enrolledClasses);
       setClasses(
         Array.isArray(enrolledClasses) ? enrolledClasses.filter(Boolean) : [],
       );
@@ -40,26 +74,7 @@ export default function TeacherDashboard() {
     }
   };
 
-  const handleCreateClass = async (data: {
-    name: string;
-    subject: string;
-    description: string;
-  }) => {
-    setIsLoading(true);
-    try {
-      const newClass = await createClass(data);
-      if (newClass) {
-        setClasses((prev) => [newClass, ...prev]);
-      }
-      setIsCreateModalOpen(false);
-    } catch (error) {
-      console.error("Failed to create class:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const filteredClasses = (classes || [])
+  const filteredBatches = (classes || [])
     .filter(Boolean)
     .filter(
       (cls) =>
@@ -69,93 +84,102 @@ export default function TeacherDashboard() {
     );
 
   return (
-    <div className="px-6 py-8">
-      <div className="mb-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-              Hi {user?.name || "Teacher"}! 👋
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              Ready to teach something new today? You have{" "}
-              <span className="font-semibold text-foreground">
-                {classes?.length || 0}{" "}
-                {classes?.length === 1 ? "class" : "classes"}
-              </span>{" "}
-              with active discussions.
-            </p>
-          </div>
-          <Button
-            onClick={() => setIsCreateModalOpen(true)}
-            className="shadow-sm hover:shadow-md gap-2 w-full md:w-auto "
-          >
-            <Plus className="w-4 h-4" />
-            Create Class
-          </Button>
-        </div>
-        <div className="flex flex-col md:flex-row gap-3 items-start md:items-center md:justify-between">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 z-20 text-muted-foreground pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Search classes, subjects, or teachers..."
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="max-w-[1440px] mx-auto p-4 md:p-6 lg:p-8">
+        {user && <DashboardHeader profile={user} stats={stats} />}
+        {/* Filters and Search Bar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+          <div className="relative w-full sm:w-80 md:w-96">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search batches, subjects, or codes..."
+              className="pl-10 h-11 bg-card border-border focus:ring-1 focus:ring-primary"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-11 w-full pl-10 pr-4 rounded-md transition-all duration-200 bg-surface text-foreground placeholder:text-muted-foreground font-medium border border-border shadow-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
             />
           </div>
-          <div className="flex gap-2">
-            <Button
-              variant={viewMode === "grid" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setViewMode("grid")}
-            >
-              <Grid className="w-4 h-4" />
-            </Button>
-            <Button
-              variant={viewMode === "list" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setViewMode("list")}
-            >
-              <List className="w-4 h-4" />
-            </Button>
+
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="h-11 bg-card border-border hover:bg-muted gap-2 w-full sm:w-auto"
+                >
+                  <Filter className="w-4 h-4" />
+                  <span>Filter by</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>Batch Status</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuCheckboxItem checked>
+                  Active Batches
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem>Archived</DropdownMenuCheckboxItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>Sort By</DropdownMenuLabel>
+                <DropdownMenuItem>Newest First</DropdownMenuItem>
+                <DropdownMenuItem>Name (A-Z)</DropdownMenuItem>
+                <DropdownMenuItem>Attendance (Low-High)</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
+
+        {/* Batch Content Grid */}
+        <div className="w-full">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-foreground">
+              Active Batches
+            </h2>
+            <span className="text-sm font-medium text-muted-foreground">
+              {filteredBatches.length} total
+            </span>
+          </div>
+
+          {filteredBatches.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredBatches.map((batch) => (
+                <BatchCard
+                  key={batch._id}
+                  batch={
+                    {
+                      id: batch._id,
+                      name: batch.name,
+                      subject: batch.subject,
+                      code: batch.code || "",
+                      studentCount: 0,
+                      maxStudents: 0,
+                      lastActivity: "Just now",
+                      attendanceRate: 0,
+                      unreadMessages: 0,
+                      status: "active",
+                    } as Batch
+                  }
+                />
+              ))}
+            </div>
+          ) : (
+            // Empty State
+            <div className="flex flex-col items-center justify-center py-20 bg-card rounded-2xl border border-dashed border-border text-center">
+              <div className="bg-muted p-4 rounded-full mb-4">
+                <BookOpen className="w-8 h-8 text-muted-foreground" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground mb-1">
+                No batches found
+              </h3>
+              <p className="text-muted-foreground max-w-sm mb-6">
+                We couldn&apos;t find any batches matching &quot;{searchQuery}
+                &quot;. Try creating a new one or adjusting filters.
+              </p>
+              <Button onClick={() => setSearchQuery("")} variant="outline">
+                Clear Search
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
-      {isLoading ? (
-        <div className="flex items-center justify-center py-12">
-          <div className="text-muted-foreground">Loading classes...</div>
-        </div>
-      ) : viewMode === "grid" ? (
-        <ClassGrid
-          classes={filteredClasses}
-          onClassClick={(classId: string) => router.push(`/class/${classId}`)}
-        />
-      ) : (
-        <ClassList
-          classes={filteredClasses}
-          onClassClick={(classId: string) => router.push(`/class/${classId}`)}
-        />
-      )}
-      {!isLoading && filteredClasses.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-12 text-center">
-          <div className="text-4xl mb-4">🔍</div>
-          <h3 className="text-lg font-semibold text-foreground mb-2">
-            No classes found
-          </h3>
-          <p className="text-muted-foreground">
-            {searchQuery
-              ? "Try adjusting your search"
-              : "Create a new class to get started"}
-          </p>
-        </div>
-      )}
-      <CreateClassForm
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        onSubmit={handleCreateClass}
-        isLoading={isLoading}
-      />
     </div>
   );
 }

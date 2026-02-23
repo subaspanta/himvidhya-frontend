@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { NavLink } from "../navbar.types";
 import { Button } from "@/components/ui/button";
+import { NavLink } from "../layout";
 
 interface NavbarMobileMenuProps {
   links: NavLink[];

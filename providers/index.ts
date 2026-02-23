@@ -3,4 +3,3 @@ export { default as AppProviders } from "./root-provider";
 
 // Individual providers
 export { default as QueryProvider } from "./query-provider";
-export { LayoutProvider, useLayout } from "./layout-provider";

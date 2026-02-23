@@ -1,5 +1,5 @@
+import { AuthenticatedProps, GuestProps } from "./navbar.types";
 import { NavbarUserMenu } from "./NavbarUserMenu";
-import { GuestProps, AuthenticatedProps } from "../navbar.types";
 
 type ThemeProps = { buttonGhost: string };
 

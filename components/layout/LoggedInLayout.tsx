@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import TextField from "@/components/ui/text-field";
 import { Button } from "@/components/ui/button";
 import { Search, Plus, Grid, List } from "lucide-react";
-import { Navbar } from "./navbar";
+import { Navbar } from "../navbar";
 
 interface LoggedInLayoutProps {
   children?: React.ReactNode;
