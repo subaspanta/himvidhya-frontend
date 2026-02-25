@@ -10,6 +10,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AuthenticatedProps } from "./navbar.types";
+import React from "react";
+
+// Mock data (replace with real data later)
+const user = {
+  name: "Dr. Elena Fisher",
+  role: "SENIOR INSTRUCTOR",
+  isActive: true, // Change to false to test inactive state
+};
 
 export const NavbarUserMenu = ({
   userName = "User",
@@ -35,7 +43,13 @@ export const NavbarUserMenu = ({
           <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full ring-2 ring-background" />
         )}
       </button>
-
+      <div className="h-8 w-px bg-gray-200" />
+      <div className="flex flex-col">
+        <span className="font-semibold text-sm text-gray-900">{userName}</span>
+        <span className="text-xs text-gray-500 uppercase tracking-wider">
+          {user.role}
+        </span>
+      </div>
       {/* Profile */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

@@ -70,7 +70,7 @@ const config: Config = {
         "2xl": "1.5rem", // 24px
       },
       zIndex: {
-        header: "10",
+        header: "60",
         sidebar: "20",
         overlay: "30",
         modal: "40",
@@ -99,6 +99,9 @@ const config: Config = {
           DEFAULT: "1rem",
           lg: "2rem",
         },
+      },
+      screens: {
+        xxl: "160rem",
       },
       fontFamily: {
         // Typography system

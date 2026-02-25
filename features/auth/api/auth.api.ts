@@ -7,6 +7,7 @@ const mapUser = (user: User): User => ({
   name: user.name,
   role: user.role,
   avatar: user.avatar,
+  permissions: user.permissions,
 });
 
 export const registerUser = async (data: RegisterData): Promise<User> => {
@@ -68,11 +69,7 @@ export const getProfile = async (): Promise<User> => {
 
   const user = response.data;
 
-  return {
-    id: user._id || user.id,
-    email: user.email,
-    name: user.name,
-  };
+  return mapUser(user);
 };
 
 export const getCurrentUser = async (): Promise<User> => {
@@ -80,11 +77,7 @@ export const getCurrentUser = async (): Promise<User> => {
 
   const user = response.data;
 
-  return {
-    id: user._id || user.id,
-    email: user.email,
-    name: user.name,
-  };
+  return mapUser(user);
 };
 
 export const logoutUser = async (): Promise<void> => {

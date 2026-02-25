@@ -1,29 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import {
-  Search,
-  Plus,
-  Grid,
-  List,
-  Filter,
-  BookOpen,
-  Users,
-  Layers,
-  BarChart,
-  UserPlus,
-} from "lucide-react";
-import StatsCard from "@/components/ui/StatsCard";
+import { Search, Plus, Grid, List, Filter, BookOpen } from "lucide-react";
 import { ClassCard } from "@/features/class/types";
-import { CreateClassForm } from "@/features/class/components/dashboard/CreateClassForm";
-import { getEnrolledClasses, createClass } from "@/features/class/api/classApi";
+import { JoinClassForm } from "@/features/class/components/dashboard/JoinClassForm";
+import useJoinClass from "@/features/home/hooks/useJoinClass";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { ClassGrid } from "@/features/class/components/dashboard/ClassGrid";
 import { ClassList } from "@/features/class/components/dashboard/ClassList";
 import DashboardHeader from "@/components/DashboardHeader";
-import { TeacherStats } from "@/types/dashboard";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -36,45 +23,31 @@ import {
 } from "@/components/ui/dropdown-menu";
 import BatchCard from "@/components/ui/BatchCard";
 import { Batch } from "@/types/dashboard";
+import { stats } from "../teacher/page";
+import { useGetEnrolledClasses } from "@/features/home/hooks/useGetEnrolledClasses";
+import BatchFilterMenu from "@/components/BatchFilterMenu";
 
-export default function TeacherDashboard() {
+export default function StudentDashboard() {
   const router = useRouter();
   const { user } = useAuthStore();
   const [searchQuery, setSearchQuery] = useState("");
-  const [classes, setClasses] = useState<ClassCard[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+  const { data: enrolledClasses = [], isLoading } = useGetEnrolledClasses();
+  const { mutate: joinMutate, isPending: isJoining } = useJoinClass();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  useEffect(() => {
-    fetchClasses();
-  }, []);
-
-  const stats: TeacherStats = {
-    totalStudents: 142,
-    activeBatches: 8,
-    averageAttendance: 84,
-    assignmentsPending: 12,
-    joinRequests: 3,
+  const handleJoinClass = (batchCode: string) => {
+    joinMutate(batchCode, {
+      onSuccess: () => {
+        setIsJoinModalOpen(false);
+      },
+      onError: (err) => {
+        console.error("Failed to join class:", err);
+      },
+    });
   };
 
-  const fetchClasses = async () => {
-    setIsLoading(true);
-    try {
-      const enrolledClasses = await getEnrolledClasses();
-      console.log("Enrolled Classes:", enrolledClasses);
-      setClasses(
-        Array.isArray(enrolledClasses) ? enrolledClasses.filter(Boolean) : [],
-      );
-    } catch (error) {
-      console.error("Failed to fetch classes:", error);
-      setClasses([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const filteredBatches = (classes || [])
+  const filteredBatches = (enrolledClasses || [])
     .filter(Boolean)
     .filter(
       (cls) =>
@@ -84,12 +57,12 @@ export default function TeacherDashboard() {
     );
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="max-w-[1440px] mx-auto p-4 md:p-6 lg:p-8">
+    <div className="w-full text-foreground pb-8">
+      <div className="w-full mx-auto">
         {user && <DashboardHeader profile={user} stats={stats} />}
         {/* Filters and Search Bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
-          <div className="relative w-full sm:w-80 md:w-96">
+          {/* <div className="relative w-full sm:w-80 md:w-96">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search batches, subjects, or codes..."
@@ -97,33 +70,10 @@ export default function TeacherDashboard() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-          </div>
+          </div> */}
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="h-11 bg-card border-border hover:bg-muted gap-2 w-full sm:w-auto"
-                >
-                  <Filter className="w-4 h-4" />
-                  <span>Filter by</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>Batch Status</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuCheckboxItem checked>
-                  Active Batches
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem>Archived</DropdownMenuCheckboxItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>Sort By</DropdownMenuLabel>
-                <DropdownMenuItem>Newest First</DropdownMenuItem>
-                <DropdownMenuItem>Name (A-Z)</DropdownMenuItem>
-                <DropdownMenuItem>Attendance (Low-High)</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <BatchFilterMenu />
           </div>
         </div>
 
@@ -142,7 +92,7 @@ export default function TeacherDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredBatches.map((batch) => (
                 <BatchCard
-                  key={batch._id}
+                  key={batch._id ?? batch.code}
                   batch={
                     {
                       id: batch._id,
@@ -150,11 +100,8 @@ export default function TeacherDashboard() {
                       subject: batch.subject,
                       code: batch.code || "",
                       studentCount: 0,
-                      maxStudents: 0,
                       lastActivity: "Just now",
-                      attendanceRate: 0,
                       unreadMessages: 0,
-                      status: "active",
                     } as Batch
                   }
                 />

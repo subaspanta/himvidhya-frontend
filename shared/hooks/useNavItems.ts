@@ -21,10 +21,10 @@ export const useNavItems = (variant?: Variant): NavLink[] => {
   ];
 
   const DASHBOARD: NavLink[] = [
-    { label: "Home", href: "/dashboard" },
-    { label: "My Batches", href: "/dashboard/batches" },
-    { label: "Schedule", href: "/dashboard/schedule" },
-    { label: "Announcements", href: "/dashboard/announcements" },
+    { label: "Home", href: "/home" },
+    { label: "My Batches", href: "/home/batches" },
+    { label: "Schedule", href: "/home/schedule" },
+    { label: "Announcements", href: "/home/announcements" },
   ];
 
   if (variant === "dashboard") return DASHBOARD;

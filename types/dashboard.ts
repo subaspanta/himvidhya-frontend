@@ -4,12 +4,8 @@ export interface Batch {
   subject: string;
   code: string;
   studentCount: number;
-  maxStudents: number;
-  lastActivity: string; // e.g., "2h ago" or "Yesterday"
+  lastActivity: string; // e.g., "2h ago" or "Just now"
   unreadMessages: number;
-  attendanceRate: number; // percentage 0-100
-  nextDeadline?: string; // ISO date string
-  status: "active" | "archived";
 }
 
 export interface TeacherStats {

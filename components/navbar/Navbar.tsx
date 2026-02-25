@@ -14,6 +14,7 @@ import { NavbarActions } from "./NavbarAuthActions";
 import { Search } from "lucide-react";
 import { Input } from "../ui/input";
 import { useState } from "react";
+import { NavbarMobileTabs } from "./NavbarMobileTabs";
 
 export const Navbar: React.FC<NavbarProps> = ({
   variant = "dashboard",
@@ -80,8 +81,8 @@ export const Navbar: React.FC<NavbarProps> = ({
       },
     });
   };
-  const defaultSettings = () => router.push("/dashboard");
-  const defaultNotification = () => router.push("/dashboard");
+  const defaultSettings = () => router.push("/home");
+  const defaultNotification = () => router.push("/home");
 
   // Auth actions props
   const isLoggedIn = isAuthenticated;
@@ -104,44 +105,51 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   // Render
   return (
-    <nav
-      className={cn(
-        "relative w-full  flex justify-between items-center border-b ",
-        theme.nav,
-        className,
-      )}
-    >
-      {!isLoggedIn || variant === "landing" ? (
-        <div className="flex items-center justify-between w-full">
-          <NavbarLogo isLoggedIn={isLoggedIn} variant={variant} />
-
-          <div className="flex items-center gap-6">
-            <NavbarLinks links={navLinks} theme={theme} />
-            <NavbarActions {...actionProps} theme={theme} />
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className="flex items-center gap-16">
+    <>
+      <nav
+        className={cn(
+          "sticky top-0 z-10 backdrop-blur-sm bg-opacity-90 w-full flex justify-between items-center border-b",
+          theme.nav,
+          className,
+        )}
+      >
+        {!isLoggedIn || variant === "landing" ? (
+          <div className="flex items-center justify-between w-full">
             <NavbarLogo isLoggedIn={isLoggedIn} variant={variant} />
-            <NavbarLinks links={navLinks} theme={theme} />
-          </div>
 
-          {isLoggedIn && (
-            <div className="relative w-full sm:w-80 md:w-96 rounded-full overflow-hidden">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search batches, students..."
-                className="pl-10 h-11 bg-card border-border focus:ring-1 focus:ring-primary rounded-full"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+            <div className="flex items-center gap-6">
+              <NavbarLinks links={navLinks} theme={theme} />
+              <div className="hidden md:flex">
+                <NavbarActions {...actionProps} theme={theme} />
+              </div>
             </div>
-          )}
+          </div>
+        ) : (
+          <>
+            <div className="flex items-center gap-16">
+              <NavbarLogo isLoggedIn={isLoggedIn} variant={variant} />
+              <NavbarLinks links={navLinks} theme={theme} />
+            </div>
 
-          <NavbarActions {...actionProps} theme={theme} />
-        </>
-      )}
-    </nav>
+            {isLoggedIn && (
+              <div className="relative w-full sm:w-80 md:w-96 rounded-full overflow-hidden">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search batches, students..."
+                  className="pl-10 h-11 bg-card border-border focus:ring-1 focus:ring-primary rounded-full"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+            )}
+
+            <div className="hidden md:flex">
+              <NavbarActions {...actionProps} theme={theme} />
+            </div>
+          </>
+        )}
+      </nav>
+      {/* <NavbarMobileTabs links={navLinks} /> */}
+    </>
   );
 };
