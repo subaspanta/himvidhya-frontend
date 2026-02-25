@@ -10,10 +10,23 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuCheckboxItem,
-  DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 
-const BatchFilterMenu: React.FC<{ className?: string }> = ({ className }) => {
+type Props = {
+  className?: string;
+  showActive?: boolean;
+  showArchived?: boolean;
+  setShowActive?: (v: boolean) => void;
+  setShowArchived?: (v: boolean) => void;
+};
+
+const BatchFilterMenu: React.FC<Props> = ({
+  className,
+  showActive = true,
+  showArchived = false,
+  setShowActive,
+  setShowArchived,
+}) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -31,15 +44,26 @@ const BatchFilterMenu: React.FC<{ className?: string }> = ({ className }) => {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>Batch Status</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuCheckboxItem checked>
+        <DropdownMenuCheckboxItem
+          checked={showActive}
+          onCheckedChange={(_v: boolean) => {
+            // make this behave like a radio: selecting Active shows only active
+            setShowActive?.(true);
+            setShowArchived?.(false);
+          }}
+        >
           Active Batches
         </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem>Archived</DropdownMenuCheckboxItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel>Sort By</DropdownMenuLabel>
-        <DropdownMenuItem>Newest First</DropdownMenuItem>
-        <DropdownMenuItem>Name (A-Z)</DropdownMenuItem>
-        <DropdownMenuItem>Attendance (Low-High)</DropdownMenuItem>
+        <DropdownMenuCheckboxItem
+          checked={showArchived}
+          onCheckedChange={(_v: boolean) => {
+            // selecting Archived shows only archived
+            setShowArchived?.(true);
+            setShowActive?.(false);
+          }}
+        >
+          Archived
+        </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -51,7 +51,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
       )}
     >
       {/* Header: Icon + Name */}
-      <CardHeader className="p-5 pb-3">
+      <CardHeader className="p-5 ">
         <div className="flex items-center gap-3">
           {/* Icon */}
           <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-bold text-lg shrink-0">
@@ -70,7 +70,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
       </CardHeader>
 
       {/* Content: Meta info – improved spacing */}
-      <CardContent className="p-5 pt-2 pb-5 flex-1 flex flex-col justify-between">
+      <CardContent className="p-5  flex-1 flex flex-col justify-between">
         {/* Students + Last activity */}
         <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
           <div className="flex items-center gap-2">
@@ -79,25 +79,24 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
               {batch.studentCount}
             </span>
             <span>students</span>
+            <span className="flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5" />
+              {batch.lastActivity}
+            </span>
           </div>
-
-          <span className="flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5" />
-            {batch.lastActivity}
-          </span>
         </div>
 
         {/* Unread messages – only if exists, bottom aligned */}
-        {hasUnread && (
+        {/* {hasUnread && (
           <div className="mt-auto flex items-center gap-2 text-sm text-primary font-medium">
             <MessageSquare className="w-4 h-4" />
             {batch.unreadMessages} unread messages
           </div>
-        )}
+        )} */}
       </CardContent>
 
       {/* Footer: Actions – fixed */}
-      <CardFooter className="p-5 pt-3 border-t bg-muted/20">
+      <CardFooter className="p-5  border-t bg-muted/20">
         <div className="w-full flex items-center justify-between gap-3">
           <Button
             variant="default"

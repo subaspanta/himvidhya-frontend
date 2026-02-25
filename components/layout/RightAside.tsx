@@ -40,9 +40,9 @@ export default function RightAside() {
             },
           ].map((cls, idx) => (
             <div key={idx} className="flex items-start gap-3">
-              <div className="bg-primary/10 p-2 rounded-full text-primary mt-1">
+              {/* <div className="bg-primary/10 p-2 rounded-full text-primary mt-1">
                 <Clock className="w-4 h-4" />
-              </div>
+              </div> */}
               <div className="flex-1">
                 <h4 className="text-sm font-semibold text-foreground">
                   {cls.title}

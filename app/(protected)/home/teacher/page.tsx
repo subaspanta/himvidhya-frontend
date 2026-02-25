@@ -6,25 +6,23 @@ import { Filter } from "lucide-react";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import DashboardHeader from "@/components/DashboardHeader";
 import { TeacherStats } from "@/types/dashboard";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import BatchCard from "@/components/ui/BatchCard";
 import { Batch } from "@/types/dashboard";
 import { useGetEnrolledClasses } from "@/features/home/hooks/useGetEnrolledClasses";
 import EmptyBatches from "@/components/EmptyBatches";
 import { Spinner } from "@/shared/loading/Spinner";
 import BatchFilterMenu from "@/components/BatchFilterMenu";
+import SortMenu from "@/components/SortMenu";
+import React from "react";
 
 export default function TeacherDashboard() {
   const { user } = useAuthStore();
   const [searchQuery, setSearchQuery] = useState("");
+  const [showActive, setShowActive] = useState(true);
+  const [showArchived, setShowArchived] = useState(false);
+  const [sortBy, setSortBy] = useState<"newest" | "name" | "attendance">(
+    "newest",
+  );
   const { data: enrolledClasses = [], isLoading } = useGetEnrolledClasses();
 
   interface EnrolledClass {
@@ -35,16 +33,54 @@ export default function TeacherDashboard() {
     creator?: {
       name?: string;
     };
+    archived?: boolean;
+    attendance?: number;
+    createdAt?: string;
+    studentCount?: number;
+    unreadMessages?: number;
+    lastActivity?: string;
   }
 
-  const filteredBatches: EnrolledClass[] = (enrolledClasses || [])
+  let filteredBatches: EnrolledClass[] = (enrolledClasses || [])
     .filter(Boolean)
     .filter(
       (cls: EnrolledClass) =>
         cls.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         cls.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         cls.creator?.name?.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
+    )
+    .filter((cls: EnrolledClass) => {
+      const isArchived = cls.archived === true;
+      if (showActive) return !isArchived;
+      if (showArchived) return isArchived;
+      return true;
+    });
+
+  // Sorting
+  filteredBatches = filteredBatches.sort(
+    (a: EnrolledClass, b: EnrolledClass) => {
+      if (sortBy === "name") {
+        return (a.name || "").localeCompare(b.name || "");
+      }
+
+      if (sortBy === "attendance") {
+        const aAtt = a.attendance ?? 0;
+        const bAtt = b.attendance ?? 0;
+        return aAtt - bAtt;
+      }
+
+      // newest: prefer `createdAt` if available, otherwise fallback to _id comparison
+      if (a.createdAt && b.createdAt) {
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      }
+
+      const aId = a._id || "";
+      const bId = b._id || "";
+      return aId.localeCompare(bId) * -1;
+    },
+  );
   return (
     <div className="w-full text-foreground pb-8">
       <div className="w-full mx-auto">
@@ -62,7 +98,13 @@ export default function TeacherDashboard() {
               </span>
             </div>
             <div className="flex items-center gap-2 w-full sm:w-auto">
-              <BatchFilterMenu />
+              <BatchFilterMenu
+                showActive={showActive}
+                showArchived={showArchived}
+                setShowActive={setShowActive}
+                setShowArchived={setShowArchived}
+              />
+              <SortMenu sortBy={sortBy} setSortBy={setSortBy} />
             </div>
           </div>
 
