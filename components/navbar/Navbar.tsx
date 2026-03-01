@@ -14,7 +14,6 @@ import { NavbarActions } from "./NavbarAuthActions";
 import { Search } from "lucide-react";
 import { Input } from "../ui/input";
 import { useState } from "react";
-import { NavbarMobileTabs } from "./NavbarMobileTabs";
 
 export const Navbar: React.FC<NavbarProps> = ({
   variant = "dashboard",
