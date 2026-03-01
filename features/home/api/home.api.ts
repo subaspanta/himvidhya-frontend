@@ -1,4 +1,4 @@
-import { ClassCard, ClassDetails } from "@/features/class";
+import { ClassCard, ClassDetails } from "@/features/batches";
 import { apiClient } from "@/shared/api/axiosClient";
 
 export async function createClassApi(data: {

@@ -18,7 +18,7 @@ const IconFor = (label: string) => {
   return Home;
 };
 
-export const NavbarMobileTabs: React.FC<{ links: NavLink[] }> = ({ links }) => {
+export const NavbarBottomTabs: React.FC<{ links: NavLink[] }> = ({ links }) => {
   return (
     <nav className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[min(720px,calc(100%-32px))] md:hidden z-50">
       <div className="bg-card border border-border rounded-2xl shadow-md flex justify-between items-center px-3 py-2">
@@ -45,4 +45,4 @@ export const NavbarMobileTabs: React.FC<{ links: NavLink[] }> = ({ links }) => {
   );
 };
 
-export default NavbarMobileTabs;
+export default NavbarBottomTabs;

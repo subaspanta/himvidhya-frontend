@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Plus, BarChart3, Users, BookOpen, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { ClassCard } from "@/features/class/types";
 import { TeacherStats } from "@/types/dashboard";
 import { User } from "@/features/auth";
-import { CreateClassForm } from "@/features/class/components/dashboard/CreateClassForm";
 import useCreateClass from "@/features/home/hooks/useCreateClass";
-import { JoinClassForm } from "@/features/class/components/dashboard/JoinClassForm";
+import { ClassCard } from "@/features/batches";
+import { CreateClassForm } from "@/features/batches/components/dashboard/CreateClassForm";
 
 interface DashboardHeaderProps {
   profile: User;

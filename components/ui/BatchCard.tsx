@@ -56,7 +56,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
         "bg-card border border-border rounded-xl",
         "hover:shadow-md hover:border-primary/30 hover:scale-[1.02]",
         "flex flex-col",
-        "min-h-[200px] sm:min-h-[210px] md:min-h-[220px]", // consistent height
+        "min-h-[180px] sm:min-h-[210px] md:min-h-[220px]", // consistent height
       )}
     >
       {/* Header: Icon + Name */}

@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AuthenticatedProps } from "./navbar.types";
 
-export const NavbarUserMenu = ({
+export const NavbarUserDropdown = ({
   userName = "User",
   userEmail,
   avatarUrl,

@@ -4,20 +4,21 @@ import { usePathname, useRouter } from "next/navigation";
 import { getNavbarTheme } from "./navbar.theme";
 import { cn } from "@/shared/utils";
 import { NavbarLogo } from "./NavbarLogo";
-import { NavbarProps, NavLink } from "./navbar.types";
+import { AuthenticatedProps, NavbarProps, NavLink } from "./navbar.types";
 import { useNavItems } from "@/shared/hooks/useNavItems";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import toast from "react-hot-toast";
 import { NavbarLinks } from "./NavbarLinks";
-import { NavbarActions } from "./NavbarAuthActions";
+import { NavbarUserDropdown } from "./NavbarUserDropdown";
+import { computeNavLinks, createDefaultActions } from "./navbar.utils";
 import { Search } from "lucide-react";
 import { Input } from "../ui/input";
 import { useState } from "react";
 
 export const Navbar: React.FC<NavbarProps> = ({
   variant = "dashboard",
-  navLinks: navLinksOverride,
+  navLinks: customLinks,
   className,
   onLoginClick: onLoginClickProp,
   onSignUpClick: onSignUpClickProp,
@@ -37,57 +38,22 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  const navLinks: NavLink[] = (() => {
-    const isActive = (href: string) => {
-      if (!pathname) return false;
-      if (href === "/") return pathname === "/";
-      return (
-        pathname === href ||
-        pathname.startsWith(href + "/") ||
-        pathname.startsWith(href)
-      );
-    };
+  const navLinks: NavLink[] = computeNavLinks(pathname, customLinks, navItems);
 
-    // If explicit override provided, use it (preserve active state)
-    if (navLinksOverride && navLinksOverride.length > 0) {
-      return navLinksOverride.map((l) => ({
-        ...l,
-        active: isActive(l.href),
-      }));
-    }
-
-    // Use items returned by the hook and mark active state
-    return (navItems || []).map((item) => ({
-      label: item.label,
-      href: item.href,
-      active: isActive(item.href),
-    }));
-  })();
-
-  // Default action handlers
-  const defaultLogin = () => router.push("/login");
-  const defaultSignUp = () => router.push("/register");
-  const defaultLogout = () => {
-    logout(undefined, {
-      onSuccess: () => {
-        toast.success("Logout successful!");
-        router.push("/login");
-      },
-      onError: (error) => {
-        toast.error(
-          error?.response?.data?.message || error.message || "Logout failed",
-        );
-      },
-    });
-  };
-  const defaultSettings = () => router.push("/home");
-  const defaultNotification = () => router.push("/home");
+  // Default action handlers (extracted)
+  const {
+    defaultLogin,
+    defaultSignUp,
+    defaultLogout,
+    defaultSettings,
+    defaultNotification,
+  } = createDefaultActions(router, logout);
 
   // Auth actions props
   const isLoggedIn = isAuthenticated;
-  const actionProps = isLoggedIn
+  const userDropdownProps: AuthenticatedProps | null = isLoggedIn
     ? {
-        isLoggedIn: true as const,
+        isLoggedIn: true,
         onLogoutClick: onLogoutClickProp ?? defaultLogout,
         onSettingsClick: onSettingsClickProp ?? defaultSettings,
         onNotificationClick: onNotificationClickProp ?? defaultNotification,
@@ -96,11 +62,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         avatarUrl: user?.avatar,
         notificationCount: 0,
       }
-    : {
-        isLoggedIn: false as const,
-        onLoginClick: onLoginClickProp ?? defaultLogin,
-        onSignUpClick: onSignUpClickProp ?? defaultSignUp,
-      };
+    : null;
 
   // Render
   return (
@@ -119,7 +81,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="flex items-center gap-6">
               <NavbarLinks links={navLinks} theme={theme} />
               <div className="hidden md:flex">
-                <NavbarActions {...actionProps} theme={theme} />
+                {userDropdownProps && (
+                  <NavbarUserDropdown {...userDropdownProps} />
+                )}
               </div>
             </div>
           </div>
@@ -143,12 +107,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
 
             <div className="hidden md:flex">
-              <NavbarActions {...actionProps} theme={theme} />
+              {userDropdownProps && (
+                <NavbarUserDropdown {...userDropdownProps} />
+              )}
             </div>
           </>
         )}
       </nav>
-      {/* <NavbarMobileTabs links={navLinks} /> */}
+      {/* <NavbarBottomTabs links={navLinks} /> */}
     </>
   );
 };

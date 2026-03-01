@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import { useAuthStore } from "@/features/auth/store/auth.store";
-import DashboardHeader from "@/components/DashboardHeader";
+import DashboardHeader from "@/components/layout/DashboardHeader";
 import { TeacherStats } from "@/types/dashboard";
 import BatchCard from "@/components/ui/BatchCard";
 import { Batch } from "@/types/dashboard";
 import { useGetEnrolledClasses } from "@/features/home/hooks/useGetEnrolledClasses";
-import EmptyBatches from "@/components/EmptyBatches";
+import EmptyBatches from "@/components/common/EmptyBatches";
 import { Spinner } from "@/shared/loading/Spinner";
-import BatchFilterMenu from "@/components/BatchFilterMenu";
-import SortMenu from "@/components/SortMenu";
+import BatchFilterMenu from "@/features/batches/components/dashboard/BatchFilterMenu";
+import SortMenu from "@/features/batches/components/dashboard/SortMenu";
 
 export default function TeacherDashboard() {
   const { user } = useAuthStore();

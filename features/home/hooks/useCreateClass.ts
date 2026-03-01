@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import type { ClassCard } from "@/features/class/types";
 import { createClassApi } from "../api/home.api";
+import { ClassCard } from "@/features/batches";
 
 export const useCreateClass = () => {
   const queryClient = useQueryClient();
