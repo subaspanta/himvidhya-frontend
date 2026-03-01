@@ -10,14 +10,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AuthenticatedProps } from "./navbar.types";
-import React from "react";
-
-// Mock data (replace with real data later)
-const user = {
-  name: "Dr. Elena Fisher",
-  role: "SENIOR INSTRUCTOR",
-  isActive: true, // Change to false to test inactive state
-};
 
 export const NavbarUserMenu = ({
   userName = "User",
@@ -47,7 +39,7 @@ export const NavbarUserMenu = ({
       <div className="flex flex-col">
         <span className="font-semibold text-sm text-gray-900">{userName}</span>
         <span className="text-xs text-gray-500 uppercase tracking-wider">
-          {user.role}
+          {userEmail?.split("@")[0] || "user"}
         </span>
       </div>
       {/* Profile */}

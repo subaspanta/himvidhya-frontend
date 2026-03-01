@@ -24,7 +24,7 @@ export default function PublicLayout({
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar
-        className=" mx-auto w-full  p-4 md:p-6 lg:p-8"
+        className=" mx-auto w-full h-12 md:p-6 lg:p-8"
         variant="landing"
         onLoginClick={openLoginModal}
         onSignUpClick={openRegisterModal}

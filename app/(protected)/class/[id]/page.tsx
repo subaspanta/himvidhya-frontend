@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getClassDetails } from "@/features/class/api/classApi";
 import { ClassDetails } from "@/features/class/types";
 import { Button } from "@/components/ui/button";
 import ClassHeader from "@/features/class/components/classroom/ClassHeader";
@@ -10,6 +9,7 @@ import UpcomingDeadlines from "@/features/class/components/classroom/UpcomingDea
 import ChannelTabs from "@/features/class/components/classroom/ChannelTab";
 import ClassMainFeed from "@/features/class/components/classroom/ChannelMainFeed";
 import ClassSidebar from "@/features/class/components/classroom/ClassSidebar";
+import { getClassDetails } from "@/features/home/api/home.api";
 
 export default function ClassDetailPage() {
   const { id } = useParams();

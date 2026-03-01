@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useRouter } from "next/navigation";
 import {
   MoreHorizontal,
   Copy,
@@ -33,11 +36,17 @@ interface BatchCardProps {
 
 const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const hasUnread = batch.unreadMessages > 0;
+  const router = useRouter();
 
   const copyCodeToClipboard = (e: React.MouseEvent) => {
     e.stopPropagation();
     navigator.clipboard.writeText(batch.code);
     toast.success("Batch code copied!");
+  };
+
+  const openBatch = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    router.push(`/class/${batch.id}`);
   };
 
   return (
@@ -99,6 +108,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
       <CardFooter className="p-5  border-t bg-muted/20">
         <div className="w-full flex items-center justify-between gap-3">
           <Button
+            onClick={openBatch}
             variant="default"
             size="sm"
             className="

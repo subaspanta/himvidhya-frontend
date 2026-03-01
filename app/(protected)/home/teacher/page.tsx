@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Filter } from "lucide-react";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import DashboardHeader from "@/components/DashboardHeader";
 import { TeacherStats } from "@/types/dashboard";
@@ -13,7 +11,6 @@ import EmptyBatches from "@/components/EmptyBatches";
 import { Spinner } from "@/shared/loading/Spinner";
 import BatchFilterMenu from "@/components/BatchFilterMenu";
 import SortMenu from "@/components/SortMenu";
-import React from "react";
 
 export default function TeacherDashboard() {
   const { user } = useAuthStore();
@@ -69,7 +66,6 @@ export default function TeacherDashboard() {
         return aAtt - bAtt;
       }
 
-      // newest: prefer `createdAt` if available, otherwise fallback to _id comparison
       if (a.createdAt && b.createdAt) {
         return (
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()

@@ -8,7 +8,6 @@ export default function DashboardPage() {
   const { user } = useAuthStore();
 
   useEffect(() => {
-    // Redirect old /dashboard route to /home
     if (user) router.replace("/home");
   }, [user, router]);
 

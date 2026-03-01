@@ -25,10 +25,10 @@ export default function DashboardLayout({
           <RightAside />
         </div>
       </main>
-      {/* <Footer
+      <Footer
         variant="dashboard"
         className="container mx-auto max-w-[1440px] p-4 md:p-6 lg:p-8"
-      /> */}
+      />
     </div>
   );
 }

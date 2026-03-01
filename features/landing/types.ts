@@ -1,4 +1,4 @@
-import { NavLink } from "@/components/layout";
+import { NavLink } from "@/components/navbar";
 
 export interface AppLogoProps {
   size?: "sm" | "lg";
