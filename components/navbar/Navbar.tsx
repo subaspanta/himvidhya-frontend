@@ -8,7 +8,6 @@ import { AuthenticatedProps, NavbarProps, NavLink } from "./navbar.types";
 import { useNavItems } from "@/shared/hooks/useNavItems";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useLogout } from "@/features/auth/hooks/useLogout";
-import toast from "react-hot-toast";
 import { NavbarLinks } from "./NavbarLinks";
 import { NavbarUserDropdown } from "./NavbarUserDropdown";
 import { computeNavLinks, createDefaultActions } from "./navbar.utils";
@@ -20,8 +19,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   variant = "dashboard",
   navLinks: customLinks,
   className,
-  onLoginClick: onLoginClickProp,
-  onSignUpClick: onSignUpClickProp,
   onLogoutClick: onLogoutClickProp,
   onSettingsClick: onSettingsClickProp,
   onNotificationClick: onNotificationClickProp,
@@ -41,13 +38,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   const navLinks: NavLink[] = computeNavLinks(pathname, customLinks, navItems);
 
   // Default action handlers (extracted)
-  const {
-    defaultLogin,
-    defaultSignUp,
-    defaultLogout,
-    defaultSettings,
-    defaultNotification,
-  } = createDefaultActions(router, logout);
+  const { defaultLogout, defaultSettings, defaultNotification } =
+    createDefaultActions(router, logout);
 
   // Auth actions props
   const isLoggedIn = isAuthenticated;

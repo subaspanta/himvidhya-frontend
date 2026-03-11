@@ -1,8 +1,8 @@
 // features/class/components/ClassHeader.tsx
 import { ArrowLeft, Copy, Bell, MoreVertical } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ClassDetails } from "@/features/class/types";
 import { Button } from "@/components/ui/button";
+import { ClassDetails } from "../../types";
 
 interface Props {
   classData: ClassDetails;
@@ -26,7 +26,7 @@ export default function ClassHeader({ classData }: Props) {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => router.push("/dashboard")}
+              onClick={() => router.push("/home")}
             >
               <ArrowLeft className="w-5 h-5" />
             </Button>

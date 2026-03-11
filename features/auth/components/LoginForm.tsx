@@ -33,7 +33,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       { email: data.email, password: data.password },
       {
         onSuccess: () => {
-          push("/dashboard");
+          push("/home");
           if (onSuccess) onSuccess();
           toast.success("Logged in successfully");
         },

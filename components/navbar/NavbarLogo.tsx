@@ -9,7 +9,7 @@ export const NavbarLogo = ({
   variant: "landing" | "dashboard";
 }) => (
   <Link
-    href={isLoggedIn ? "/dashboard" : "/"}
+    href={isLoggedIn ? "/home" : "/"}
     className="flex items-center hover:opacity-90"
   >
     <AppLogo size="lg" variant={variant} />

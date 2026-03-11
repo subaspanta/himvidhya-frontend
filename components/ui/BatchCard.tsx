@@ -7,7 +7,6 @@ import {
   Copy,
   Users,
   Clock,
-  MessageSquare,
   Edit,
   Archive,
   Delete,
