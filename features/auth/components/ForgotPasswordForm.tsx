@@ -68,7 +68,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
               {
                 onSuccess: () => {
                   toast.success("Password reset successful!");
-                  push("/dashboard"); // Auto-logged in
+                  push("/home"); // Auto-logged in
                 },
                 onError: (error) => {
                   toast.error(

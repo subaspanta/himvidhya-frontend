@@ -33,7 +33,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       { email: data.email, password: data.password },
       {
         onSuccess: () => {
-          push("/dashboard");
+          push("/home");
           if (onSuccess) onSuccess();
           toast.success("Logged in successfully");
         },
@@ -52,7 +52,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         </h2>
         <p className="text-base leading-relaxed text-muted-foreground">
           Sign in to continue to{" "}
-          <span className="text-accent font-bold">HimVidhya</span>
+          <span className="text-primary font-bold">HimVidhya</span>
         </p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -78,7 +78,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               <Button
                 type="button"
                 variant="ghost"
-                className="text-sm text-accent hover:text-accent/80 font-bold transition-colors p-0 h-auto"
+                className="text-sm text-primary hover:text-primary/80 font-bold transition-colors p-0 h-auto"
                 onClick={() =>
                   onSwitchToForgotPassword ? onSwitchToForgotPassword() : null
                 }
@@ -113,7 +113,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             onSwitchToRegister ? onSwitchToRegister() : push("/register")
           }
           variant="ghost"
-          className="text-accent hover:text-accent/80 font-bold hover:underline p-0 h-auto"
+          className="text-primary hover:text-primary/80 font-bold hover:underline p-0 h-auto"
         >
           Create account
         </Button>

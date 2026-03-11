@@ -10,7 +10,7 @@ export const useAuthStore = create<AuthStore>()((set) => ({
   setUser: (user, role) =>
     set({
       user,
-      role: role || user?.role || null,
+      role: role ?? (user?.role as AuthStore["role"]) ?? null,
       isAuthenticated: !!user,
     }),
 

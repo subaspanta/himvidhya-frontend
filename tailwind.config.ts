@@ -70,7 +70,7 @@ const config: Config = {
         "2xl": "1.5rem", // 24px
       },
       zIndex: {
-        header: "10",
+        header: "60",
         sidebar: "20",
         overlay: "30",
         modal: "40",
@@ -100,10 +100,13 @@ const config: Config = {
           lg: "2rem",
         },
       },
+      screens: {
+        xxl: "160rem",
+      },
       fontFamily: {
         // Typography system
-        sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"], // Body - Inter Regular
-        heading: ["var(--font-inter)", "Inter", "sans-serif"], // Headings - Using Inter (replace with Satoshi when available)
+        sans: ["Satoshi", "Inter", "system-ui", "sans-serif"], // Body - Satoshi
+        heading: ["Satoshi", "Inter", "sans-serif"], // Headings - Satoshi
         mono: [
           "var(--font-jetbrains-mono)",
           "JetBrains Mono",
