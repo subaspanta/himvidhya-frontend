@@ -22,7 +22,7 @@ export default function DashboardLayout({
             {children}
           </div>
 
-          <RightAside />
+          {/* <RightAside /> */}
         </div>
       </main>
       <Footer
