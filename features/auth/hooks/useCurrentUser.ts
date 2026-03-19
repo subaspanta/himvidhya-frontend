@@ -13,12 +13,11 @@ export const useCurrentUser = () => {
   const query = useQuery<User, Error>({
     queryKey: QUERY_KEYS.currentUser,
     queryFn: getCurrentUser,
-    enabled: !authChecked, // Only fetch if auth not checked
+    enabled: !authChecked,
     staleTime: 5 * 60 * 1000,
     retry: false,
     refetchOnWindowFocus: false,
     select: (user) => {
-      // Map backend data to store-friendly format
       return {
         id: user.id,
         email: user.email,
@@ -30,7 +29,9 @@ export const useCurrentUser = () => {
   });
 
   useEffect(() => {
-    if (query.status === "success") {
+    if (!query.isFetched) return;
+
+    if (query.isSuccess) {
       setUser(
         query.data,
         query.data.role as
@@ -42,14 +43,19 @@ export const useCurrentUser = () => {
           | null
           | undefined,
       );
-      setAuthChecked(true);
+    } else if (query.isError) {
+      setUser(null, null);
     }
 
-    if (query.status === "error") {
-      setUser(null, null);
-      setAuthChecked(true);
-    }
-  }, [query.status]);
+    setAuthChecked(true);
+  }, [
+    query.isFetched,
+    query.isSuccess,
+    query.isError,
+    query.data,
+    setUser,
+    setAuthChecked,
+  ]);
 
   return query;
 };

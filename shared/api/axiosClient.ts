@@ -34,7 +34,13 @@ const processQueue = (error: Error | null) => {
 apiClient.interceptors.response.use(
   (response) => {
     const payload = response?.data?.data ?? response?.data;
-    return { ...response, data: payload };
+    const meta = {
+      success: response?.data?.success,
+      message: response?.data?.message,
+      timestamp: response?.data?.timestamp,
+    };
+
+    return { ...response, data: payload, meta };
   },
 
   async (error: AxiosError) => {

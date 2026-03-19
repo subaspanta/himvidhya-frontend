@@ -1,17 +1,32 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { AuthPageLayout } from "@/components/layout/AuthPageLayout";
+import { HeroSection } from "@/features/landing";
 import { ForgotPasswordForm } from "@/features/auth/components/ForgotPasswordForm";
+import { Modal } from "@/components/ui/modal";
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
 
+  const handleClose = () => {
+    router.replace("/");
+  };
+
+  const handleSwitchToRegister = () => {
+    router.push("/register");
+  };
+
   return (
-    <AuthPageLayout>
-      <div className="w-96 p-8 bg-surface border border-border rounded-2xl shadow-2xl">
+    <>
+      <HeroSection onGetStartedClick={handleSwitchToRegister} />
+      <Modal
+        isOpen={true}
+        onClose={handleClose}
+        className="w-96"
+        closeButtonClassName="right-6 top-6"
+      >
         <ForgotPasswordForm onBackToLogin={() => router.push("/login")} />
-      </div>
-    </AuthPageLayout>
+      </Modal>
+    </>
   );
 }

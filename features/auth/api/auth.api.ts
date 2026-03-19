@@ -37,7 +37,11 @@ export const forgotPassword = async (
   payload: ForgotPasswordPayload,
 ): Promise<ForgotPasswordResponse> => {
   const response = await apiClient.post("/auth/forget-password", payload);
-  return { message: response.data.message };
+  return {
+    message:
+      (response as { meta?: { message?: string } }).meta?.message ||
+      "If email exists, OTP has been sent",
+  };
 };
 
 export const verifyOTP = async (
@@ -45,7 +49,12 @@ export const verifyOTP = async (
   otp: string,
 ): Promise<{ valid: boolean; message: string }> => {
   const response = await apiClient.post("/auth/verify-otp", { email, otp });
-  return { valid: response.data.valid, message: response.data.message };
+  return {
+    valid: response.data.valid,
+    message:
+      (response as { meta?: { message?: string } }).meta?.message ||
+      "OTP verified successfully",
+  };
 };
 
 export const resetPassword = async (
@@ -64,13 +73,13 @@ export const resetPassword = async (
   return mapUser(user);
 };
 
-export const getProfile = async (): Promise<User> => {
-  const response = await apiClient.get("/auth/profile");
+// export const getProfile = async (): Promise<User> => {
+//   const response = await apiClient.get("/auth/me");
 
-  const user = response.data;
+//   const user = response.data;
 
-  return mapUser(user);
-};
+//   return mapUser(user);
+// };
 
 export const getCurrentUser = async (): Promise<User> => {
   const response = await apiClient.get("/auth/me");

@@ -12,12 +12,12 @@ export async function createClassApi(data: {
 
 export async function getEnrolledClasses(): Promise<ClassCard[]> {
   const response = await apiClient.get("/class/my");
-  return response.data || [];
+  return response.data.classes || [];
 }
 
 export async function getClassDetails(id: string): Promise<ClassDetails> {
   const response = await apiClient.get(`/class/${id}`);
-  return response.data;
+  return response.data.class;
 }
 
 export async function joinClass(code: string): Promise<ClassCard> {
