@@ -8,12 +8,11 @@ import { QUERY_KEYS } from "@/config/constants";
 export const useCurrentUser = () => {
   const setUser = useAuthStore((state) => state.setUser);
   const setAuthChecked = useAuthStore((state) => state.setAuthChecked);
-  const authChecked = useAuthStore((state) => state.authChecked);
 
   const query = useQuery<User, Error>({
     queryKey: QUERY_KEYS.currentUser,
     queryFn: getCurrentUser,
-    enabled: !authChecked,
+    enabled: true,
     staleTime: 5 * 60 * 1000,
     retry: false,
     refetchOnWindowFocus: false,

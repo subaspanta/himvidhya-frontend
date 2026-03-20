@@ -58,10 +58,6 @@ apiClient.interceptors.response.use(
 
     /* ================= SKIP CASES ================= */
 
-    if (status === 401 && url.includes("/auth/me")) {
-      return Promise.reject(error);
-    }
-
     if (status === 401 && url.includes("/auth/login")) {
       return Promise.reject(error);
     }
