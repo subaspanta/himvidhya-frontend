@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Check } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -40,13 +40,20 @@ const SortMenu: React.FC<Props> = ({ sortBy, setSortBy, className }) => {
         <DropdownMenuLabel>Sort By</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => setSortBy("newest")}>
-          Newest First{sortBy === "newest" ? " ✅" : ""}
+          <span>Newest First</span>
+          {sortBy === "newest" && (
+            <Check className="ml-2 h-4 w-4 text-primary" />
+          )}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setSortBy("name")}>
-          Name (A-Z){sortBy === "name" ? " ✅" : ""}
+          <span>Name (A-Z)</span>
+          {sortBy === "name" && <Check className="ml-2 h-4 w-4 text-primary" />}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setSortBy("attendance")}>
-          Attendance (Low-High){sortBy === "attendance" ? " ✅" : ""}
+          <span>Attendance (Low-High)</span>
+          {sortBy === "attendance" && (
+            <Check className="ml-2 h-4 w-4 text-primary" />
+          )}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

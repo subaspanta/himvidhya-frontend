@@ -53,8 +53,8 @@ export function createDefaultActions(router: Router, logout: LogoutMutate) {
       },
     });
   };
-  const defaultSettings = () => router.push("/home");
-  const defaultNotification = () => router.push("/home");
+  const defaultSettings = () => toast("Settings coming soon!");
+  const defaultNotification = () => router.push("/announcements");
 
   return {
     defaultLogin,

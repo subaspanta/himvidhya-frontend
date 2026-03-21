@@ -86,17 +86,15 @@ export const Navbar: React.FC<NavbarProps> = ({
               <NavbarLinks links={navLinks} theme={theme} />
             </div>
 
-            {isLoggedIn && (
-              <div className="relative w-full sm:w-80 md:w-96 rounded-full overflow-hidden">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search batches, students..."
-                  className="pl-10 h-11 bg-card border-border focus:ring-1 focus:ring-primary rounded-full"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-            )}
+            <div className="relative w-full sm:w-80 md:w-96 rounded-full overflow-hidden">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search batches, students..."
+                className="pl-10 h-11 bg-card border-border focus:ring-1 focus:ring-primary rounded-full"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
 
             <div className="hidden md:flex">
               {userDropdownProps && (

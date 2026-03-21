@@ -1,7 +1,7 @@
 // features/class/components/ClassSidebar.tsx
-import { ClassDetails } from "@/features/class/types";
 import { Button } from "@/components/ui/button";
 import { Calendar, FileText, UserPlus } from "lucide-react";
+import { ClassDetails } from "../../types";
 
 interface Props {
   classData: ClassDetails;

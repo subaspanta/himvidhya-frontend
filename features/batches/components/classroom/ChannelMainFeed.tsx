@@ -1,5 +1,5 @@
 // features/class/components/ClassMainFeed.tsx
-import { ClassDetails } from "@/features/class/types";
+import { ClassDetails } from "../../types";
 import AnnouncementCard from "./AnnouncementCard";
 
 interface Props {
