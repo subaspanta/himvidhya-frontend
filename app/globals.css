@@ -14,6 +14,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: "Satoshi";
   src:
@@ -24,66 +25,124 @@
   font-style: italic;
   font-display: swap;
 }
-@font-face {
-  font-family: "Satoshi";
-  src:
-    url("/fonts/Satoshi-Variable.woff2") format("woff2"),
-    url("/fonts/Satoshi-Variable.woff") format("woff"),
-    url("/fonts/Satoshi-Variable.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Satoshi";
-  src:
-    url("/fonts/Satoshi-VariableItalic.woff2") format("woff2"),
-    url("/fonts/Satoshi-VariableItalic.woff") format("woff"),
-    url("/fonts/Satoshi-VariableItalic.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: swap;
-}
+
+/* ================================================================
+   DESIGN TOKENS — Light Mode
+   Navy + Indigo — Modern & Professional
+   ================================================================ */
 
 :root {
   color-scheme: light;
+  --fontSans: "Satoshi", "Inter", sans-serif;
 
-  /* New Design System - Light Mode */
-  /* Primary Blue: #1E40AF */
-  --primary: 30 64 175;
-  --primary-foreground: 250 249 246;
+  /* ── Primary: Rich Indigo ── */
+  --primary: rgba(79, 70, 229, 1); /* #4F46E5 Indigo 600 */
+  --primary-hover: rgba(67, 56, 202, 1); /* #4338CA Indigo 700 */
+  --primary-active: rgba(55, 48, 163, 1); /* #3730A3 Indigo 800 */
+  --primary-foreground: rgba(255, 255, 255, 1);
 
-  /* Accent Blue: #60A5FA */
-  --accent: 96 165 250;
-  --accent-foreground: 15 23 42;
+  /* ── Primary Subtle (for badges, chips, hover bg) ── */
+  --primary-subtle: rgba(238, 242, 255, 1); /* #EEF2FF Indigo 50 */
+  --primary-muted: rgba(199, 210, 254, 1); /* #C7D2FE Indigo 200 */
+  --primary-accent: rgba(165, 180, 252, 1); /* #A5B4FC Indigo 300 */
 
-  /* Backgrounds */
-  --background: 250 249 246; /* #FAF9F6 - Background Light */
-  --background-dark: 15 23 42; /* #0F172A - Background Dark */
-  --surface: 255 255 255; /* White cards/surfaces */
+  /* ── Backgrounds ── */
+  --background: rgba(248, 250, 252, 1); /* #F8FAFC Slate 50 */
+  --background-secondary: rgba(241, 245, 249, 1); /* #F1F5F9 Slate 100 */
 
-  /* Borders & Subtle */
-  --border: 226 232 240; /* Light border */
-  --muted: 241 245 249; /* Subtle fills */
+  /* ── Surface (cards, modals, popovers) ── */
+  --card: rgba(255, 255, 255, 1);
+  --card-foreground: rgba(15, 23, 42, 1);
+  --popover: rgba(255, 255, 255, 1);
+  --popover-foreground: rgba(15, 23, 42, 1);
 
-  /* Text */
-  --foreground: 15 23 42; /* #0F172A - Text Primary (light mode) */
-  --muted-foreground: 100 116 139; /* #64748B - Text Muted */
+  /* ── Dark Navy Surface (navbar, sidebar) ── */
+  --surface-dark: rgba(15, 23, 42, 1); /* #0F172A Navy 950 */
+  --surface-dark-elevated: rgba(30, 41, 59, 1); /* #1E293B Navy 800 */
+  --surface-dark-border: rgba(51, 65, 85, 1); /* #334155 Navy 600 */
+  --surface-dark-foreground: rgba(241, 245, 249, 1); /* #F1F5F9 */
+  --surface-dark-muted: rgba(148, 163, 184, 1); /* #94A3B8 Slate 400 */
 
-  /* Status Colors */
-  --success: 16 185 129; /* #10B981 - Success */
-  --warning: 239 68 68; /* #EF4444 - Warning/Danger */
-  --danger: 239 68 68; /* #EF4444 - Danger */
+  /* ── Text ── */
+  --foreground: rgba(15, 23, 42, 1); /* #0F172A Navy — primary text */
+  --foreground-secondary: rgba(30, 41, 59, 1); /* #1E293B — secondary text */
+  --muted-foreground: rgba(100, 116, 139, 1); /* #64748B Slate 500 — muted */
 
-  /* Radius */
-  --radius: 0.75rem; /* 12px default */
+  /* ── Secondary & Accent ── */
+  --secondary: rgba(241, 245, 249, 1); /* #F1F5F9 Slate 100 */
+  --secondary-foreground: rgba(15, 23, 42, 1);
+  --accent: rgba(238, 242, 255, 1); /* #EEF2FF Indigo 50 */
+  --accent-foreground: rgba(79, 70, 229, 1); /* Indigo 600 */
+  --muted: rgba(241, 245, 249, 1); /* #F1F5F9 */
+
+  /* ── Borders & Input ── */
+  --border: rgba(226, 232, 240, 1); /* #E2E8F0 Slate 200 */
+  --border-strong: rgba(203, 213, 225, 1); /* #CBD5E1 Slate 300 */
+  --input: rgba(226, 232, 240, 1);
+  --ring: rgba(99, 102, 241, 1); /* #6366F1 Indigo 500 — focus ring */
+
+  /* ── Semantic: Status Colors ── */
+  --success: rgba(16, 185, 129, 1); /* #10B981 Emerald 500 */
+  --success-subtle: rgba(236, 253, 245, 1); /* #ECFDF5 Emerald 50 */
+  --success-foreground: rgba(255, 255, 255, 1);
+
+  --warning: rgba(245, 158, 11, 1); /* #F59E0B Amber 500 */
+  --warning-subtle: rgba(255, 251, 235, 1); /* #FFFBEB Amber 50 */
+  --warning-foreground: rgba(255, 255, 255, 1);
+
+  --destructive: rgba(239, 68, 68, 1); /* #EF4444 Red 500 */
+  --destructive-subtle: rgba(254, 242, 242, 1); /* #FEF2F2 Red 50 */
+  --destructive-foreground: rgba(255, 255, 255, 1);
+
+  --info: rgba(99, 102, 241, 1); /* #6366F1 Indigo 500 */
+  --info-subtle: rgba(238, 242, 255, 1); /* #EEF2FF Indigo 50 */
+
+  /* ── Radius ── */
+  --radius: 0.75rem; /* 12px base */
+
+  /* ── Shadows ── */
+  --shadow-xs: 0px 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-sm:
+    0px 2px 6px rgba(15, 23, 42, 0.06), 0px 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md:
+    0px 4px 12px rgba(15, 23, 42, 0.08), 0px 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-lg:
+    0px 8px 24px rgba(15, 23, 42, 0.1), 0px 4px 8px rgba(15, 23, 42, 0.06);
+  --shadow-xl:
+    0px 16px 48px rgba(15, 23, 42, 0.12), 0px 8px 16px rgba(15, 23, 42, 0.08);
+
+  /* ── Sidebar ── */
+  --sidebar: rgba(255, 255, 255, 1);
+  --sidebar-foreground: rgba(15, 23, 42, 1);
+  --sidebar-primary: rgba(79, 70, 229, 1);
+  --sidebar-primary-foreground: rgba(255, 255, 255, 1);
+  --sidebar-accent: rgba(238, 242, 255, 1);
+  --sidebar-accent-foreground: rgba(79, 70, 229, 1);
+  --sidebar-border: rgba(226, 232, 240, 1);
+  --sidebar-ring: rgba(99, 102, 241, 1);
+
+  /* ── Charts ── */
+  --chart-1: rgba(79, 70, 229, 1); /* Indigo 600 */
+  --chart-2: rgba(99, 102, 241, 1); /* Indigo 500 */
+  --chart-3: rgba(165, 180, 252, 1); /* Indigo 300 */
+  --chart-4: rgba(16, 185, 129, 1); /* Emerald 500 */
+  --chart-5: rgba(245, 158, 11, 1); /* Amber 500 */
 }
+
+/* ================================================================
+   TAILWIND THEME MAPPING
+   ================================================================ */
+
 @theme inline {
   --font-sans: var(--fontSans);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+
+  --radius-sm: calc(var(--radius) - 4px); /* 8px */
+  --radius-md: calc(var(--radius) - 2px); /* 10px */
+  --radius-lg: var(--radius); /* 12px */
+  --radius-xl: calc(var(--radius) + 4px); /* 16px */
+  --radius-2xl: calc(var(--radius) + 8px); /* 20px */
+  --radius-3xl: calc(var(--radius) + 12px); /* 24px */
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -115,94 +174,97 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --shadow-x: var(--shadow-x);
-  --shadow-y: var(--shadow-y);
-  --shadow-blur: var(--shadow-blur);
-  --shadow-spread: var(--shadow-spread);
-  --shadow-color: var(--shadow-color);
 }
 
-:root {
-  --fontSans: "Satoshi", "Inter", sans-serif;
-  /* HimVidya Light Theme */
-  --background: rgba(248, 250, 252, 1); /* Slate 50 */
-  --foreground: rgba(15, 23, 42, 1); /* Slate 900 */
-  --card: rgba(255, 255, 255, 1);
-  --card-foreground: rgba(15, 23, 42, 1);
-  --popover: rgba(255, 255, 255, 1);
-  --popover-foreground: rgba(15, 23, 42, 1);
-  --primary: rgba(30, 64, 175, 1); /* Blue 800 - #1E40AF */
-  --primary-foreground: rgba(255, 255, 255, 1);
-  --secondary: rgba(241, 245, 249, 1); /* Slate 100 */
-  --secondary-foreground: rgba(15, 23, 42, 1);
-  --muted: rgba(241, 245, 249, 1);
-  --muted-foreground: rgba(100, 116, 139, 1); /* Slate 500 */
-  --accent: rgba(226, 232, 240, 1); /* Slate 200 */
-  --accent-foreground: rgba(15, 23, 42, 1);
-  --destructive: rgba(239, 68, 68, 1); /* Red 500 */
-  --destructive-foreground: rgba(255, 255, 255, 1);
-  --border: rgba(226, 232, 240, 1); /* Slate 200 */
-  --input: rgba(226, 232, 240, 1);
-  --ring: rgba(30, 64, 175, 1);
-  --radius: 0.75rem; /* 12px as requested */
-  --chart-1: rgba(238, 221, 252, 1);
-  --chart-2: rgba(195, 150, 237, 1);
-  --chart-3: rgba(238, 221, 252, 1);
-  --chart-4: rgba(195, 150, 237, 1);
-  --chart-5: rgba(238, 221, 252, 1);
-  --sidebar: rgb(250 250 250);
-  --sidebar-foreground: rgb(10 10 10);
-  --sidebar-primary: rgb(23 23 23);
-  --sidebar-primary-foreground: rgb(250 250 250);
-  --sidebar-accent: rgb(245 245 245);
-  --sidebar-accent-foreground: rgb(23 23 23);
-  --sidebar-border: rgb(229 229 229);
-  --sidebar-ring: rgb(161 161 161);
-  --shadow-x: 0px;
-  --shadow-y: 4px;
-  --shadow-blur: 12px;
-  --shadow-spread: -2px;
-  --shadow-opacity: 0.08;
-  --shadow-color: rgba(15, 23, 42, 0.08); /* Slate shadow */
-}
-
-/* ------------------------------------------------------------------
+/* ================================================================
    DARK MODE
-   ------------------------------------------------------------------ */
+   Navy stays deep, Indigo stays vibrant
+   ================================================================ */
 
 .dark {
   color-scheme: dark;
 
-  /* Primary Blue: #1E40AF */
-  --primary: 30 64 175;
-  --primary-foreground: 241 245 249;
+  /* ── Primary: keep indigo vibrant on dark ── */
+  --primary: rgba(99, 102, 241, 1); /* #6366F1 Indigo 500 — slightly lighter */
+  --primary-hover: rgba(79, 70, 229, 1); /* #4F46E5 Indigo 600 */
+  --primary-foreground: rgba(255, 255, 255, 1);
+  --primary-subtle: rgba(30, 27, 75, 1); /* Deep indigo tint */
+  --primary-muted: rgba(55, 48, 163, 1); /* #3730A3 Indigo 800 */
+  --primary-accent: rgba(99, 102, 241, 0.3); /* Indigo 500 at 30% */
 
-  /* Accent Blue: #60A5FA */
-  --accent: 96 165 250;
-  --accent-foreground: 241 245 249;
+  /* ── Backgrounds ── */
+  --background: rgba(10, 15, 28, 1); /* #0A0F1C — deeper than slate 950 */
+  --background-secondary: rgba(15, 23, 42, 1); /* #0F172A Navy */
 
-  /* Backgrounds */
-  --background: 15 23 42; /* #0F172A - Background Dark */
-  --background-dark: 15 23 42;
-  --surface: 30 41 59; /* Darker surface for cards */
+  /* ── Surface ── */
+  --card: rgba(15, 23, 42, 1); /* #0F172A */
+  --card-foreground: rgba(241, 245, 249, 1);
+  --popover: rgba(22, 32, 55, 1); /* Slightly lighter navy */
+  --popover-foreground: rgba(241, 245, 249, 1);
 
-  /* Borders & Subtle */
-  --border: 51 65 85; /* Dark border */
-  --muted: 30 41 59; /* Subtle fills */
+  /* ── Dark Navy Surface ── */
+  --surface-dark: rgba(7, 10, 20, 1); /* Even deeper */
+  --surface-dark-elevated: rgba(15, 23, 42, 1);
+  --surface-dark-border: rgba(30, 41, 59, 1);
+  --surface-dark-foreground: rgba(241, 245, 249, 1);
+  --surface-dark-muted: rgba(100, 116, 139, 1);
 
-  /* Text */
-  --foreground: 241 245 249; /* #F1F5F9 - Text Primary (dark mode) */
-  --muted-foreground: 148 163 184; /* Lighter muted text for dark mode */
+  /* ── Text ── */
+  --foreground: rgba(241, 245, 249, 1); /* #F1F5F9 */
+  --foreground-secondary: rgba(203, 213, 225, 1); /* #CBD5E1 */
+  --muted-foreground: rgba(148, 163, 184, 1); /* #94A3B8 Slate 400 */
 
-  /* Status Colors */
-  --success: 16 185 129;
-  --warning: 239 68 68;
-  --danger: 239 68 68;
+  /* ── Secondary & Accent ── */
+  --secondary: rgba(30, 41, 59, 1); /* #1E293B */
+  --secondary-foreground: rgba(241, 245, 249, 1);
+  --accent: rgba(30, 27, 75, 1); /* Deep indigo */
+  --accent-foreground: rgba(165, 180, 252, 1); /* Indigo 300 */
+  --muted: rgba(30, 41, 59, 1);
+
+  /* ── Borders ── */
+  --border: rgba(30, 41, 59, 1); /* #1E293B */
+  --border-strong: rgba(51, 65, 85, 1); /* #334155 */
+  --input: rgba(30, 41, 59, 1);
+  --ring: rgba(99, 102, 241, 1); /* Indigo 500 */
+
+  /* ── Semantic ── */
+  --success: rgba(52, 211, 153, 1); /* Emerald 400 — brighter on dark */
+  --success-subtle: rgba(6, 47, 36, 1);
+  --warning: rgba(251, 191, 36, 1); /* Amber 400 */
+  --warning-subtle: rgba(55, 40, 5, 1);
+  --destructive: rgba(248, 113, 113, 1); /* Red 400 */
+  --destructive-subtle: rgba(69, 10, 10, 1);
+  --info: rgba(129, 140, 248, 1); /* Indigo 400 */
+  --info-subtle: rgba(30, 27, 75, 1);
+
+  /* ── Shadows (darker, more pronounced) ── */
+  --shadow-xs: 0px 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0px 2px 6px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0px 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0px 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-xl: 0px 16px 48px rgba(0, 0, 0, 0.4);
+
+  /* ── Sidebar ── */
+  --sidebar: rgba(15, 23, 42, 1);
+  --sidebar-foreground: rgba(241, 245, 249, 1);
+  --sidebar-primary: rgba(99, 102, 241, 1);
+  --sidebar-primary-foreground: rgba(255, 255, 255, 1);
+  --sidebar-accent: rgba(30, 27, 75, 1);
+  --sidebar-accent-foreground: rgba(165, 180, 252, 1);
+  --sidebar-border: rgba(30, 41, 59, 1);
+  --sidebar-ring: rgba(99, 102, 241, 1);
+
+  /* ── Charts ── */
+  --chart-1: rgba(99, 102, 241, 1);
+  --chart-2: rgba(129, 140, 248, 1);
+  --chart-3: rgba(165, 180, 252, 1);
+  --chart-4: rgba(52, 211, 153, 1);
+  --chart-5: rgba(251, 191, 36, 1);
 }
 
-/* ------------------------------------------------------------------
+/* ================================================================
    BASE STYLES
-   ------------------------------------------------------------------ */
+   ================================================================ */
 
 @layer base {
   *,
@@ -211,112 +273,190 @@
     box-sizing: border-box;
   }
 
-  body {
-    background: rgb(var(--background));
-    color: rgb(var(--foreground));
-    font-family: Inter, system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  * {
+    @apply border-border outline-ring/50;
   }
 
-  /* Typography - Headings use Satoshi Bold */
+  body {
+    background-color: rgb(var(--background, 248 250 252));
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--fontSans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    @apply bg-background text-foreground;
+  }
+
+  /* Headings — Satoshi Bold */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    font-family: Satoshi, Inter, sans-serif;
+    font-family: "Satoshi", var(--fontSans);
     font-weight: 700;
     line-height: 1.25;
-    letter-spacing: -0.01em;
-    color: rgb(var(--foreground));
+    letter-spacing: -0.02em;
+    color: var(--foreground);
   }
 
-  /* Code uses JetBrains Mono */
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  h3 {
+    font-size: 1.25rem;
+  }
+  h4 {
+    font-size: 1.125rem;
+  }
+  h5 {
+    font-size: 1rem;
+  }
+  h6 {
+    font-size: 0.875rem;
+  }
+
+  p {
+    line-height: 1.7;
+    color: var(--foreground-secondary, var(--foreground));
+  }
+
+  /* Links */
+  a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  a:hover {
+    color: var(--primary-hover);
+  }
+
+  /* Code */
   code,
   pre,
   .font-mono {
-    font-family: "JetBrains Mono", "Courier New", monospace;
+    font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace;
+    font-size: 0.875em;
+  }
+
+  /* Focus visible */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Selection */
+  ::selection {
+    background: var(--primary-subtle);
+    color: var(--primary);
+  }
+
+  .dark ::selection {
+    background: var(--primary-muted);
+    color: var(--primary-foreground);
   }
 }
 
-/* ------------------------------------------------------------------
-   SCROLLBAR (OPTIONAL — NICE FOR CHAT APPS)
-   ------------------------------------------------------------------ */
+/* ================================================================
+   UTILITY CLASSES
+   ================================================================ */
 
 @layer utilities {
+  /* Scrollbar */
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: rgb(var(--muted)) transparent;
+    scrollbar-color: var(--border) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
+    height: 5px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: rgb(var(--muted));
+    background-color: var(--border);
     border-radius: 9999px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: var(--border-strong);
+  }
+
+  /* Surface dark utility — for navbar, sidebar */
+  .surface-dark {
+    background: var(--surface-dark);
+    color: var(--surface-dark-foreground);
+    border-color: var(--surface-dark-border);
+  }
+
+  /* Primary badge utility */
+  .badge-primary {
+    background: var(--primary-subtle);
+    color: var(--primary);
+    border: 1px solid var(--primary-muted);
+  }
+
+  .dark .badge-primary {
+    background: var(--primary-subtle);
+    color: var(--primary-accent);
+    border-color: var(--primary-muted);
+  }
+
+  /* Shadow utilities */
+  .shadow-xs {
+    box-shadow: var(--shadow-xs);
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-sm);
+  }
+  .shadow-elevated {
+    box-shadow: var(--shadow-md);
+  }
+  .shadow-overlay {
+    box-shadow: var(--shadow-xl);
+  }
+
+  /* Indigo gradient text */
+  .text-gradient {
+    background: linear-gradient(
+      135deg,
+      var(--primary) 0%,
+      rgba(99, 102, 241, 0.7) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Smooth transitions */
+  .transition-base {
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease,
+      box-shadow 0.15s ease;
   }
 }
 
-/* Autofill styling override */
+/* ================================================================
+   AUTOFILL OVERRIDE
+   ================================================================ */
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px rgb(var(--background)) inset !important;
-  -webkit-text-fill-color: rgb(var(--foreground)) !important;
+  -webkit-box-shadow: 0 0 0 30px var(--card, #ffffff) inset !important;
+  -webkit-text-fill-color: var(--foreground) !important;
   transition: background-color 5000s ease-in-out 0s;
-}
-
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
 }
