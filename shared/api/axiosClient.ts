@@ -52,6 +52,9 @@ apiClient.interceptors.response.use(
     if (!error.response) {
       return Promise.reject(error);
     }
+    if (!originalRequest) {
+      return Promise.reject(error);
+    }
 
     const status = error.response.status;
     const url = originalRequest?.url || "";
@@ -61,13 +64,22 @@ apiClient.interceptors.response.use(
     if (status === 401 && url.includes("/auth/login")) {
       return Promise.reject(error);
     }
+    // Skip refresh if hitting /auth/me with no refresh token cookie:
+    if (
+      status === 401 &&
+      url.includes("/auth/me") &&
+      !document.cookie.includes("refreshToken")
+    ) {
+      return Promise.reject(error);
+    }
 
     if (status === 401 && url.includes("/auth/refresh-token")) {
       isRefreshing = false;
       processQueue(new Error("Refresh token expired"));
 
-      // HARD RESET (correct behavior)
-      window.location.href = "/login";
+      if (!window.location.pathname.includes("/login")) {
+        window.location.href = "/login";
+      }
 
       return Promise.reject(error);
     }
@@ -87,7 +99,7 @@ apiClient.interceptors.response.use(
       try {
         await apiClient.post("/auth/refresh-token");
 
-        // 🔥 CRITICAL: Sync React Query
+        // Sync React Query
         await queryClient.invalidateQueries({ queryKey: ["me"] });
 
         isRefreshing = false;
@@ -97,14 +109,12 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         isRefreshing = false;
         processQueue(new Error("Token refresh failed"));
-
-        // HARD RESET
-        window.location.href = "/login";
-
+        if (!window.location.pathname.includes("/login")) {
+          window.location.href = "/login";
+        }
         return Promise.reject(refreshError);
       }
     }
-
     return Promise.reject(error);
   },
 );

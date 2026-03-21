@@ -12,8 +12,8 @@ export const Footer: React.FC<{
 
   return (
     <footer className={cn("w-full px-0 py-6 md:py-8", theme.nav, className)}>
-      <div className="w-full max-w-[1440px] mx-auto px-6 md:px-8 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3 text-sm text-muted-foreground">
+      <div className="w-full max-w-[1440px] mx-auto px-6 md:px-8 flex flex-col md:flex-row items-center md:items-center justify-center md:justify-between gap-4 md:gap-6 text-center md:text-left">
+        <div className="flex items-center justify-center md:justify-start gap-3 text-sm text-muted-foreground">
           <AppLogo
             size="lg"
             variant={variant === "landing" ? "landing" : "dashboard"}
@@ -23,7 +23,7 @@ export const Footer: React.FC<{
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 md:gap-6 mt-2 md:mt-0">
           <Link
             href="/help"
             className={cn(
