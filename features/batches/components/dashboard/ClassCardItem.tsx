@@ -35,7 +35,8 @@ export const ClassCardItem: React.FC<ClassCardItemProps> = ({
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-foreground truncate">{name}</h3>
           <p className="text-sm text-muted-foreground truncate">
-            {members?.length || 0} {members?.length === 1 ? "member" : "members"}
+            {members?.length || 0}{" "}
+            {members?.length === 1 ? "member" : "members"}
           </p>
           <div className="flex items-center gap-2 mt-2">
             <span className="inline-block px-2 py-1 rounded bg-primary/10 text-xs font-medium text-primary">
