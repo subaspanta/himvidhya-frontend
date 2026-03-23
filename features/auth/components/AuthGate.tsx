@@ -41,7 +41,7 @@ export const AuthGate = ({ children }: { children: React.ReactNode }) => {
     if (!user && onProtectedPath) {
       // console.log("[AuthGate] → redirecting to /login");
 
-      window.location.replace("/login");
+      router.replace("/login");
       return;
     }
 

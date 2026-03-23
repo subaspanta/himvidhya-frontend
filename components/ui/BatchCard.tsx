@@ -56,11 +56,11 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
         "group relative overflow-hidden transition-all duration-300",
         "bg-card border border-border rounded-2xl",
         "hover:shadow-md hover:border-primary/30 hover:scale-[1.02]",
-        "flex flex-col",
+        "flex flex-col gap-0 py-0",
       )}
     >
       {/* Header: Icon, title, kebab */}
-      <CardHeader className="px-6 pt-4 pb-3">
+      <CardHeader className="px-6 pt-5 pb-3 grid-cols-1 grid-rows-1 gap-0">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
             {/* Icon */}
@@ -69,7 +69,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
             </div>
 
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-lg md:text-2xl leading-tight truncate text-foreground">
+              <h3 className="font-semibold text-base  leading-tight truncate text-foreground">
                 {batch.name}
               </h3>
               <p className="text-sm md:text-base text-muted-foreground truncate mt-1">
@@ -113,7 +113,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
       </CardHeader>
 
       {/* Bottom row: students + manage */}
-      <CardContent className="px-6 pt-3 pb-4 border-t border-border/60 mt-2">
+      <CardContent className="px-6 py-4 border-t border-border/80 ">
         <div className="flex items-center justify-between text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <Users className="w-4 h-4" />

@@ -27,7 +27,7 @@ export const ClassCardItem: React.FC<ClassCardItemProps> = ({
         {/* Avatar */}
         <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
           <span className="text-xs font-bold text-primary">
-            {creator.avatar || name.substring(0, 2).toUpperCase()}
+            {creator?.avatar || name.substring(0, 2).toUpperCase()}
           </span>
         </div>
 
@@ -35,14 +35,14 @@ export const ClassCardItem: React.FC<ClassCardItemProps> = ({
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-foreground truncate">{name}</h3>
           <p className="text-sm text-muted-foreground truncate">
-            {members.length} {members.length === 1 ? "member" : "members"}
+            {members?.length || 0} {members?.length === 1 ? "member" : "members"}
           </p>
           <div className="flex items-center gap-2 mt-2">
             <span className="inline-block px-2 py-1 rounded bg-primary/10 text-xs font-medium text-primary">
               {subject}
             </span>
             <span className="text-xs text-muted-foreground">
-              {creator.name}
+              {creator?.name}
             </span>
           </div>
         </div>

@@ -5,7 +5,7 @@ import { useAuthStore } from "@/features/auth/store/auth.store";
 import DashboardHeader from "@/components/layout/DashboardHeader";
 import { TeacherStats } from "@/types/dashboard";
 import BatchCard from "@/components/ui/BatchCard";
-import { Batch } from "@/types/dashboard";
+// import { Batch } from "@/types/dashboard"; (removed unused import to fix lint error)
 import { useGetEnrolledClasses } from "@/features/home/hooks/useGetEnrolledClasses";
 import EmptyBatches from "@/components/common/EmptyBatches";
 import { Spinner } from "@/shared/loading/Spinner";
@@ -23,19 +23,19 @@ export default function TeacherDashboard() {
   const { data: enrolledClasses = [], isLoading } = useGetEnrolledClasses();
 
   interface EnrolledClass {
-    _id?: string;
+    id?: string;
     name?: string;
     subject?: string;
     code?: string;
     creator?: {
       name?: string;
     };
-    archived?: boolean;
     attendance?: number;
     createdAt?: string;
     studentCount?: number;
     unreadMessages?: number;
-    lastActivity?: string;
+    lastActivity?: string | null;
+    status?: string;
   }
 
   let filteredBatches: EnrolledClass[] = (enrolledClasses || [])
@@ -46,10 +46,9 @@ export default function TeacherDashboard() {
         cls.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         cls.creator?.name?.toLowerCase().includes(searchQuery.toLowerCase()),
     )
-    .filter((cls: EnrolledClass) => {
-      const isArchived = cls.archived === true;
-      if (showActive) return !isArchived;
-      if (showArchived) return isArchived;
+    .filter((cls: EnrolledClass): boolean => {
+      if (showActive) return cls.status === "active";
+      if (showArchived) return cls.status === "archived";
       return true;
     });
 
@@ -72,8 +71,8 @@ export default function TeacherDashboard() {
         );
       }
 
-      const aId = a._id || "";
-      const bId = b._id || "";
+      const aId = a.id || "";
+      const bId = b.id || "";
       return aId.localeCompare(bId) * -1;
     },
   );
@@ -107,21 +106,19 @@ export default function TeacherDashboard() {
           {isLoading ? (
             <Spinner size={24} />
           ) : filteredBatches.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xxl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xxl:grid-cols-4 gap-6 items-start">
               {filteredBatches.map((batch) => (
                 <BatchCard
-                  key={batch._id ?? batch.code}
-                  batch={
-                    {
-                      id: batch._id,
-                      name: batch.name,
-                      subject: batch.subject,
-                      code: batch.code || "",
-                      studentCount: 0,
-                      lastActivity: "Just now",
-                      unreadMessages: 0,
-                    } as Batch
-                  }
+                  key={batch.id ?? batch.code}
+                  batch={{
+                    id: batch.id || "",
+                    name: batch.name || "",
+                    subject: batch.subject || "",
+                    code: batch.code || "",
+                    studentCount: batch.studentCount ?? 0,
+                    lastActivity: "Just now", // Hardcoded for now
+                    unreadMessages: 0, // Hardcoded for now
+                  }}
                 />
               ))}
             </div>

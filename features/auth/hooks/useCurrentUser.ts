@@ -22,7 +22,6 @@ export const useCurrentUser = () => {
         email: user.email,
         name: user.name,
         role: user.role ?? undefined,
-        permissions: user.permissions ?? [],
       };
     },
   });

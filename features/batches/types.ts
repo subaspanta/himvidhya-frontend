@@ -1,33 +1,38 @@
 /**
- * Class/Course Types
+ * Class/Batch Types — matches API response shapes exactly
  */
 
+// Shape returned by GET /class/my
 export interface ClassCard {
-  _id: string;
+  id: string;
   name: string;
   subject: string;
   code: string;
-  description?: string;
-  creator: {
+  studentCount: number;
+  maxStudents: number;
+  lastActivity: string | null;
+  unreadMessages: number;
+  attendanceRate: number;
+  nextDeadline: string | null;
+  status: "active" | "archived";
+  creator?: {
     _id: string;
     name: string;
     email: string;
+    role: string;
     avatar: string | null;
   };
-  members: Array<{
-    user: string;
-    role: "teacher" | "student";
-    joinedAt: string;
-  }>;
-  createdAt: string;
+  members?: ClassMember[];
 }
 
-export interface ClassDetails extends Omit<ClassCard, "members" | "creator"> {
+// Shape returned by GET /class/:id
+export interface ClassDetails {
   _id: string;
   name: string;
   subject: string;
   description?: string;
   joinCode: string;
+  status: "active" | "archived";
   creator: {
     _id: string;
     name: string;
@@ -36,27 +41,48 @@ export interface ClassDetails extends Omit<ClassCard, "members" | "creator"> {
     avatar: string | null;
   };
   members: ClassMember[];
-  announcements?: Announcement;
   membersCount: number;
-  isActive: boolean;
+  maxStudents: number;
+  attendanceRate: number;
+  nextDeadline: string | null;
+  announcements?: Announcement[];
   createdAt: string;
   updatedAt: string;
 }
 
 export interface ClassMember {
   user: {
-    id: string;
+    _id: string;
     name: string;
     email: string;
+    role: string;
+    avatar: string | null;
   };
   role: "teacher" | "student";
   joinedAt: string;
 }
 
+// Shape returned by POST /class/join (now returns joinRequest not class)
+export interface JoinRequest {
+  _id: string;
+  class: string;
+  user: string;
+  type: "request" | "invite";
+  status: "pending" | "approved" | "rejected";
+  rejectionCount: number;
+  createdAt: string;
+}
+
 export interface Announcement {
-  id: string;
+  id: string; // Used by UI
+  _id?: string;
   title: string;
   content: string;
-  author: string;
+  author: {
+    _id?: string;
+    id?: string;
+    name: string;
+    role: string;
+  };
   createdAt: string;
 }

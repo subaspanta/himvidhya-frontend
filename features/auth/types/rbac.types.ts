@@ -1,8 +1,2 @@
-// export type ROLES = {
-//   USER: "user";
-//   ADMIN: "admin";
-//   INSTRUCTOR: "teacher";
-// };
-
-export type Permission = "CREATE_CLASS" | "SEND_MESSAGE";
+// Simple role-based access; no per-user permissions array
 export type Role = "student" | "teacher" | "admin";

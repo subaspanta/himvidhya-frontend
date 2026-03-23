@@ -14,7 +14,7 @@ export default function ClassMainFeed({ activeTab, classData }: Props) {
         {Array.isArray(classData.announcements) &&
         classData.announcements.length > 0 ? (
           classData.announcements.map((ann) => (
-            <AnnouncementCard key={ann._id} announcement={ann} />
+            <AnnouncementCard key={ann.id || (ann as any)._id} announcement={ann} />
           ))
         ) : (
           <div className="text-center py-12 text-muted-foreground">

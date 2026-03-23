@@ -1,4 +1,8 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
+// Removing direct import: import { queryClient } from "./queryClient";
+// In axios interceptors, outside of components, we have to either import the singleton
+// or redirect. We have one singleton `queryClient` which we'll use here,
+// so let's import the one true queryClient instance.
 import { queryClient } from "./queryClient";
 
 export const apiClient = axios.create({
@@ -27,6 +31,15 @@ const processQueue = (error: Error | null) => {
     }
   });
   failedQueue = [];
+};
+
+const redirectToLogin = () => {
+  if (
+    typeof window !== "undefined" &&
+    !window.location.pathname.includes("/login")
+  ) {
+    window.location.href = "/login";
+  }
 };
 
 /* ================= RESPONSE TRANSFORM ================= */
@@ -60,14 +73,14 @@ apiClient.interceptors.response.use(
     const url = originalRequest?.url || "";
 
     /* ================= SKIP CASES ================= */
-
     if (status === 401 && url.includes("/auth/login")) {
       return Promise.reject(error);
     }
-    // Skip refresh if hitting /auth/me with no refresh token cookie:
+
     if (
       status === 401 &&
       url.includes("/auth/me") &&
+      typeof document !== "undefined" &&
       !document.cookie.includes("refreshToken")
     ) {
       return Promise.reject(error);
@@ -76,16 +89,12 @@ apiClient.interceptors.response.use(
     if (status === 401 && url.includes("/auth/refresh-token")) {
       isRefreshing = false;
       processQueue(new Error("Refresh token expired"));
-
-      if (!window.location.pathname.includes("/login")) {
-        window.location.href = "/login";
-      }
-
+      queryClient.clear(); // clear all cached queries on session expiry
+      redirectToLogin();
       return Promise.reject(error);
     }
 
     /* ================= REFRESH FLOW ================= */
-
     if (status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise<void>((resolve, reject) => {
@@ -99,8 +108,8 @@ apiClient.interceptors.response.use(
       try {
         await apiClient.post("/auth/refresh-token");
 
-        // Sync React Query
-        await queryClient.invalidateQueries({ queryKey: ["me"] });
+        // Invalidate me query so UI reflects fresh auth state
+        await queryClient.invalidateQueries({ queryKey: ["me"] }); // keep fallback since it's hard to import const here simply if cyclic
 
         isRefreshing = false;
         processQueue(null);
@@ -109,12 +118,12 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         isRefreshing = false;
         processQueue(new Error("Token refresh failed"));
-        if (!window.location.pathname.includes("/login")) {
-          window.location.href = "/login";
-        }
+        queryClient.clear();
+        redirectToLogin();
         return Promise.reject(refreshError);
       }
     }
+
     return Promise.reject(error);
   },
 );
