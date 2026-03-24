@@ -1,9 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
-// Removing direct import: import { queryClient } from "./queryClient";
-// In axios interceptors, outside of components, we have to either import the singleton
-// or redirect. We have one singleton `queryClient` which we'll use here,
-// so let's import the one true queryClient instance.
 import { queryClient } from "./queryClient";
+import Router from "next/router";
+import type { ApiResponse } from "@/shared/types";
 
 export const apiClient = axios.create({
   baseURL:
@@ -38,7 +36,7 @@ const redirectToLogin = () => {
     typeof window !== "undefined" &&
     !window.location.pathname.includes("/login")
   ) {
-    window.location.href = "/login";
+    Router.push("/login");
   }
 };
 
@@ -46,11 +44,15 @@ const redirectToLogin = () => {
 
 apiClient.interceptors.response.use(
   (response) => {
-    const payload = response?.data?.data ?? response?.data;
+    const envelope = response?.data as
+      | (ApiResponse<unknown> & { timestamp?: string })
+      | undefined;
+
+    const payload = envelope?.data ?? response?.data;
     const meta = {
-      success: response?.data?.success,
-      message: response?.data?.message,
-      timestamp: response?.data?.timestamp,
+      success: envelope?.success,
+      message: envelope?.message,
+      timestamp: envelope?.timestamp,
     };
 
     return { ...response, data: payload, meta };

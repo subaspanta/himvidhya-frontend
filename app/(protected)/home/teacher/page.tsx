@@ -3,9 +3,7 @@
 import { useState } from "react";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import DashboardHeader from "@/components/layout/DashboardHeader";
-import { TeacherStats } from "@/types/dashboard";
 import BatchCard from "@/components/ui/BatchCard";
-// import { Batch } from "@/types/dashboard"; (removed unused import to fix lint error)
 import { useGetEnrolledClasses } from "@/features/home/hooks/useGetEnrolledClasses";
 import EmptyBatches from "@/components/common/EmptyBatches";
 import { Spinner } from "@/shared/loading/Spinner";
@@ -79,7 +77,7 @@ export default function TeacherDashboard() {
   return (
     <div className="w-full text-foreground pb-8">
       <div className="w-full mx-auto">
-        {user && <DashboardHeader profile={user} stats={stats} />}
+        {user && <DashboardHeader profile={user} />}
 
         {/* Batch Content Grid */}
         <div className="w-full">
@@ -133,10 +131,3 @@ export default function TeacherDashboard() {
     </div>
   );
 }
-export const stats: TeacherStats = {
-  totalStudents: 142,
-  activeBatches: 8,
-  averageAttendance: 84,
-  assignmentsPending: 12,
-  joinRequests: 3,
-};

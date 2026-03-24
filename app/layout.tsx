@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import AppProviders from "@/providers/root-provider";
 import ToasterProvider from "@/providers/toaster-provider";
 import { AuthInitializer } from "@/features/auth/components/AuthInitializer";
 import { AuthGate } from "@/features/auth/components/AuthGate";
 import "./globals.css";
+import RootProvider from "@/providers/root-provider";
 
 export const metadata: Metadata = {
   title: "HimVidhya",
-  description: "A modern chat application",
+  description:
+    "HimVidhya is a classroom platform for managing batches, learning workflows, and student-teacher collaboration.",
   icons: {
     icon: "/HimVidhya.svg",
   },
@@ -21,13 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AppProviders>
+        <RootProvider>
           {/* 1. Triggers /me query & syncs Zustand — renders nothing */}
           <AuthInitializer />
           {/* 2. Blocks UI until authChecked is true */}
           <AuthGate>{children}</AuthGate>
           <div id="modal-root"></div>
-        </AppProviders>
+        </RootProvider>
         <ToasterProvider />
       </body>
     </html>

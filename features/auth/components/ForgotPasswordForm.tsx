@@ -10,12 +10,8 @@ import { useRouter } from "next/navigation";
 import TextField from "@/components/ui/text-field";
 import PasswordField from "@/features/landing/components/PasswordField";
 import { toast } from "react-hot-toast";
-import {
-  EmailFormData,
-  ForgotPasswordFormProps,
-  ResetFormData,
-  Step,
-} from "../types/auth.types";
+import { EmailFormData, ResetFormData, Step } from "../types/form.types";
+import type { ForgotPasswordFormProps } from "../types/ui.types";
 
 export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   onBackToLogin,

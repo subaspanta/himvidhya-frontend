@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 import TextField from "@/components/ui/text-field";
 import PasswordField from "@/features/landing/components/PasswordField";
 import { useLogin } from "../hooks/useLogin";
-import { LoginFormData, LoginFormProps } from "../types/auth.types";
+import type { LoginFormData } from "../types/form.types";
+import type { LoginFormProps } from "../types/ui.types";
 import toast from "react-hot-toast";
 
 export const LoginForm: React.FC<LoginFormProps> = ({

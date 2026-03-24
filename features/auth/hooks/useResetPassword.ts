@@ -1,7 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { resetPassword } from "@/features/auth/api/auth.api";
-import { ResetPasswordPayload, User } from "../types/auth.types";
+import type { User } from "../types/domain.types";
+import type { ResetPasswordPayload } from "../types/api.types";
 
 export const useResetPassword = () => {
   return useMutation<

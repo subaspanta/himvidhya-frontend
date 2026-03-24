@@ -1,39 +1,62 @@
 import { ClassCard, ClassDetails, JoinRequest } from "@/features/batches/types";
 import { apiClient } from "@/shared/api/axiosClient";
+import type { ApiResponse } from "@/shared/types";
 import { mapClassDto, mapClassListDto } from "./home.mapper";
 
-export async function createClassApi(data: {
+export type CreateClassPayload = {
   name: string;
   subject: string;
-}): Promise<ClassCard> {
+  description?: string;
+};
+
+type CreateClassResponseData = ApiResponse<{ class: unknown }>["data"];
+type EnrolledClassesResponseData = ApiResponse<{ classes: unknown[] }>["data"];
+type ClassDetailsResponseData = ApiResponse<{ class: ClassDetails }>["data"];
+type JoinRequestResponseData = ApiResponse<{
+  joinRequest: JoinRequest;
+}>["data"];
+type JoinRequestsResponseData = ApiResponse<{
+  requests: JoinRequest[];
+}>["data"];
+type JoinRequestsCountResponseData = ApiResponse<{ count: number }>["data"];
+
+export async function createClassApi(
+  data: CreateClassPayload,
+): Promise<ClassCard> {
   const response = await apiClient.post("/class", data);
-  return mapClassDto(response.data.class);
+  const payload = response.data as CreateClassResponseData;
+  return mapClassDto(payload.class);
 }
 
 export async function getEnrolledClasses(): Promise<ClassCard[]> {
   const response = await apiClient.get("/class/my");
-  return mapClassListDto(response.data.classes || []);
+  const payload = response.data as EnrolledClassesResponseData;
+  return mapClassListDto(payload.classes || []);
 }
 
 export async function getClassDetails(id: string): Promise<ClassDetails> {
   const response = await apiClient.get(`/class/${id}`);
-  return response.data.class; // We can map this later
+  const payload = response.data as ClassDetailsResponseData;
+  return payload.class; // We can map this later
 }
 
 // Now returns JoinRequest (pending) not ClassCard
 export async function joinClass(code: string): Promise<JoinRequest> {
   const response = await apiClient.post("/class/join", { code });
-  return response.data.joinRequest;
+  const payload = response.data as JoinRequestResponseData;
+  return payload.joinRequest;
 }
 
 export async function getJoinRequests(): Promise<JoinRequest[]> {
   const response = await apiClient.get("/class/requests");
-  return response.data.requests || [];
+  const payload = response.data as JoinRequestsResponseData;
+  return payload.requests || [];
 }
 
 export async function getJoinRequestsCount(): Promise<number> {
   const response = await apiClient.get("/class/requests/count");
-  return response.data.count ?? 0;
+  const payload = response.data as JoinRequestsCountResponseData;
+  return payload.count ?? 0;
 }
 
 export async function approveJoinRequest(
@@ -42,12 +65,14 @@ export async function approveJoinRequest(
   const response = await apiClient.patch(
     `/class/requests/${requestId}/approve`,
   );
-  return response.data.joinRequest;
+  const payload = response.data as JoinRequestResponseData;
+  return payload.joinRequest;
 }
 
 export async function rejectJoinRequest(
   requestId: string,
 ): Promise<JoinRequest> {
   const response = await apiClient.patch(`/class/requests/${requestId}/reject`);
-  return response.data.joinRequest;
+  const payload = response.data as JoinRequestResponseData;
+  return payload.joinRequest;
 }

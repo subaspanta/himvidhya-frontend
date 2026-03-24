@@ -1,12 +1,15 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, PlayCircle } from "lucide-react";
+import Link from "next/link";
 interface HeroSectionProps {
-  onGetStartedClick: () => void;
+  onGetStartedClick?: () => void;
+  getStartedHref?: string;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onGetStartedClick,
+  getStartedHref,
 }) => {
   return (
     <main className="relative min-h-[88vh] w-full overflow-hidden bg-gradient-to-b from-[#0F172A] to-[#1E293B] flex flex-col items-center justify-center">
@@ -78,14 +81,27 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
         {/* D. CTA Buttons */}
         <div className="mt-10 flex flex-col w-full max-w-md gap-4 sm:flex-row sm:justify-center sm:max-w-none">
-          <Button
-            onClick={onGetStartedClick}
-            size="lg"
-            className="h-14 px-8 text-base font-semibold bg-[#1E40AF] hover:bg-[#1E3A8A] text-white rounded-xl shadow-[0_0_20px_-5px_rgba(30,64,175,0.5)] hover:shadow-[0_0_25px_-5px_rgba(30,64,175,0.6)] transition-all duration-300 w-full sm:w-auto"
-          >
-            Get Started Free
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
+          {getStartedHref ? (
+            <Button
+              asChild
+              size="lg"
+              className="h-14 px-8 text-base font-semibold bg-[#1E40AF] hover:bg-[#1E3A8A] text-white rounded-xl shadow-[0_0_20px_-5px_rgba(30,64,175,0.5)] hover:shadow-[0_0_25px_-5px_rgba(30,64,175,0.6)] transition-all duration-300 w-full sm:w-auto"
+            >
+              <Link href={getStartedHref}>
+                Get Started Free
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+          ) : (
+            <Button
+              onClick={onGetStartedClick}
+              size="lg"
+              className="h-14 px-8 text-base font-semibold bg-[#1E40AF] hover:bg-[#1E3A8A] text-white rounded-xl shadow-[0_0_20px_-5px_rgba(30,64,175,0.5)] hover:shadow-[0_0_25px_-5px_rgba(30,64,175,0.6)] transition-all duration-300 w-full sm:w-auto"
+            >
+              Get Started Free
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          )}
 
           <Button
             variant="outline"

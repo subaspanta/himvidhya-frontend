@@ -7,8 +7,6 @@ import { PageLoader } from "@/shared/loading/PageLoader";
 export default function DashboardPage() {
   const { user, authChecked } = useAuthStore();
 
-  // Removed redundant window.location redirect; this goes in AuthGate
-
   // While auth is resolving, show the PageLoader
   if (!authChecked || !user) return <PageLoader />;
 

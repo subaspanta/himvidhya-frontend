@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Plus, BarChart3, Users, BookOpen, UserPlus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { TeacherStats } from "@/types/dashboard";
 import { User } from "@/features/auth";
 import useCreateClass from "@/features/home/hooks/useCreateClass";
 import { ClassCard } from "@/features/batches";
@@ -9,13 +8,11 @@ import { CreateClassForm } from "@/features/batches/components/dashboard/CreateC
 
 interface DashboardHeaderProps {
   profile: User;
-  stats: TeacherStats;
   onClassCreated?: (cls: ClassCard) => void;
 }
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   profile,
-  stats,
   onClassCreated,
 }) => {
   const [classes, setClasses] = useState<ClassCard[]>([]);

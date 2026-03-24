@@ -14,12 +14,7 @@ export const useNavItems = (variant?: Variant): NavLink[] => {
     { label: "Register", href: "/register" },
   ];
 
-  const DASHBOARD: NavLink[] = [
-    { label: "Home", href: "/home" },
-    { label: "My Batches", href: "/batches" },
-    { label: "Schedule", href: "/schedule" },
-    { label: "Announcements", href: "/announcements" },
-  ];
+  const DASHBOARD: NavLink[] = [{ label: "Home", href: "/home" }];
 
   if (variant === "dashboard") return DASHBOARD;
 

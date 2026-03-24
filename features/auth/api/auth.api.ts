@@ -1,20 +1,22 @@
 import { apiClient } from "@/shared/api/axiosClient";
-import type { User, RegisterData, LoginCredentials } from "../types/auth.types";
-
-const mapUser = (user: User): User => ({
-  id: user.id,
-  email: user.email,
-  name: user.name,
-  role: user.role,
-  avatar: user.avatar,
-});
+import type { ApiResponse } from "@/shared/types";
+import type { User } from "../types/domain.types";
+import type {
+  RegisterData,
+  LoginCredentials,
+  AuthUserDTO,
+  CurrentUserDTO,
+  ForgotPasswordPayload,
+  ForgotPasswordResponse,
+} from "../types/api.types";
+import { mapAuthUserDTO, mapCurrentUserDTO } from "../types/auth.mapper";
 
 export const registerUser = async (data: RegisterData): Promise<User> => {
   const response = await apiClient.post("/auth/register", data);
 
-  const user = response.data.user;
+  const user = response.data.user as AuthUserDTO;
 
-  return mapUser(user);
+  return mapAuthUserDTO(user);
 };
 
 export const loginUser = async (
@@ -22,15 +24,16 @@ export const loginUser = async (
 ): Promise<User> => {
   const response = await apiClient.post("/auth/login", credentials);
 
-  const user = response.data.user;
+  const user = response.data.user as AuthUserDTO;
 
-  return mapUser(user);
+  return mapAuthUserDTO(user);
 };
 
-import type {
-  ForgotPasswordPayload,
-  ForgotPasswordResponse,
-} from "../types/auth.types";
+type ResponseWithMeta = {
+  meta?: Pick<ApiResponse<unknown>, "message" | "success"> & {
+    timestamp?: string;
+  };
+};
 
 export const forgotPassword = async (
   payload: ForgotPasswordPayload,
@@ -38,7 +41,7 @@ export const forgotPassword = async (
   const response = await apiClient.post("/auth/forget-password", payload);
   return {
     message:
-      (response as { meta?: { message?: string } }).meta?.message ||
+      (response as ResponseWithMeta).meta?.message ||
       "If email exists, OTP has been sent",
   };
 };
@@ -51,7 +54,7 @@ export const verifyOTP = async (
   return {
     valid: response.data.valid,
     message:
-      (response as { meta?: { message?: string } }).meta?.message ||
+      (response as ResponseWithMeta).meta?.message ||
       "OTP verified successfully",
   };
 };
@@ -67,9 +70,9 @@ export const resetPassword = async (
     password,
   });
 
-  const user = response.data.user;
+  const user = response.data.user as AuthUserDTO;
 
-  return mapUser(user);
+  return mapAuthUserDTO(user);
 };
 
 // export const getProfile = async (): Promise<User> => {
@@ -83,9 +86,9 @@ export const resetPassword = async (
 export const getCurrentUser = async (): Promise<User> => {
   const response = await apiClient.get("/auth/me");
 
-  const user = response.data;
+  const user = response.data as CurrentUserDTO;
 
-  return mapUser(user);
+  return mapCurrentUserDTO(user);
 };
 
 export const logoutUser = async (): Promise<void> => {

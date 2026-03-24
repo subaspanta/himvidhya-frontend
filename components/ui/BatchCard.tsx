@@ -20,7 +20,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/shared/utils";
-import { Batch } from "@/types/dashboard";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import toast from "react-hot-toast";
 

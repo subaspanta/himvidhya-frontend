@@ -51,7 +51,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         onNotificationClick: onNotificationClickProp ?? defaultNotification,
         userEmail: user?.email ?? "",
         userName: user?.name ?? "User",
-        avatarUrl: user?.avatar,
+        avatarUrl: user?.avatar ?? undefined,
         notificationCount: 0,
       }
     : null;

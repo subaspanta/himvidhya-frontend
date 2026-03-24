@@ -1,7 +1,6 @@
 import { NavLink } from "./navbar.types";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import toast from "react-hot-toast";
 
 type Router = { push: (href: string) => void };
 type LogoutMutate = UseMutateFunction<
@@ -41,20 +40,10 @@ export function createDefaultActions(router: Router, logout: LogoutMutate) {
   const defaultLogin = () => router.push("/");
   const defaultSignUp = () => router.push("/");
   const defaultLogout = () => {
-    logout(undefined, {
-      onSuccess: () => {
-        toast.success("Logout successful!");
-        router.push("/");
-      },
-      onError: (error: AxiosError<{ message?: string }>) => {
-        toast.error(
-          error?.response?.data?.message || error.message || "Logout failed",
-        );
-      },
-    });
+    logout();
   };
-  const defaultSettings = () => toast("Settings coming soon!");
-  const defaultNotification = () => router.push("/announcements");
+  const defaultSettings = () => {};
+  const defaultNotification = () => router.push("/home");
 
   return {
     defaultLogin,

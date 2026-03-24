@@ -1,167 +1,256 @@
 ## Frontend Architecture Audit (React + React Query)
 
+Audit date: 24 Mar 2026  
+Scope: frontend architecture, API/data handling, React Query usage
+
+---
+
+## 0) Latest progress since previous audit
+
+### Completed in this cycle
+
+- Route dead-links were removed from active navigation/gating paths.
+  - Navbar defaults now route to implemented surfaces.
+  - Auth gate protected-prefix behavior was narrowed to implemented protected routes.
+- Logout side effects were centralized (navbar now triggers `logout()` only).
+  - Reduced risk of duplicate toasts/conflicting redirects.
+- Create-class payload contract drift was addressed.
+  - `description` handling now aligned through form/hook/API path.
+- Hard reload redirect usage was replaced with router navigation in transport redirect helper.
+
+### Still open
+
+- `joinClass` contract mismatch and unsafe casting remains a major type risk (`JoinRequest` vs `ClassCard` assumptions).
+- Boundary validation is still permissive in mapper fallback paths.
+- Teacher dashboard still carries local/duplicated class view-model typing.
+- Interceptor-level navigation strategy is still fragile in App Router architecture (non-component redirect orchestration).
+
+---
+
 ## 1) Project structure and interaction map
 
-- **Framework/entry**
-  - Next.js App Router with global shell in [client/app/layout.tsx](client/app/layout.tsx).
-  - Global providers mounted via [client/providers/root-provider.tsx](client/providers/root-provider.tsx) and [client/providers/query-provider.tsx](client/providers/query-provider.tsx).
-- **Routing split**
-  - Public routes in [client/app/(public)](<client/app/(public)>).
-  - Protected routes in [client/app/(protected)](<client/app/(protected)>).
-  - Modal route segments in [client/app/(public)/@modal](<client/app/(public)/@modal>).
-- **Feature layering**
-  - API functions by domain: [client/features/auth/api/auth.api.ts](client/features/auth/api/auth.api.ts), [client/features/home/api/home.api.ts](client/features/home/api/home.api.ts).
-  - React Query hooks around API functions in [client/features/auth/hooks](client/features/auth/hooks), [client/features/home/hooks](client/features/home/hooks).
-  - UI state via Zustand in [client/features/auth/store/auth.store.ts](client/features/auth/store/auth.store.ts).
-- **Shared platform layer**
-  - Axios transport + token refresh logic in [client/shared/api/axiosClient.ts](client/shared/api/axiosClient.ts).
-  - Query key constants in [client/config/constants.ts](client/config/constants.ts).
-  - Navigation helper in [client/shared/hooks/useNavItems.ts](client/shared/hooks/useNavItems.ts).
+### Root and runtime shell
 
-**Interaction model (current):**
+- App entry/layout:
+  - `client/app/layout.tsx`
+- Provider composition:
+  - `client/providers/root-provider.tsx`
+  - `client/providers/query-provider.tsx`
+  - `client/providers/toaster-provider.tsx`
+- Global auth bootstrap and route guard:
+  - `client/features/auth/components/AuthInitializer.tsx`
+  - `client/features/auth/components/AuthGate.tsx`
 
-1. App boots → `QueryProvider` + `AuthInitializer`.
-2. `AuthInitializer` calls `useCurrentUser()` → `/auth/me`.
-3. `useCurrentUser()` syncs server auth into Zustand (`user`, `isAuthenticated`, `authChecked`).
-4. `AuthGate` allows/redirects UI based on Zustand auth state.
-5. Feature pages/components consume React Query hooks + local UI state.
+### Routing model (Next.js App Router)
 
----
+- Public group:
+  - `client/app/(public)/layout.tsx`
+  - `client/app/(public)/page.tsx`
+  - auth routes under `(public)` and modal intercept routes under `@modal`
+- Protected group:
+  - `client/app/(protected)/layout.tsx`
+  - implemented route tree currently centered on `/home`:
+    - `client/app/(protected)/home/page.tsx`
+    - `client/app/(protected)/home/teacher/page.tsx`
+    - `client/app/(protected)/home/student/page.tsx`
 
-## 2) API integrations: React Query vs other methods
+### Feature/module layering
 
-## React Query managed
+- `features/auth`: API + hooks + Zustand store + auth UI
+- `features/home`: class API/hooks/mapper and dashboard data flow
+- `features/batches`: UI/types scaffold with partial integration
+- Shared platform layer:
+  - transport/interceptors: `client/shared/api/axiosClient.ts`
+  - query singleton: `client/shared/api/queryClient.ts`
+  - query keys/constants: `client/config/constants.ts`
+  - nav contract: `client/shared/hooks/useNavItems.ts`
 
-- **Auth**
-  - `POST /auth/login` via `useLogin()` + `loginUser()`
-  - `POST /auth/register` via `useRegister()` + `registerUser()`
-  - `GET /auth/me` via `useCurrentUser()` + `getCurrentUser()`
-  - `POST /auth/logout` via `useLogout()` + `logoutUser()`
-  - `POST /auth/forget-password` via `useForgetPassword()`
-  - `POST /auth/verify-otp` via `useVerifyOTP()`
-  - `POST /auth/reset-password` via `useResetPassword()`
-- **Class/Home**
-  - `GET /class/my` via `useGetEnrolledClasses()`
-  - `POST /class` via `useCreateClass()`
-  - `POST /class/join` via `useJoinClass()`
+### Interaction map (runtime)
 
-Sources: [client/features/auth/hooks](client/features/auth/hooks), [client/features/home/hooks](client/features/home/hooks), [client/features/auth/api/auth.api.ts](client/features/auth/api/auth.api.ts), [client/features/home/api/home.api.ts](client/features/home/api/home.api.ts).
-
-## Non-React-Query / transport-level
-
-- `POST /auth/refresh-token` inside Axios response interceptor in [client/shared/api/axiosClient.ts](client/shared/api/axiosClient.ts).
-- Imperative browser redirects via `window.location.*` in:
-  - [client/shared/api/axiosClient.ts](client/shared/api/axiosClient.ts)
-  - [client/features/auth/components/AuthGate.tsx](client/features/auth/components/AuthGate.tsx)
-  - [client/app/(protected)/home/page.tsx](<client/app/(protected)/home/page.tsx>)
-  - [client/features/auth/hooks/useLogout.ts](client/features/auth/hooks/useLogout.ts)
-
-## Not used
-
-- No direct `fetch()` usage found in active frontend TS/TSX files.
+1. Root layout mounts providers and auth lifecycle components.
+2. `AuthInitializer` runs `useCurrentUser()` (`GET /auth/me`).
+3. Query result is synchronized into Zustand auth store (`user`, `isAuthenticated`, `authChecked`).
+4. `AuthGate` blocks rendering until `authChecked`, then route-gates.
+5. Protected screens consume feature hooks (React Query), then render dashboard components.
 
 ---
 
-## 3) Data flow (API → state/cache → UI)
+## 2) API integrations inventory
 
-- **Transport**
-  - All API calls use `apiClient` from [client/shared/api/axiosClient.ts](client/shared/api/axiosClient.ts).
-  - Response interceptor normalizes payload to `response.data = response.data.data ?? response.data`.
-- **Cache**
-  - React Query provider is created in [client/providers/query-provider.tsx](client/providers/query-provider.tsx) with defaults (`staleTime`, `retry`, `refetchOnWindowFocus`).
-  - Domain hooks use query keys:
-    - `["me"]` from [client/config/constants.ts](client/config/constants.ts)
-    - `["enrolledClasses"]` inline in home hooks.
-- **Global state**
-  - Auth identity persisted in Zustand store [client/features/auth/store/auth.store.ts](client/features/auth/store/auth.store.ts).
-  - `useCurrentUser()` bridges React Query result into Zustand.
-- **UI composition**
-  - `AuthGate` gates rendering/redirect.
-  - `TeacherDashboard` renders class list from `useGetEnrolledClasses()` in [client/app/(protected)/home/teacher/page.tsx](<client/app/(protected)/home/teacher/page.tsx>).
-- **Transformations**
-  - User mapping in `mapUser()` in [client/features/auth/api/auth.api.ts](client/features/auth/api/auth.api.ts).
-  - Class records reshaped/cast in teacher page (`as Batch`) using fallback defaults.
+### React Query managed (active)
+
+#### Auth
+
+- `POST /auth/login` → `useLogin()` / `loginUser()`
+- `POST /auth/register` → `useRegister()` / `registerUser()`
+- `GET /auth/me` → `useCurrentUser()` / `getCurrentUser()`
+- `POST /auth/logout` → `useLogout()` / `logoutUser()`
+- `POST /auth/forget-password` → `useForgetPassword()` / `forgotPassword()`
+- `POST /auth/verify-otp` → `useVerifyOTP()` / `verifyOTP()`
+- `POST /auth/reset-password` → `useResetPassword()` / `resetPassword()`
+
+#### Home/Class
+
+- `GET /class/my` → `useGetEnrolledClasses()` / `getEnrolledClasses()`
+- `POST /class` → `useCreateClass()` / `createClassApi()`
+- `POST /class/join` → `useJoinClass()` / `joinClass()`
+
+### Axios-only (defined but not fully wired into React Query UI flows)
+
+- `GET /class/:id` → `getClassDetails()`
+- `GET /class/requests` → `getJoinRequests()`
+- `GET /class/requests/count` → `getJoinRequestsCount()`
+- `PATCH /class/requests/:requestId/approve` → `approveJoinRequest()`
+- `PATCH /class/requests/:requestId/reject` → `rejectJoinRequest()`
+
+Source: `client/features/home/api/home.api.ts`
+
+### Transport/interceptor-managed API behavior
+
+- Refresh flow: `POST /auth/refresh-token` retry path
+- Global 401 recovery and redirect handling implemented in Axios interceptor
+
+Source: `client/shared/api/axiosClient.ts`
+
+### Not observed in active frontend source
+
+- No direct `fetch()` usage in primary TS/TSX app paths (Axios is primary transport).
 
 ---
 
-## 4) Inconsistencies and mixed paradigms
+## 3) Data flow: API → cache/store → UI
 
-- **Critical cache inconsistency**
-  - `QueryProvider` uses a local `new QueryClient(...)`, but interceptor/logout import a different singleton from [client/shared/api/queryClient.ts](client/shared/api/queryClient.ts).
-  - Result: `invalidateQueries()`/`removeQueries()` may target the wrong client instance.
-- **Route mismatch**
-  - Navbar links point to `/home/batches`, `/home/schedule`, `/home/announcements` in [client/shared/hooks/useNavItems.ts](client/shared/hooks/useNavItems.ts), but actual protected routes are `/batches`, `/schedule`, `/announcements` in [client/app/(protected)](<client/app/(protected)>).
-- **State duplication**
-  - Auth routing logic duplicated in `AuthGate` and home page ([client/features/auth/components/AuthGate.tsx](client/features/auth/components/AuthGate.tsx), [client/app/(protected)/home/page.tsx](<client/app/(protected)/home/page.tsx>)).
-- **Type drift**
-  - `ClassCard` uses `_id` in [client/features/batches/types.ts](client/features/batches/types.ts), while teacher page expects `id` and casts to `Batch` in [client/app/(protected)/home/teacher/page.tsx](<client/app/(protected)/home/teacher/page.tsx>).
-- **Unfinished/placeholder areas**
-  - Empty pages: [client/app/(protected)/batches/page.tsx](<client/app/(protected)/batches/page.tsx>), [client/app/(protected)/announcements/page.tsx](<client/app/(protected)/announcements/page.tsx>), [client/app/(protected)/materials/page.tsx](<client/app/(protected)/materials/page.tsx>), [client/app/(protected)/schedule/page.tsx](<client/app/(protected)/schedule/page.tsx>).
-  - Commented-out class detail implementation in [client/app/(protected)/batches/[id]/page.tsx](<client/app/(protected)/batches/[id]/page.tsx>).
-  - Empty module files: [client/features/batches/api/classApi.ts](client/features/batches/api/classApi.ts), [client/features/home/index.ts](client/features/home/index.ts), [client/features/rbac/permissions.ts](client/features/rbac/permissions.ts), [client/features/home/data/mockData.ts](client/features/home/data/mockData.ts).
-- **Navigation/RBAC drift**
-  - Old commented nav config in [client/features/nav/nav.config.ts](client/features/nav/nav.config.ts), active nav elsewhere.
-- **Mixed navigation methods**
-  - `router.push/replace` mixed with `window.location.*` across auth and API layers.
+### Transport boundary
+
+- Single Axios instance (`apiClient`) with:
+  - base URL + credentials
+  - response envelope flattening (`data.data ?? data`)
+  - `meta` augmentation for message/success/timestamp
+
+### Cache lifecycle (React Query)
+
+- Shared singleton `QueryClient` in `shared/api/queryClient.ts`
+- Mounted once in `providers/query-provider.tsx`
+- Query keys centralized in `config/constants.ts`
+- Invalidations/refetch behavior driven by feature hooks
+
+### Global state (Zustand)
+
+- Auth store is source of truth for render gating and user role UI branching
+- `useCurrentUser()` acts as bridge:
+  - success → `setUser(data)`
+  - error → clear user
+  - always sets `authChecked` once query is fetched
+
+### Transformation layer
+
+- Auth API uses `mapUser()` to normalize selected user fields
+- Class mapper (`home.mapper.ts`) performs DTO normalization (`_id`/`id`, defaults/coercions)
+
+### UI consumption
+
+- Dashboard route branches teacher/student by store role
+- Teacher dashboard filters/sorts enrolled classes in-memory before rendering cards
 
 ---
 
-## 5) Critical code areas (high impact)
+## 4) Inconsistencies, drift, and mixed paradigms
 
-- Auth bootstrap + guard:
-  - [client/features/auth/components/AuthInitializer.tsx](client/features/auth/components/AuthInitializer.tsx)
-  - [client/features/auth/components/AuthGate.tsx](client/features/auth/components/AuthGate.tsx)
-  - [client/features/auth/hooks/useCurrentUser.ts](client/features/auth/hooks/useCurrentUser.ts)
-- Token refresh and interceptor logic:
-  - [client/shared/api/axiosClient.ts](client/shared/api/axiosClient.ts)
-- Query configuration and key strategy:
-  - [client/providers/query-provider.tsx](client/providers/query-provider.tsx)
-  - [client/config/constants.ts](client/config/constants.ts)
-- Core class list UX/business surface:
-  - [client/app/(protected)/home/teacher/page.tsx](<client/app/(protected)/home/teacher/page.tsx>)
-  - [client/features/home/hooks/useGetEnrolledClasses.ts](client/features/home/hooks/useGetEnrolledClasses.ts)
+### Critical
+
+- **Join flow type mismatch still unresolved**
+  - API returns join-request semantics, while UI path still expects class-card semantics in places.
+  - Unsafe cast patterns remain a reliability risk.
+
+### High
+
+- **Redirect architecture is still mixed at framework boundary**
+  - Hard reload was removed, but redirect from transport layer still depends on router behavior in non-component context.
+  - In App Router systems, central redirect orchestration should be explicit and framework-safe.
+- **Boundary mapper fallback is permissive**
+  - Parse failures falling back to raw payload + assertions can silently bypass type safety.
+
+### Medium
+
+- **Duplicated class view-model typing**
+  - Teacher page inline interface overlaps with shared feature types.
+  - Causes drift and weakens refactor safety.
+- **Partially wired API surface**
+  - Several class-request endpoints exist but are not represented as first-class React Query hooks/UI flows.
+
+### Low / hygiene
+
+- Empty/placeholder modules/folders still present:
+  - `client/features/home/index.ts` (empty)
+  - `client/features/rbac/`
+  - `client/features/home/data/`
+- Legacy/scaffold components exported but not integrated into live route tree.
+
+---
+
+## 5) Critical code areas (high impact / fragile)
+
+- Auth lifecycle + gating:
+  - `client/features/auth/components/AuthInitializer.tsx`
+  - `client/features/auth/components/AuthGate.tsx`
+  - `client/features/auth/hooks/useCurrentUser.ts`
+- Transport + session recovery:
+  - `client/shared/api/axiosClient.ts`
+- Query strategy:
+  - `client/shared/api/queryClient.ts`
+  - `client/providers/query-provider.tsx`
+  - `client/config/constants.ts`
+- Core dashboard delivery path:
+  - `client/app/(protected)/home/teacher/page.tsx`
+  - `client/features/home/hooks/useGetEnrolledClasses.ts`
+  - `client/features/home/api/home.mapper.ts`
 
 ---
 
 ## 6) Mock data, hardcoded values, temporary workarounds
 
-- Hardcoded API fallback URL:
-  - [client/shared/api/axiosClient.ts](client/shared/api/axiosClient.ts) (`http://localhost:5000/api/v1`)
-- Hardcoded teacher stats and text:
-  - [client/app/(protected)/home/teacher/page.tsx](<client/app/(protected)/home/teacher/page.tsx>)
-  - [client/components/layout/DashboardHeader.tsx](client/components/layout/DashboardHeader.tsx) (`"You have 3 classes..."`)
-- Temporary placeholder messaging:
-  - [client/components/navbar/navbar.utils.ts](client/components/navbar/navbar.utils.ts) (`"Settings coming soon!"`)
-- Placeholder/empty pages and commented legacy code (listed above) indicate scaffold stage.
-- Stale README/app description still references chat architecture:
-  - [client/README.md](client/README.md)
-  - [client/app/layout.tsx](client/app/layout.tsx) metadata description.
+- Hardcoded API fallback:
+  - `NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api/v1"`
+  - Source: `client/shared/api/axiosClient.ts`
+- Hardcoded teacher dashboard display defaults:
+  - `lastActivity: "Just now"`
+  - `unreadMessages: 0`
+  - Source: `client/app/(protected)/home/teacher/page.tsx`
+- Hardcoded dashboard narrative copy:
+  - `"You have 3 classes scheduled for today."`
+  - Source: `client/components/layout/DashboardHeader.tsx`
+- Placeholder product behavior:
+  - settings action is still stubbed
+  - Source: `client/components/navbar/navbar.utils.ts`
+- Metadata drift:
+  - app metadata/description text does not fully reflect current product scope
 
 ---
 
 ## 7) Actionable recommendations (priority order)
 
-1. **Unify QueryClient instance (highest priority).**  
-   Use one shared `QueryClient` for provider + interceptor + logout logic.
-2. **Normalize route contracts.**  
-   Fix nav hrefs in [client/shared/hooks/useNavItems.ts](client/shared/hooks/useNavItems.ts) to match App Router routes.
-3. **Create strict API DTO mappers per feature.**  
-   Remove ad-hoc casts (`as Batch`), normalize `_id` → `id` at API boundary.
-4. **Consolidate auth redirection in one place.**  
-   Keep guard logic in `AuthGate`; remove duplicate imperative redirects in pages/hooks.
-5. **Standardize query keys.**  
-   Move all keys (`enrolledClasses`, etc.) into [client/config/constants.ts](client/config/constants.ts) or feature key factories.
-6. **Reduce mixed paradigms.**  
-   Replace `window.location.*` with router navigation where possible to avoid hard reloads.
-7. **Finish or remove placeholders.**  
-   Implement or hide empty protected routes and dead files to reduce false architecture surface.
-8. **Introduce schema validation at boundaries.**  
-   Apply `zod` parsing in API layer before store/UI consumption.
-9. **Add frontend architecture docs.**  
-   Replace stale chat-focused README with current module/data-flow docs.
+1. **Fix join contract end-to-end (highest priority).**
+   - Define one canonical join response type.
+   - Remove `as unknown as` and align hook return type with backend semantics.
+2. **Harden transformation boundaries.**
+   - Replace permissive mapper fallback with `safeParse` + explicit fallback object or typed error surface.
+3. **Stabilize redirect architecture for App Router.**
+   - Keep transport concerns transport-only.
+   - Move app navigation side effects to auth boundary/component layer where possible.
+4. **Consolidate class types.**
+   - Introduce shared normalized class view model; remove inline teacher-page interface duplication.
+5. **Promote Axios-only class endpoints into React Query hooks.**
+   - Add hooks + query keys + invalidation plan for join requests/count/details.
+6. **Type tightening pass across auth/home modules.**
+   - Strict role unions, payload DTOs, and API response meta typing.
+7. **Cleanup architecture surface.**
+   - Remove empty placeholders or mark clearly with implementation roadmap and ownership.
+8. **Keep docs synchronized with implemented route tree and API contracts.**
+   - Update overview/readme alongside code changes in each PR.
 
 ---
 
-### Bottom line
+## 8) Bottom line
 
-The codebase has a solid modular direction (feature APIs + React Query + Zustand), but currently carries **high-risk integration drift** around `QueryClient` instance usage, route contracts, and type normalization. These should be addressed before scaling features.
+The frontend architecture is improving: query-client setup is unified, dead-link surface was reduced, logout side effects were simplified, and create-class payload alignment improved contract consistency.  
+Current risk center has shifted to **type integrity in class join flow** and **boundary robustness (redirect + mapper strictness)**. Addressing those next will materially improve reliability and maintainability.

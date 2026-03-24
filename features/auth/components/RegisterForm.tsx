@@ -8,7 +8,8 @@ import TextField from "@/components/ui/text-field";
 import PasswordField from "@/features/landing/components/PasswordField";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { RegisterFormData, RegisterFormProps } from "../types/auth.types";
+import type { RegisterFormData } from "../types/form.types";
+import type { RegisterFormProps } from "../types/ui.types";
 import { useRegister } from "../hooks/useRegister";
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({
@@ -32,7 +33,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
     mutate(
       {
         name: data.name,
-        username: data.username,
         email: data.email,
         password: data.password,
       },
@@ -74,15 +74,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
             error={errors.name?.message}
             required
             {...register("name")}
-          />
-
-          <TextField
-            label="Username"
-            type="text"
-            placeholder="yourusername"
-            error={errors.username?.message}
-            required
-            {...register("username")}
           />
 
           <TextField

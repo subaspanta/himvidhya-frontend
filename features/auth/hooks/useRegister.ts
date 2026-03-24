@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { registerUser } from "@/features/auth/api/auth.api";
 import { useAuthStore } from "@/features/auth/store/auth.store";
-import { RegisterData } from "../types/auth.types";
+import type { RegisterData } from "../types/api.types";
 
 export const useRegister = () => {
   const setUser = useAuthStore((state) => state.setUser);

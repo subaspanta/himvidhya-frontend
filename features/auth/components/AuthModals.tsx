@@ -5,7 +5,7 @@ import { LoginForm } from "@/features/auth/components/LoginForm";
 import { RegisterForm } from "@/features/auth/components/RegisterForm";
 import { ForgotPasswordForm } from "@/features/auth/components/ForgotPasswordForm";
 import { Modal } from "@/components/ui/modal";
-import { AuthModalsProps } from "../types/auth.types";
+import type { AuthModalsProps } from "../types/ui.types";
 
 export const AuthModals: React.FC<AuthModalsProps> = ({
   openModal,

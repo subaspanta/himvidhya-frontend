@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { loginUser } from "@/features/auth/api/auth.api";
 import { useAuthStore } from "@/features/auth/store/auth.store";
-import type { LoginCredentials } from "../types/auth.types";
+import type { LoginCredentials } from "../types/api.types";
 
 export const useLogin = () => {
   const setUser = useAuthStore((state) => state.setUser);
