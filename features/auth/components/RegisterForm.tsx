@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import TextField from "@/components/ui/text-field";
 import PasswordField from "@/features/landing/components/PasswordField";
-import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import type { RegisterFormData } from "../types/form.types";
 import type { RegisterFormProps } from "../types/ui.types";
@@ -14,9 +13,8 @@ import { useRegister } from "../hooks/useRegister";
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({
   onSuccess,
-  onSwitchToLogin,
+  navigation,
 }) => {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -25,7 +23,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   } = useForm<RegisterFormData>({
     mode: "onChange",
   });
-  const { push } = useRouter();
 
   const { mutate, isPending: isLoading, error: authError } = useRegister();
 
@@ -39,7 +36,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
       {
         onSuccess: () => {
           toast.success("Registration successful! Please log in.");
-          push("/login");
+          navigation.toLogin();
           if (onSuccess) onSuccess();
         },
         onError: (error) => {
@@ -111,9 +108,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         Already have an account?{" "}
         <button
           type="button"
-          onClick={() =>
-            onSwitchToLogin ? onSwitchToLogin() : router.push("/login")
-          }
+          onClick={navigation.toLogin}
           className="text-primary hover:text-primary/80 font-bold transition-colors hover:underline"
         >
           Login here

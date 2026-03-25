@@ -26,6 +26,7 @@ export const NavbarUserDropdown = ({
     <div className="hidden md:flex items-center gap-4">
       {/* Notifications */}
       <button
+        type="button"
         aria-label="Notifications"
         onClick={onNotificationClick}
         className="relative p-2 rounded-full text-muted-foreground hover:bg-accent"
@@ -60,7 +61,7 @@ export const NavbarUserDropdown = ({
 
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuLabel>
-            <div className="    flex flex-col">
+            <div className="flex flex-col">
               <span>{userName}</span>
               <span className="text-xs truncate">{userEmail}</span>
             </div>

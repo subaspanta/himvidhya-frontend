@@ -4,12 +4,6 @@ export interface NavLink {
   active?: boolean;
 }
 
-export type GuestProps = {
-  isLoggedIn: false;
-  onLoginClick: () => void;
-  onSignUpClick: () => void;
-};
-
 export type AuthenticatedProps = {
   isLoggedIn: true;
   onLogoutClick: () => void;
@@ -26,9 +20,6 @@ export type NavbarBaseProps = {
   /** Optional override; when not provided, links come from useNavItems (RBAC). */
   navLinks?: NavLink[];
   className?: string;
-  /** Optional guest overrides (e.g. open modal on landing). */
-  onLoginClick?: () => void;
-  onSignUpClick?: () => void;
   /** Optional authenticated overrides. */
   onLogoutClick?: () => void;
   onSettingsClick?: () => void;

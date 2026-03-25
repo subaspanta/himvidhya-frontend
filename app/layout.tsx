@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import ToasterProvider from "@/providers/toaster-provider";
 import { AuthInitializer } from "@/features/auth/components/AuthInitializer";
-import { AuthGate } from "@/features/auth/components/AuthGate";
 import "./globals.css";
 import RootProvider from "@/providers/root-provider";
 
@@ -23,10 +22,8 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <RootProvider>
-          {/* 1. Triggers /me query & syncs Zustand — renders nothing */}
           <AuthInitializer />
-          {/* 2. Blocks UI until authChecked is true */}
-          <AuthGate>{children}</AuthGate>
+          {children}
           <div id="modal-root"></div>
         </RootProvider>
         <ToasterProvider />

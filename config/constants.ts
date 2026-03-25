@@ -15,3 +15,11 @@ export const QUERY_KEYS = {
   joinRequests: ["joinRequests"],
   joinRequestsCount: ["joinRequestsCount"],
 };
+
+export const PUBLIC_PATHS = new Set([
+  "/",
+  "/login",
+  "/register",
+  "/forgot-password",
+]);
+export const PROTECTED_PREFIXES = ["/home"];

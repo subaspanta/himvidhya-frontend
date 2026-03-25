@@ -1,50 +1,19 @@
-"use client";
-
-import React from "react";
-import { LoginForm } from "@/features/auth/components/LoginForm";
-import { RegisterForm } from "@/features/auth/components/RegisterForm";
-import { ForgotPasswordForm } from "@/features/auth/components/ForgotPasswordForm";
-import { Modal } from "@/components/ui/modal";
 import type { AuthModalsProps } from "../types/ui.types";
+import { LoginForm } from "./LoginForm";
+import { RegisterForm } from "./RegisterForm";
+import { ForgotPasswordForm } from "./ForgotPasswordForm";
 
-export const AuthModals: React.FC<AuthModalsProps> = ({
-  openModal,
-  onCloseModal,
-  onSwitchToRegister,
-  onSwitchToLogin,
-  onSwitchToForgotPassword,
-}) => {
-  return (
-    <>
-      <Modal
-        isOpen={openModal === "login"}
-        onClose={onCloseModal ?? (() => {})}
-        className="w-96"
-        closeButtonClassName="right-6 top-6"
-      >
-        <LoginForm
-          onSwitchToRegister={onSwitchToRegister}
-          onSwitchToForgotPassword={onSwitchToForgotPassword}
-        />
-      </Modal>
+export const AuthModals = ({ openModal, navigation }: AuthModalsProps) => {
+  if (!openModal) return null;
 
-      <Modal
-        isOpen={openModal === "register"}
-        onClose={onCloseModal ?? (() => {})}
-        className="w-96"
-        closeButtonClassName="right-6 top-6"
-      >
-        <RegisterForm onSwitchToLogin={onSwitchToLogin} />
-      </Modal>
-
-      <Modal
-        isOpen={openModal === "forgot-password"}
-        onClose={onCloseModal}
-        className="w-96"
-        closeButtonClassName="right-6 top-6"
-      >
-        <ForgotPasswordForm onBackToLogin={onSwitchToLogin} />
-      </Modal>
-    </>
-  );
+  switch (openModal) {
+    case "login":
+      return <LoginForm navigation={navigation} />;
+    case "register":
+      return <RegisterForm navigation={navigation} />;
+    case "forgot-password":
+      return <ForgotPasswordForm navigation={navigation} />;
+    default:
+      return null;
+  }
 };

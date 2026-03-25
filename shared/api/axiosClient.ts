@@ -2,6 +2,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { queryClient } from "./queryClient";
 import Router from "next/router";
 import type { ApiResponse } from "@/shared/types";
+import { QUERY_KEYS } from "@/config/constants";
 
 export const apiClient = axios.create({
   baseURL:
@@ -12,6 +13,12 @@ export const apiClient = axios.create({
 /* ================= QUEUE ================= */
 
 let isRefreshing = false;
+const PROTECTED_PREFIXES = ["/home"];
+
+const isProtectedPath = (pathname: string) =>
+  PROTECTED_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
 
 type QueueItem = {
   resolve: () => void;
@@ -32,11 +39,12 @@ const processQueue = (error: Error | null) => {
 };
 
 const redirectToLogin = () => {
-  if (
-    typeof window !== "undefined" &&
-    !window.location.pathname.includes("/login")
-  ) {
-    Router.push("/login");
+  if (typeof window !== "undefined") {
+    const pathname = window.location.pathname;
+
+    if (isProtectedPath(pathname) && !pathname.includes("/login")) {
+      Router.push("/login");
+    }
   }
 };
 
@@ -79,19 +87,14 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (
-      status === 401 &&
-      url.includes("/auth/me") &&
-      typeof document !== "undefined" &&
-      !document.cookie.includes("refreshToken")
-    ) {
+    if (status === 401 && url.includes("/auth/logout")) {
       return Promise.reject(error);
     }
 
     if (status === 401 && url.includes("/auth/refresh-token")) {
       isRefreshing = false;
       processQueue(new Error("Refresh token expired"));
-      queryClient.clear(); // clear all cached queries on session expiry
+      queryClient.clear();
       redirectToLogin();
       return Promise.reject(error);
     }
@@ -110,8 +113,9 @@ apiClient.interceptors.response.use(
       try {
         await apiClient.post("/auth/refresh-token");
 
-        // Invalidate me query so UI reflects fresh auth state
-        await queryClient.invalidateQueries({ queryKey: ["me"] }); // keep fallback since it's hard to import const here simply if cyclic
+        await queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.currentUser,
+        });
 
         isRefreshing = false;
         processQueue(null);

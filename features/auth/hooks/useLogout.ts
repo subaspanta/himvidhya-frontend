@@ -9,9 +9,12 @@ import { useRouter } from "next/navigation";
 export const useLogout = () => {
   const clearUser = useAuthStore((state) => state.logout);
   const queryClient = useQueryClient();
-  const router = useRouter(); // Next.js router instead of window.location
+  const router = useRouter();
 
   return useMutation({
+    onMutate: () => {
+      router.replace("/");
+    },
     mutationFn: async () => {
       await logoutUser();
       return;
@@ -21,7 +24,6 @@ export const useLogout = () => {
       queryClient.removeQueries({ queryKey: QUERY_KEYS.currentUser });
       clearUser();
       toast.success("Logout successful!");
-      router.replace("/login"); // Use router.replace to prevent going back
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       console.error("Logout failed:", error?.response?.data || error.message);

@@ -1,24 +1,27 @@
+import { User } from "./domain.types";
+
 export type AuthModal = "login" | "register" | "forgot-password" | null;
 
+export type AuthNavigation = {
+  toLogin: () => void;
+  toRegister: () => void;
+  toForgotPassword: () => void;
+  close: () => void;
+};
 export interface AuthModalsProps {
   openModal: AuthModal;
-  onCloseModal: () => void;
-  onSwitchToRegister: () => void;
-  onSwitchToLogin: () => void;
-  onSwitchToForgotPassword?: () => void;
+  navigation: AuthNavigation;
+  onSuccess?: (userData?: User) => void;
 }
-
 export interface LoginFormProps {
   onSuccess?: () => void;
-  onSwitchToRegister?: () => void;
-  onSwitchToForgotPassword?: () => void;
+  navigation: AuthNavigation;
 }
-
 export interface RegisterFormProps {
   onSuccess?: () => void;
-  onSwitchToLogin?: () => void;
+  navigation: AuthNavigation;
 }
 
 export interface ForgotPasswordFormProps {
-  onBackToLogin?: () => void;
+  navigation: AuthNavigation;
 }

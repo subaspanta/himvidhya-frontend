@@ -6,7 +6,7 @@ export type AuthStore = {
   isAuthenticated: boolean;
   authChecked: boolean;
 
-  setUser: (user: User | null, role?: Role | null) => void;
+  setUser: (user: User | null) => void;
   setAuthChecked: (value: boolean) => void;
   logout: () => void;
 };

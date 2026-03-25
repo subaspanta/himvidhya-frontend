@@ -22,16 +22,23 @@ export type ClassDto = z.infer<typeof ClassDtoSchema>;
 
 export const mapClassDto = (item: unknown): ClassCard => {
   const result = ClassDtoSchema.safeParse(item);
-  const parsedItem = (result.success ? result.data : item) as Record<
-    string,
-    unknown
-  >;
+  const parsedItem: Partial<ClassDto> = result.success ? result.data : {};
+
+  const id = parsedItem._id || parsedItem.id || "";
 
   return {
-    ...parsedItem,
-    id: (parsedItem._id as string) || (parsedItem.id as string) || "",
-    _id: (parsedItem._id as string) || (parsedItem.id as string) || "",
-  } as unknown as ClassCard; // Type assertion because of spread and missing guaranteed fields in input
+    id,
+    name: parsedItem.name ?? "",
+    subject: parsedItem.subject ?? "",
+    code: parsedItem.code ?? "",
+    studentCount: parsedItem.studentCount ?? 0,
+    maxStudents: parsedItem.maxStudents ?? 0,
+    lastActivity: parsedItem.lastActivity ?? null,
+    unreadMessages: parsedItem.unreadMessages ?? 0,
+    attendanceRate: parsedItem.attendanceRate ?? 0,
+    nextDeadline: parsedItem.nextDeadline ?? null,
+    status: parsedItem.status ?? "active",
+  };
 };
 
 export const mapClassListDto = (items: unknown[]): ClassCard[] => {

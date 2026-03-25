@@ -18,11 +18,7 @@ export function computeNavLinks(
   const isActive = (href: string) => {
     if (!pathname) return false;
     if (href === "/") return pathname === "/";
-    return (
-      pathname === href ||
-      pathname.startsWith(href + "/") ||
-      pathname.startsWith(href)
-    );
+    return pathname === href || pathname.startsWith(href + "/");
   };
 
   if (navLinksOverride && navLinksOverride.length > 0) {
@@ -37,17 +33,15 @@ export function computeNavLinks(
 }
 
 export function createDefaultActions(router: Router, logout: LogoutMutate) {
-  const defaultLogin = () => router.push("/");
-  const defaultSignUp = () => router.push("/");
   const defaultLogout = () => {
     logout();
   };
+  // TODO: Route to a dedicated settings page (or open settings modal) when settings feature is finalized.
   const defaultSettings = () => {};
+  // TODO: Replace this redirect fallback with real notifications panel/page navigation.
   const defaultNotification = () => router.push("/home");
 
   return {
-    defaultLogin,
-    defaultSignUp,
     defaultLogout,
     defaultSettings,
     defaultNotification,
