@@ -1,4 +1,14 @@
-// shared/api/queryClient.ts
+"use client";
+
 import { QueryClient } from "@tanstack/react-query";
 
-export const queryClient = new QueryClient();
+// Single instance shared across provider + axios interceptor + logout
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 30,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});

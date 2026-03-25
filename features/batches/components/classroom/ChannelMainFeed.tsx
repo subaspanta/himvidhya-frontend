@@ -1,5 +1,5 @@
 // features/class/components/ClassMainFeed.tsx
-import { ClassDetails } from "@/features/class/types";
+import { ClassDetails } from "../../types";
 import AnnouncementCard from "./AnnouncementCard";
 
 interface Props {
@@ -14,7 +14,10 @@ export default function ClassMainFeed({ activeTab, classData }: Props) {
         {Array.isArray(classData.announcements) &&
         classData.announcements.length > 0 ? (
           classData.announcements.map((ann) => (
-            <AnnouncementCard key={ann._id} announcement={ann} />
+            <AnnouncementCard
+              key={ann.id || (ann as any)._id}
+              announcement={ann}
+            />
           ))
         ) : (
           <div className="text-center py-12 text-muted-foreground">

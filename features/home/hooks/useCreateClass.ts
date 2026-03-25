@@ -1,16 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { createClassApi } from "../api/home.api";
+import { createClassApi, type CreateClassPayload } from "../api/home.api";
 import { ClassCard } from "@/features/batches";
+import { QUERY_KEYS } from "@/config/constants";
 
 export const useCreateClass = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<
-    ClassCard,
-    AxiosError,
-    { name: string; subject: string; description: string }
-  >({
+  return useMutation<ClassCard, AxiosError, CreateClassPayload>({
     mutationFn: (data) => createClassApi(data),
     onError: (error) => {
       console.error(
@@ -20,7 +17,7 @@ export const useCreateClass = () => {
     },
     onSuccess: (data) => {
       // ensure enrolled classes list is refreshed so new class appears
-      queryClient.invalidateQueries({ queryKey: ["enrolledClasses"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.enrolledClasses });
     },
   });
 };

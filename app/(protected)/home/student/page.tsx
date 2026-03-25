@@ -1,7 +1,5 @@
-import React from "react";
+import StudentDashboardPage from "@/features/home/pages/StudentDashboardPage";
 
-const page = () => {
-  return <div></div>;
-};
-
-export default page;
+export default function StudentDashboardRoute() {
+  return <StudentDashboardPage />;
+}

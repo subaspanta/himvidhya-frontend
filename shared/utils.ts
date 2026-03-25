@@ -1,4 +1,4 @@
-import { Permission, Role } from "@/features/auth/types/rbac.types";
+import { Role } from "@/features/auth/types/rbac.types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -11,15 +11,4 @@ export const hasRole = (userRole: Role, allowedUser?: Role[]) => {
   return allowedUser.includes(userRole);
 };
 
-export const hasPermissions = (
-  userPermissions: Permission[] | undefined,
-  required?: Permission[],
-) => {
-  // No specific permissions required → allow
-  if (!required || required.length === 0) return true;
-
-  // Required permissions but user has none → deny
-  if (!userPermissions || userPermissions.length === 0) return false;
-
-  return required.every((p) => userPermissions.includes(p));
-};
+// permissions-based checks removed; rely on role-based checks via hasRole

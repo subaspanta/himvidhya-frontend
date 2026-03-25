@@ -1,5 +1,8 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { queryClient } from "./queryClient";
+import Router from "next/router";
+import type { ApiResponse } from "@/shared/types";
+import { QUERY_KEYS } from "@/config/constants";
 
 export const apiClient = axios.create({
   baseURL:
@@ -10,6 +13,12 @@ export const apiClient = axios.create({
 /* ================= QUEUE ================= */
 
 let isRefreshing = false;
+const PROTECTED_PREFIXES = ["/home"];
+
+const isProtectedPath = (pathname: string) =>
+  PROTECTED_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
 
 type QueueItem = {
   resolve: () => void;
@@ -29,12 +38,32 @@ const processQueue = (error: Error | null) => {
   failedQueue = [];
 };
 
+const redirectToLogin = () => {
+  if (typeof window !== "undefined") {
+    const pathname = window.location.pathname;
+
+    if (isProtectedPath(pathname) && !pathname.includes("/login")) {
+      Router.push("/login");
+    }
+  }
+};
+
 /* ================= RESPONSE TRANSFORM ================= */
 
 apiClient.interceptors.response.use(
   (response) => {
-    const payload = response?.data?.data ?? response?.data;
-    return { ...response, data: payload };
+    const envelope = response?.data as
+      | (ApiResponse<unknown> & { timestamp?: string })
+      | undefined;
+
+    const payload = envelope?.data ?? response?.data;
+    const meta = {
+      success: envelope?.success,
+      message: envelope?.message,
+      timestamp: envelope?.timestamp,
+    };
+
+    return { ...response, data: payload, meta };
   },
 
   async (error: AxiosError) => {
@@ -46,32 +75,31 @@ apiClient.interceptors.response.use(
     if (!error.response) {
       return Promise.reject(error);
     }
+    if (!originalRequest) {
+      return Promise.reject(error);
+    }
 
     const status = error.response.status;
     const url = originalRequest?.url || "";
 
     /* ================= SKIP CASES ================= */
-
-    if (status === 401 && url.includes("/auth/me")) {
+    if (status === 401 && url.includes("/auth/login")) {
       return Promise.reject(error);
     }
 
-    if (status === 401 && url.includes("/auth/login")) {
+    if (status === 401 && url.includes("/auth/logout")) {
       return Promise.reject(error);
     }
 
     if (status === 401 && url.includes("/auth/refresh-token")) {
       isRefreshing = false;
       processQueue(new Error("Refresh token expired"));
-
-      // HARD RESET (correct behavior)
-      window.location.href = "/login";
-
+      queryClient.clear();
+      redirectToLogin();
       return Promise.reject(error);
     }
 
     /* ================= REFRESH FLOW ================= */
-
     if (status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise<void>((resolve, reject) => {
@@ -85,8 +113,9 @@ apiClient.interceptors.response.use(
       try {
         await apiClient.post("/auth/refresh-token");
 
-        // 🔥 CRITICAL: Sync React Query
-        await queryClient.invalidateQueries({ queryKey: ["me"] });
+        await queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.currentUser,
+        });
 
         isRefreshing = false;
         processQueue(null);
@@ -95,10 +124,8 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         isRefreshing = false;
         processQueue(new Error("Token refresh failed"));
-
-        // HARD RESET
-        window.location.href = "/login";
-
+        queryClient.clear();
+        redirectToLogin();
         return Promise.reject(refreshError);
       }
     }

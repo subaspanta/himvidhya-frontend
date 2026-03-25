@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { joinClass } from "../api/home.api";
-import { ClassCard } from "@/features/batches";
+import { QUERY_KEYS } from "@/config/constants";
+import { JoinRequest } from "@/features/batches/types";
 
 export const useJoinClass = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<ClassCard, AxiosError, string>({
+  return useMutation<JoinRequest, AxiosError, string>({
     mutationFn: (code: string) => joinClass(code),
-    onSuccess: (data) => {
-      // Refresh enrolled classes so UI shows newly joined class
-      queryClient.invalidateQueries({ queryKey: ["enrolledClasses"] });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.enrolledClasses });
     },
     onError: (error) => {
       console.error(

@@ -1,18 +1,27 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { logoutUser } from "@/features/auth/api/auth.api"; // <-- Import the API function
 import toast from "react-hot-toast";
+import { QUERY_KEYS } from "@/config/constants";
+import { useRouter } from "next/navigation";
 
 export const useLogout = () => {
   const clearUser = useAuthStore((state) => state.logout);
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
+    onMutate: () => {
+      router.replace("/");
+    },
     mutationFn: async () => {
       await logoutUser();
       return;
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.cancelQueries({ queryKey: QUERY_KEYS.currentUser });
+      queryClient.removeQueries({ queryKey: QUERY_KEYS.currentUser });
       clearUser();
       toast.success("Logout successful!");
     },

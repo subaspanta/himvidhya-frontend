@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { verifyOTP } from "@/features/auth/api/auth.api";
-import { VerifyOTPPayload, VerifyOTPResponse } from "../types/auth.types";
+import type { VerifyOTPPayload, VerifyOTPResponse } from "../types/api.types";
 
 export const useVerifyOTP = () => {
   return useMutation<

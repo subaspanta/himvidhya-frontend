@@ -2,12 +2,7 @@ import { Button } from "@/components/ui/button";
 import { MoreVertical } from "lucide-react";
 
 // features/class/components/AnnouncementCard.tsx
-interface Announcement {
-  _id: string;
-  content: string;
-  createdAt: string;
-  author: { name: string; role: string };
-}
+import { Announcement } from "../../types";
 
 interface Props {
   announcement: Announcement;

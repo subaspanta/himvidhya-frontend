@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { AuthStore } from "../types/auth.types";
+import type { AuthStore } from "../types/store.types";
 
 export const useAuthStore = create<AuthStore>()((set) => ({
   user: null,
@@ -7,12 +7,13 @@ export const useAuthStore = create<AuthStore>()((set) => ({
   isAuthenticated: false,
   authChecked: false,
 
-  setUser: (user, role) =>
+  setUser: (user) => {
     set({
       user,
-      role: role ?? (user?.role as AuthStore["role"]) ?? null,
+      role: user?.role ?? null,
       isAuthenticated: !!user,
-    }),
+    });
+  },
 
   setAuthChecked: (authChecked) => set({ authChecked }),
 

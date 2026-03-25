@@ -4,7 +4,7 @@ import { forgotPassword } from "@/features/auth/api/auth.api";
 import type {
   ForgotPasswordPayload,
   ForgotPasswordResponse,
-} from "@/features/auth/types/auth.types";
+} from "../types/api.types";
 
 export const useForgetPassword = () => {
   return useMutation<

@@ -26,19 +26,22 @@ export const NavbarUserDropdown = ({
     <div className="hidden md:flex items-center gap-4">
       {/* Notifications */}
       <button
+        type="button"
         aria-label="Notifications"
         onClick={onNotificationClick}
-        className="relative p-2 rounded-full hover:bg-slate-100"
+        className="relative p-2 rounded-full text-muted-foreground hover:bg-accent"
       >
         <Bell className="w-5 h-5" />
         {notificationCount > 0 && (
-          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full ring-2 ring-background" />
+          <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full ring-2 ring-background" />
         )}
       </button>
-      <div className="h-8 w-px bg-gray-200" />
+      <div className="h-8 w-px bg-border" />
       <div className="flex flex-col">
-        <span className="font-semibold text-sm text-gray-900">{userName}</span>
-        <span className="text-xs text-gray-500 uppercase tracking-wider">
+        <span className="font-semibold text-sm text-foreground">
+          {userName}
+        </span>
+        <span className="text-xs text-muted-foreground uppercase tracking-wider">
           {userEmail?.split("@")[0] || "user"}
         </span>
       </div>
@@ -58,7 +61,7 @@ export const NavbarUserDropdown = ({
 
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuLabel>
-            <div className="    flex flex-col">
+            <div className="flex flex-col">
               <span>{userName}</span>
               <span className="text-xs truncate">{userEmail}</span>
             </div>
@@ -71,7 +74,10 @@ export const NavbarUserDropdown = ({
             Settings
           </DropdownMenuItem>
 
-          <DropdownMenuItem onClick={onLogoutClick} className="text-red-600">
+          <DropdownMenuItem
+            onClick={onLogoutClick}
+            className="text-destructive focus:text-destructive"
+          >
             <LogOut className="mr-2 h-4 w-4" />
             Logout
           </DropdownMenuItem>

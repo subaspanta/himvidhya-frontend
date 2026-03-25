@@ -1,4 +1,4 @@
-export * from "./types/auth.types";
+export * from "./types";
 
 export * from "./api/auth.api";
 
@@ -6,6 +6,8 @@ export * from "./api/auth.api";
 export { AuthInitializer } from "./components/AuthInitializer";
 export { AuthGate } from "./components/AuthGate";
 export { AuthModals } from "./components/AuthModals";
+export { AuthModalController } from "./components/AuthModalController";
+export { AuthPageShell } from "./components/AuthPageShell";
 export { ForgotPasswordForm } from "./components/ForgotPasswordForm";
 export { LoginForm } from "./components/LoginForm";
 export { RegisterForm } from "./components/RegisterForm";
