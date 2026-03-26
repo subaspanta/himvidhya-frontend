@@ -13,7 +13,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 }) => {
   return (
     <main className="relative min-h-[88vh] w-full overflow-hidden bg-gradient-to-b from-[#0F172A] to-[#1E293B] flex flex-col items-center justify-center">
-      {/* Noise Texture Overlay */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0">
         <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
           <filter id="noise">
@@ -44,7 +43,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       {/* 2. Content Container */}
       <div className="relative z-10 w-full max-w-[1200px] px-6 py-12 flex flex-col items-center text-center">
-        {/* B. Main Headline */}
         <h1 className="max-w-4xl text-5xl font-bold tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[5rem] leading-[1.1]">
           <span className="block mb-2">
             तिम्रो{" "}
@@ -79,7 +77,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           Himalayas.
         </p>
 
-        {/* D. CTA Buttons */}
         <div className="mt-10 flex flex-col w-full max-w-md gap-4 sm:flex-row sm:justify-center sm:max-w-none">
           {getStartedHref ? (
             <Button
