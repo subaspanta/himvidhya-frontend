@@ -3,12 +3,16 @@ import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
 
-export const AuthModals = ({ openModal, navigation }: AuthModalsProps) => {
+export const AuthModals = ({
+  openModal,
+  navigation,
+  onSuccess,
+}: AuthModalsProps) => {
   if (!openModal) return null;
 
   switch (openModal) {
     case "login":
-      return <LoginForm navigation={navigation} />;
+      return <LoginForm navigation={navigation} onSuccess={onSuccess} />;
     case "register":
       return <RegisterForm navigation={navigation} />;
     case "forgot-password":

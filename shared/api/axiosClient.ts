@@ -41,9 +41,12 @@ const processQueue = (error: Error | null) => {
 const redirectToLogin = () => {
   if (typeof window !== "undefined") {
     const pathname = window.location.pathname;
+    const query = window.location.search;
+    const requestedPath = `${pathname}${query}`;
+    const redirectParam = encodeURIComponent(requestedPath);
 
     if (isProtectedPath(pathname) && !pathname.includes("/login")) {
-      Router.push("/login");
+      Router.push(`/login?redirect=${redirectParam}`);
     }
   }
 };

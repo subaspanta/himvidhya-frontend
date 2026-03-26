@@ -3,6 +3,7 @@ import ToasterProvider from "@/providers/toaster-provider";
 import { AuthInitializer } from "@/features/auth/components/AuthInitializer";
 import "./globals.css";
 import RootProvider from "@/providers/root-provider";
+import { AuthQueryModalHost } from "@/features/auth/components/AuthQueryModalHost";
 
 export const metadata: Metadata = {
   title: "HimVidhya",
@@ -24,6 +25,7 @@ export default function RootLayout({
         <RootProvider>
           <AuthInitializer />
           {children}
+          <AuthQueryModalHost />
           <div id="modal-root"></div>
         </RootProvider>
         <ToasterProvider />

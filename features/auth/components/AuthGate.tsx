@@ -2,7 +2,7 @@
 
 import { PageLoader } from "@/shared/loading/PageLoader";
 import { useAuthStore } from "../store/auth.store";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { PROTECTED_PREFIXES, PUBLIC_PATHS } from "@/config/constants";
 import type { Role } from "../types/domain.types";
@@ -22,6 +22,7 @@ export const AuthGate = ({ children }: { children: React.ReactNode }) => {
   const authChecked = useAuthStore((s) => s.authChecked);
   const user = useAuthStore((s) => s.user);
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const router = useRouter();
 
   useEffect(() => {
@@ -29,7 +30,10 @@ export const AuthGate = ({ children }: { children: React.ReactNode }) => {
 
     // 1. Not authenticated → block protected
     if (!user && isProtectedPath(pathname)) {
-      router.replace("/login");
+      const query = searchParams.toString();
+      const requestedPath = query ? `${pathname}?${query}` : pathname;
+      const redirectParam = encodeURIComponent(requestedPath);
+      router.replace(`/login?redirect=${redirectParam}`);
       return;
     }
 
@@ -58,14 +62,11 @@ export const AuthGate = ({ children }: { children: React.ReactNode }) => {
         return;
       }
     }
-  }, [authChecked, user, pathname, router]);
+  }, [authChecked, user, pathname, router, searchParams]);
 
   if (!authChecked) {
     return <PageLoader />;
   }
-  if (authChecked && user) {
-    // redirect based on role
-    router.replace(`/home/${user.role?.toLowerCase()}`);
-  }
+
   return <>{children}</>;
 };

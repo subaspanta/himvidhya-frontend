@@ -24,11 +24,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
   const onSubmit = (data: LoginFormData) => {
     mutate(data, {
-      onSuccess: () => {
+      onSuccess: (userData) => {
         toast.success("Logged in successfully");
         navigation.close();
-        onSuccess?.();
-        
+        onSuccess?.(userData);
       },
       onError: () => {
         setError("root", { message: "Login failed" });

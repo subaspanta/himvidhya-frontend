@@ -16,7 +16,7 @@ export type AuthenticatedProps = {
 };
 
 export type NavbarBaseProps = {
-  variant?: "landing" | "dashboard";
+  variant: "landing" | "dashboard";
   /** Optional override; when not provided, links come from useNavItems (RBAC). */
   navLinks?: NavLink[];
   className?: string;
@@ -26,4 +26,6 @@ export type NavbarBaseProps = {
   onNotificationClick?: () => void;
 };
 
-export type NavbarProps = NavbarBaseProps;
+export type AuthQuery = {
+  auth?: "login" | "register" | "forgot-password";
+};
