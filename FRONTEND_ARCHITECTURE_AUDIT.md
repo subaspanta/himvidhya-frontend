@@ -1,6 +1,6 @@
 ## Frontend Architecture Audit (React + React Query)
 
-Audit date: 24 Mar 2026  
+Audit date: 26 Mar 2026  
 Scope: frontend architecture, API/data handling, React Query usage
 
 ---
@@ -17,6 +17,9 @@ Scope: frontend architecture, API/data handling, React Query usage
 - Create-class payload contract drift was addressed.
   - `description` handling now aligned through form/hook/API path.
 - Hard reload redirect usage was replaced with router navigation in transport redirect helper.
+- Auth boundary routing was stabilized in `AuthGate`.
+  - Removed render-phase router mutation (`router.replace(...)` in render path).
+  - Redirects now execute only in effect-driven guard flow, eliminating Router update warnings and infinite redirect loops.
 
 ### Still open
 
@@ -165,6 +168,7 @@ Source: `client/shared/api/axiosClient.ts`
 ### High
 
 - **Redirect architecture is still mixed at framework boundary**
+  - `AuthGate` render-loop regression is fixed (no render-time router mutation).
   - Hard reload was removed, but redirect from transport layer still depends on router behavior in non-component context.
   - In App Router systems, central redirect orchestration should be explicit and framework-safe.
 - **Boundary mapper fallback is permissive**
@@ -253,4 +257,5 @@ Source: `client/shared/api/axiosClient.ts`
 ## 8) Bottom line
 
 The frontend architecture is improving: query-client setup is unified, dead-link surface was reduced, logout side effects were simplified, and create-class payload alignment improved contract consistency.  
-Current risk center has shifted to **type integrity in class join flow** and **boundary robustness (redirect + mapper strictness)**. Addressing those next will materially improve reliability and maintainability.
+The auth boundary now also avoids render-phase navigation side effects, removing a known infinite-loop failure mode in route guarding.  
+Current risk center has shifted to **type integrity in class join flow** and **boundary robustness (transport-level redirect + mapper strictness)**. Addressing those next will materially improve reliability and maintainability.
