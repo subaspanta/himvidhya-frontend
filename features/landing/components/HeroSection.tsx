@@ -71,7 +71,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           अन्त्य
         </h1>
 
-        {/* C. Subheadline */}
         <p className="mt-8 max-w-2xl text-lg text-slate-300 md:text-xl md:leading-relaxed">
           Streamline your classroom management with Nepal&apos;s first
           AI-powered education tool designed for students and teachers in the
