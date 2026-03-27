@@ -112,7 +112,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
 
         {/* E. Trust / Social Proof */}
-        <div className="mt-12 flex items-center justify-center gap-4 text-sm text-slate-400">
+        {/* <div className="mt-12 flex items-center justify-center gap-4 text-sm text-slate-400">
           <div className="flex -space-x-3">
             {[1, 2, 3, 4].map((i) => (
               <Avatar key={i} className="border-2 border-[#0F172A] w-8 h-8">
@@ -127,7 +127,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             Trusted by <span className="font-bold text-white">2,000+</span>{" "}
             students across Nepal
           </p>
-        </div>
+        </div> */}
       </div>
     </main>
   );
