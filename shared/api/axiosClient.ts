@@ -1,8 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
-import { queryClient } from "./queryClient";
-import Router from "next/router";
 import type { ApiResponse } from "@/shared/types";
 import { QUERY_KEYS } from "@/config/constants";
+import { emitAuthSessionExpired } from "./authSessionEvents";
 
 export const apiClient = axios.create({
   baseURL:
@@ -13,12 +12,6 @@ export const apiClient = axios.create({
 /* ================= QUEUE ================= */
 
 let isRefreshing = false;
-const PROTECTED_PREFIXES = ["/home"];
-
-const isProtectedPath = (pathname: string) =>
-  PROTECTED_PREFIXES.some(
-    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
-  );
 
 type QueueItem = {
   resolve: () => void;
@@ -36,19 +29,6 @@ const processQueue = (error: Error | null) => {
     }
   });
   failedQueue = [];
-};
-
-const redirectToLogin = () => {
-  if (typeof window !== "undefined") {
-    const pathname = window.location.pathname;
-    const query = window.location.search;
-    const requestedPath = `${pathname}${query}`;
-    const redirectParam = encodeURIComponent(requestedPath);
-
-    if (isProtectedPath(pathname) && !pathname.includes("/login")) {
-      Router.push(`/login?redirect=${redirectParam}`);
-    }
-  }
 };
 
 /* ================= RESPONSE TRANSFORM ================= */
@@ -74,35 +54,35 @@ apiClient.interceptors.response.use(
       _retry?: boolean;
     };
 
-    /* ================= NETWORK ERROR ================= */
-    if (!error.response) {
-      return Promise.reject(error);
-    }
-    if (!originalRequest) {
+    if (!error.response || !originalRequest) {
       return Promise.reject(error);
     }
 
     const status = error.response.status;
     const url = originalRequest?.url || "";
 
+    const isLogin = url?.endsWith("/auth/login");
+    const isLogout = url?.endsWith("/auth/logout");
+    const isRefresh = url?.endsWith("/auth/refresh-token");
+
     /* ================= SKIP CASES ================= */
-    if (status === 401 && url.includes("/auth/login")) {
+
+    if (status === 401 && (isLogin || isLogout)) {
       return Promise.reject(error);
     }
 
-    if (status === 401 && url.includes("/auth/logout")) {
-      return Promise.reject(error);
-    }
+    /* ================= REFRESH TOKEN EXPIRED ================= */
 
-    if (status === 401 && url.includes("/auth/refresh-token")) {
+    if (status === 401 && isRefresh) {
       isRefreshing = false;
       processQueue(new Error("Refresh token expired"));
-      queryClient.clear();
-      redirectToLogin();
+
+      emitAuthSessionExpired("refresh-token-expired");
       return Promise.reject(error);
     }
 
     /* ================= REFRESH FLOW ================= */
+
     if (status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise<void>((resolve, reject) => {
@@ -116,9 +96,9 @@ apiClient.interceptors.response.use(
       try {
         await apiClient.post("/auth/refresh-token");
 
-        await queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.currentUser,
-        });
+        // optional: keep this if you want fresh user data
+        // (this is okay since it's not destructive like clear)
+        // you can also move this out if you want strict purity
 
         isRefreshing = false;
         processQueue(null);
@@ -127,8 +107,18 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         isRefreshing = false;
         processQueue(new Error("Token refresh failed"));
-        queryClient.clear();
-        redirectToLogin();
+
+        const axiosRefreshError = refreshError as AxiosError | undefined;
+        const refreshRequestUrl = axiosRefreshError?.config?.url || "";
+
+        const alreadyHandled =
+          axiosRefreshError?.response?.status === 401 &&
+          refreshRequestUrl.endsWith("/auth/refresh-token");
+
+        if (!alreadyHandled) {
+          emitAuthSessionExpired("refresh-token-failed");
+        }
+
         return Promise.reject(refreshError);
       }
     }

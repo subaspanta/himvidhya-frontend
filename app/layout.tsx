@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import ToasterProvider from "@/providers/toaster-provider";
 import { AuthInitializer } from "@/features/auth/components/AuthInitializer";
+import { AuthSessionBoundary } from "@/features/auth/components/AuthSessionBoundary";
 import "./globals.css";
 import RootProvider from "@/providers/root-provider";
 import { AuthQueryModalHost } from "@/features/auth/components/AuthQueryModalHost";
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body>
         <RootProvider>
           <AuthInitializer />
+          <AuthSessionBoundary />
           {children}
           <AuthQueryModalHost />
           <div id="modal-root"></div>

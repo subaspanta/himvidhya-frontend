@@ -33,7 +33,7 @@ export const AuthGate = ({ children }: { children: React.ReactNode }) => {
       const query = searchParams.toString();
       const requestedPath = query ? `${pathname}?${query}` : pathname;
       const redirectParam = encodeURIComponent(requestedPath);
-      router.replace(`/login?redirect=${redirectParam}`);
+      router.replace(`/?auth=login&redirect=${redirectParam}`);
       return;
     }
 

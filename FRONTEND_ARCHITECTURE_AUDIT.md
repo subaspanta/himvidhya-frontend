@@ -1,6 +1,6 @@
 ## Frontend Architecture Audit (React + React Query)
 
-Audit date: 26 Mar 2026  
+Audit date: 28 Mar 2026  
 Scope: frontend architecture, API/data handling, React Query usage
 
 ---
@@ -20,13 +20,18 @@ Scope: frontend architecture, API/data handling, React Query usage
 - Auth boundary routing was stabilized in `AuthGate`.
   - Removed render-phase router mutation (`router.replace(...)` in render path).
   - Redirects now execute only in effect-driven guard flow, eliminating Router update warnings and infinite redirect loops.
+- App Router redirect architecture was moved out of transport layer.
+  - `axiosClient` no longer performs navigation side effects.
+  - Session-expiry events are emitted from transport (`authSessionEvents`).
+  - `AuthSessionBoundary` now performs App Router navigation at component boundary.
+  - Login redirect now follows query-state modal flow (`/?auth=login&redirect=...`) instead of `/login` path redirects.
 
 ### Still open
 
 - `joinClass` contract mismatch and unsafe casting remains a major type risk (`JoinRequest` vs `ClassCard` assumptions).
 - Boundary validation is still permissive in mapper fallback paths.
 - Teacher dashboard still carries local/duplicated class view-model typing.
-- Interceptor-level navigation strategy is still fragile in App Router architecture (non-component redirect orchestration).
+- Join-request endpoints are still API-only (not promoted to first-class React Query hooks + UI flows).
 
 ---
 
@@ -169,8 +174,8 @@ Source: `client/shared/api/axiosClient.ts`
 
 - **Redirect architecture is still mixed at framework boundary**
   - `AuthGate` render-loop regression is fixed (no render-time router mutation).
-  - Hard reload was removed, but redirect from transport layer still depends on router behavior in non-component context.
-  - In App Router systems, central redirect orchestration should be explicit and framework-safe.
+  - Transport redirect side effects were removed and moved to auth boundary component orchestration.
+  - Follow-up needed: keep transport file free from app-specific cache/navigation assumptions.
 - **Boundary mapper fallback is permissive**
   - Parse failures falling back to raw payload + assertions can silently bypass type safety.
 
@@ -236,15 +241,24 @@ Source: `client/shared/api/axiosClient.ts`
 1. **Fix join contract end-to-end (highest priority).**
    - Define one canonical join response type.
    - Remove `as unknown as` and align hook return type with backend semantics.
+
+- Wire `JoinClassForm` to active dashboard flow so join mutation is used in production UI.
+
 2. **Harden transformation boundaries.**
    - Replace permissive mapper fallback with `safeParse` + explicit fallback object or typed error surface.
-3. **Stabilize redirect architecture for App Router.**
-   - Keep transport concerns transport-only.
-   - Move app navigation side effects to auth boundary/component layer where possible.
+3. **Promote class-request API surface into React Query hooks + UI.**
+
+- Add hooks for requests/count/approve/reject.
+- Add query keys + invalidation plan.
+- Integrate in teacher dashboard/sidebar surfaces.
+
 4. **Consolidate class types.**
    - Introduce shared normalized class view model; remove inline teacher-page interface duplication.
-5. **Promote Axios-only class endpoints into React Query hooks.**
-   - Add hooks + query keys + invalidation plan for join requests/count/details.
+5. **Transport/auth boundary cleanup pass.**
+
+- Remove stale/unused imports and keep interceptor free of UI concerns.
+- Verify session-expiry flow behavior across protected/public routes.
+
 6. **Type tightening pass across auth/home modules.**
    - Strict role unions, payload DTOs, and API response meta typing.
 7. **Cleanup architecture surface.**
@@ -254,8 +268,64 @@ Source: `client/shared/api/axiosClient.ts`
 
 ---
 
-## 8) Bottom line
+## 8) Tomorrow execution checklist (copy/paste runbook)
 
-The frontend architecture is improving: query-client setup is unified, dead-link surface was reduced, logout side effects were simplified, and create-class payload alignment improved contract consistency.  
-The auth boundary now also avoids render-phase navigation side effects, removing a known infinite-loop failure mode in route guarding.  
-Current risk center has shifted to **type integrity in class join flow** and **boundary robustness (transport-level redirect + mapper strictness)**. Addressing those next will materially improve reliability and maintainability.
+### P0 — Start here
+
+- [ ] **Join flow contract + UI wiring**
+  - Files:
+  - `client/features/home/api/home.api.ts`
+  - `client/features/home/hooks/useJoinClass.ts`
+  - `client/features/batches/components/dashboard/JoinClassForm.tsx`
+  - `client/components/layout/DashboardHeader.tsx`
+  - Acceptance:
+  - Join action is callable from live dashboard UI.
+  - Return type is canonical and used consistently (no unsafe cast path).
+  - Enrolled classes invalidate/refetch after success.
+
+- [ ] **Mapper strictness hardening**
+  - File: `client/features/home/api/home.mapper.ts`
+  - Acceptance:
+  - Parse failures are observable (typed error/fallback object), not silently swallowed into blank class cards.
+
+### P1 — After P0
+
+- [ ] **Join requests React Query layer**
+  - Files:
+  - `client/features/home/api/home.api.ts`
+  - `client/features/home/hooks/*` (new hooks for requests/count/approve/reject)
+  - `client/config/constants.ts`
+  - Acceptance:
+  - Hooks exist and are consumed by at least one UI entrypoint.
+  - Query invalidation strategy is explicit and tested manually.
+
+- [ ] **Teacher dashboard type consolidation**
+  - File: `client/features/home/pages/TeacherDashboardPage.tsx`
+  - Acceptance:
+  - Remove local `EnrolledClass` duplication and use shared normalized feature type.
+
+### P2 — Hygiene pass
+
+- [ ] **Transport/auth cleanup**
+  - Files:
+  - `client/shared/api/axiosClient.ts`
+  - `client/features/auth/components/AuthSessionBoundary.tsx`
+  - `client/shared/api/authSessionEvents.ts`
+  - Acceptance:
+  - No unused imports/variables.
+  - Session-expiry behavior verified on protected route and public route.
+
+- [ ] **UI placeholder/hardcoded cleanup**
+  - Files:
+  - `client/components/layout/DashboardHeader.tsx`
+  - `client/components/navbar/navbar.utils.ts`
+  - `client/app/(protected)/home/teacher/page.tsx`
+  - Acceptance:
+  - Hardcoded metrics/copy replaced or clearly marked behind TODO ownership.
+
+---
+
+## 9) Bottom line
+
+The frontend architecture is materially more stable now: auth gating no longer mutates router during render, and transport-level navigation side effects were removed in favor of App Router boundary orchestration with query-state auth modal redirects.  
+Current risk center is now concentrated in **join-flow contract completeness**, **mapper strictness**, and **missing React Query/UI coverage for join-request endpoints**. Finishing the P0 checklist above is the fastest path to reliable next-step delivery.
