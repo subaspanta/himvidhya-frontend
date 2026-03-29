@@ -1,7 +1,7 @@
 import { ClassCard, ClassDetails, JoinRequest } from "@/features/batches/types";
 import { apiClient } from "@/shared/api/axiosClient";
 import type { ApiResponse } from "@/shared/types";
-import { mapClassDto, mapClassListDto } from "./home.mapper";
+import { mapClassDto, mapClassListDto, mapJoinRequest } from "./home.mapper";
 
 export type CreateClassPayload = {
   name: string;
@@ -43,8 +43,7 @@ export async function getClassDetails(id: string): Promise<ClassDetails> {
 // Now returns JoinRequest (pending) not ClassCard
 export async function joinClass(code: string): Promise<JoinRequest> {
   const response = await apiClient.post("/class/join", { code });
-  const payload = response.data as JoinRequestResponseData;
-  return payload.joinRequest;
+  return mapJoinRequest(response.data.joinRequest);
 }
 
 export async function getJoinRequests(): Promise<JoinRequest[]> {
