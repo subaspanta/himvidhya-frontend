@@ -7,7 +7,7 @@ export const ClassDtoSchema = z
     id: z.string().optional(),
     name: z.string(),
     subject: z.string().optional().default(""),
-    code: z.string(),
+    code: z.string().optional().default(""),
     studentCount: z.number().optional().default(0),
     maxStudents: z.number().optional().default(0),
     lastActivity: z.string().nullable().optional(),
@@ -45,7 +45,7 @@ function safeMap<T>(
   };
 }
 
-export const mapClassDto = (item: unknown[]): ClassCard[]  => {
+export const mapClassDto = (item: unknown): ClassCard | null => {
   const mapped = safeMap(ClassDtoSchema, item, "class");
 
   if (!mapped.success) {
@@ -59,16 +59,17 @@ export const mapClassDto = (item: unknown[]): ClassCard[]  => {
   }
 
   const parsedItem = mapped.data;
+
   const id = parsedItem._id || parsedItem.id;
   if (!id) {
     console.error("[mapper] ClassCard missing id field:", parsedItem);
-    return null; // drop the card entirely
+    return null;
   }
 
   return {
     id,
     name: parsedItem.name,
-    subject: parsedItem.subject,
+    subject: parsedItem.subject ?? "",
     code: parsedItem.code ?? "",
     studentCount: parsedItem.studentCount ?? 0,
     maxStudents: parsedItem.maxStudents ?? 0,
@@ -79,12 +80,19 @@ export const mapClassDto = (item: unknown[]): ClassCard[]  => {
     status: parsedItem.status ?? "active",
   };
 };
-
 export const mapClassListDto = (items: unknown[]): ClassCard[] => {
   if (!Array.isArray(items)) return [];
-  return items
-    .map(mapClassDto)
-    .filter((item): item is ClassCard => item !== null);
+
+  const results = items.map(mapClassDto);
+  const valid = results.filter((item): item is ClassCard => item !== null);
+
+  if (isDev && valid.length !== items.length) {
+    console.warn(
+      `[mapper] ${items.length - valid.length} class(es) failed to parse and were dropped`,
+    );
+  }
+
+  return valid;
 };
 
 const JoinRequestSchema = z.object({
@@ -100,7 +108,7 @@ const JoinRequestSchema = z.object({
 export function mapJoinRequest(raw: unknown): JoinRequest {
   const result = JoinRequestSchema.safeParse(raw);
   if (!result.success) {
-    console.error("JoinRequest parse failed:", result.error.flatten());
+    console.error("[mapper] JoinRequest parse failed:", result.error.flatten());
     throw new Error("Invalid join request data received from server");
   }
   return result.data;
