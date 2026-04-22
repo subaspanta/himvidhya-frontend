@@ -20,11 +20,16 @@ export type NavbarBaseProps = {
   /** Optional override; when not provided, links come from useNavItems (RBAC). */
   navLinks?: NavLink[];
   className?: string;
+  /** Optional guest action overrides for landing usage. */
+  onLoginClick?: () => void;
+  onSignUpClick?: () => void;
   /** Optional authenticated overrides. */
   onLogoutClick?: () => void;
   onSettingsClick?: () => void;
   onNotificationClick?: () => void;
 };
+
+export type NavbarProps = NavbarBaseProps;
 
 export type AuthQuery = {
   auth?: "login" | "register" | "forgot-password";

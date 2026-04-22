@@ -19,9 +19,9 @@ export const ClassList: React.FC<ClassListProps> = ({
     <div className="space-y-4">
       {classes.map((cls) => (
         <ClassCardItem
-          key={cls._id}
+          key={cls.id}
           classData={cls}
-          onClick={() => onClassClick?.(cls._id)}
+          onClick={() => onClassClick?.(cls.id)}
           variant="list"
         />
       ))}

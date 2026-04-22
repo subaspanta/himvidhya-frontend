@@ -15,7 +15,7 @@ export default function ClassMainFeed({ activeTab, classData }: Props) {
         classData.announcements.length > 0 ? (
           classData.announcements.map((ann) => (
             <AnnouncementCard
-              key={ann.id || (ann as any)._id}
+              key={ann.id || ann._id}
               announcement={ann}
             />
           ))

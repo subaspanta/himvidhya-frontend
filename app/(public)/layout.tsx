@@ -3,10 +3,8 @@ import { Navbar } from "@/components/navbar";
 
 export default function PublicLayout({
   children,
-  modal,
 }: {
   children: React.ReactNode;
-  modal: React.ReactNode;
 }) {
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -15,7 +13,6 @@ export default function PublicLayout({
         variant="landing"
       />
       {children}
-      {modal}
       <Footer variant="landing" className="p-4 md:p-6 lg:p-8" />
     </div>
   );

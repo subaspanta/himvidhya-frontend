@@ -1,6 +1,5 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import type { ApiResponse } from "@/shared/types";
-import { QUERY_KEYS } from "@/config/constants";
 import { emitAuthSessionExpired } from "./authSessionEvents";
 
 export const apiClient = axios.create({

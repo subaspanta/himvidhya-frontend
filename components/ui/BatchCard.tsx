@@ -22,9 +22,10 @@ import {
 import { cn } from "@/shared/utils";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import toast from "react-hot-toast";
+import type { ClassCard } from "@/features/batches/types";
 
 interface BatchCardProps {
-  batch: Batch;
+  batch: ClassCard;
 }
 
 const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
@@ -44,7 +45,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const initials = batch.name
     .split(" ")
     .filter(Boolean)
-    .map((word) => word[0])
+    .map((word: string) => word[0])
     .slice(0, 2)
     .join("")
     .toUpperCase();

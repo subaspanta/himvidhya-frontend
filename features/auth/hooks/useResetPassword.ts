@@ -12,7 +12,7 @@ export const useResetPassword = () => {
   >({
     mutationFn: ({ email, otp, password }) =>
       resetPassword(email, otp, password),
-    onSuccess: (data) => {
+    onSuccess: () => {
       // Success logic handled in component
     },
     onError: (error) => {

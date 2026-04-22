@@ -16,6 +16,8 @@ export const Navbar: React.FC<NavbarBaseProps> = ({
   variant,
   navLinks: customLinks,
   className,
+  onLoginClick: onLoginClickProp,
+  onSignUpClick: onSignUpClickProp,
   onLogoutClick: onLogoutClickProp,
   onSettingsClick: onSettingsClickProp,
   onNotificationClick: onNotificationClickProp,
@@ -70,8 +72,10 @@ export const Navbar: React.FC<NavbarBaseProps> = ({
             isLoggedIn={isLoggedIn}
             variant={variant}
             userDropdownProps={userDropdownProps}
-            onLoginClick={() => setAuthQuery("login")}
-            onRegisterClick={() => setAuthQuery("register")}
+            onLoginClick={onLoginClickProp ?? (() => setAuthQuery("login"))}
+            onRegisterClick={
+              onSignUpClickProp ?? (() => setAuthQuery("register"))
+            }
           />
         ) : (
           <DashboardNavbarContent

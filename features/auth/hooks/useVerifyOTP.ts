@@ -10,8 +10,7 @@ export const useVerifyOTP = () => {
     VerifyOTPPayload
   >({
     mutationFn: ({ email, otp }) => verifyOTP(email, otp),
-    onSuccess: (data) => {
-      // Success logic handled in component
+    onSuccess: () => {
     },
     onError: (error) => {
       console.error(

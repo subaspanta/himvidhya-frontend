@@ -1,4 +1,4 @@
-import { Role } from "@/features/auth/types/rbac.types";
+import { Role } from "@/features/auth/types/domain.types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
