@@ -5,6 +5,7 @@ import { User } from "@/features/auth";
 import useCreateClass from "@/features/home/hooks/useCreateClass";
 import { ClassCard } from "@/features/batches";
 import { CreateClassForm } from "@/features/batches/components/dashboard/CreateClassForm";
+import { JoinClassForm } from "@/features/batches/components/dashboard/JoinClassForm";
 
 interface DashboardHeaderProps {
   profile: User;
@@ -15,13 +16,9 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   profile,
   onClassCreated,
 }) => {
-  const [classes, setClasses] = useState<ClassCard[]>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const {
-    mutate: createMutate,
-    isPending: isCreating,
-    error: createError,
-  } = useCreateClass();
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+  const { mutate: createMutate, isPending: isCreating } = useCreateClass();
 
   const handleCreateClass = (data: {
     name: string;
@@ -31,7 +28,6 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     createMutate(data, {
       onSuccess: (newClass) => {
         if (newClass) {
-          setClasses((prev) => [newClass, ...prev]);
           if (typeof onClassCreated === "function") onClassCreated(newClass);
         }
         setIsCreateModalOpen(false);
@@ -75,14 +71,17 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           </Button>
         </div>
       </div>
-
       <CreateClassForm
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onSubmit={handleCreateClass}
         isLoading={isCreating}
       />
-      {/* <JoinClassForm  /> */}
+      {/* {user.role === "student" && */}
+      <JoinClassForm
+        isOpen={isJoinModalOpen}
+        onClose={() => setIsJoinModalOpen(false)}
+      />
     </div>
   );
 };

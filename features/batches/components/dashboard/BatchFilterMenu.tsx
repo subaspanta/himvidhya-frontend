@@ -46,7 +46,7 @@ const BatchFilterMenu: React.FC<Props> = ({
         <DropdownMenuSeparator />
         <DropdownMenuCheckboxItem
           checked={showActive}
-          onCheckedChange={(_v: boolean) => {
+          onCheckedChange={() => {
             // make this behave like a radio: selecting Active shows only active
             setShowActive?.(true);
             setShowArchived?.(false);
@@ -56,7 +56,7 @@ const BatchFilterMenu: React.FC<Props> = ({
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           checked={showArchived}
-          onCheckedChange={(_v: boolean) => {
+          onCheckedChange={() => {
             // selecting Archived shows only archived
             setShowArchived?.(true);
             setShowActive?.(false);

@@ -1,64 +1,122 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AxiosError } from "axios";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import TextField from "@/components/ui/text-field";
 import { Modal } from "@/components/ui/modal";
+import { useJoinClass } from "@/features/home/hooks/useJoinClass";
+
+const joinClassSchema = z.object({
+  batchCode: z
+    .string()
+    .trim()
+    .min(6, "Batch code must be at least 6 characters.")
+    .max(10, "Batch code cannot exceed 10 characters.")
+    .regex(
+      /^[A-Za-z0-9]+$/,
+      "Batch code can only contain letters and numbers.",
+    ),
+});
+
+type JoinClassFormData = z.infer<typeof joinClassSchema>;
 
 interface JoinClassFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (batchCode: string) => void;
-  isLoading?: boolean;
 }
 
-export function JoinClassForm({
-  isOpen,
-  onClose,
-  onSubmit,
-  isLoading = false,
-}: JoinClassFormProps) {
-  const [batchCode, setBatchCode] = useState("");
+export function JoinClassForm({ isOpen, onClose }: JoinClassFormProps) {
+  const { mutateAsync: joinClass, isPending } = useJoinClass();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(batchCode);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+    setError,
+  } = useForm<JoinClassFormData>({
+    mode: "onChange",
+    resolver: zodResolver(joinClassSchema),
+    defaultValues: {
+      batchCode: "",
+    },
+  });
+
+  const isBusy = isPending || isSubmitting;
+
+  const submitJoinCode = async (data: JoinClassFormData) => {
+    try {
+      const normalizedCode = data.batchCode.trim().toUpperCase();
+      await joinClass(normalizedCode);
+
+      toast.success("Join request submitted. Waiting for teacher approval.");
+      reset();
+      onClose();
+    } catch (error) {
+      const message =
+        error instanceof AxiosError
+          ? (error.response?.data as { message?: string } | undefined)
+              ?.message || error.message
+          : "Unable to send join request. Please try again.";
+
+      setError("root", {
+        type: "server",
+        message,
+      });
+      toast.error(message);
+    }
   };
 
   const handleClose = () => {
-    setBatchCode("");
+    reset();
     onClose();
   };
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title="Join Class">
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit(submitJoinCode)} className="space-y-4">
         <div>
           <TextField
-            name="batchCode"
             label="Enter batch code"
             placeholder="e.g., ABC123XYZ"
-            value={batchCode}
-            onChange={(e) => setBatchCode(e.target.value)}
+            maxLength={10}
             required
-            disabled={isLoading}
+            disabled={isBusy}
+            error={errors.batchCode?.message}
+            autoCapitalize="characters"
+            autoCorrect="off"
+            {...register("batchCode", {
+              setValueAs: (value) =>
+                typeof value === "string"
+                  ? value.replace(/\s+/g, "").toUpperCase()
+                  : value,
+            })}
           />
           <p className="text-sm text-muted-foreground mt-2">
             Ask your CR or teacher for the code
           </p>
         </div>
 
+        {errors.root?.message && (
+          <p className="text-sm text-danger">{errors.root.message}</p>
+        )}
+
         <div className="flex gap-3 justify-end pt-4">
           <Button
             type="button"
             variant="outline"
             onClick={handleClose}
-            disabled={isLoading}
+            disabled={isBusy}
           >
             Cancel
           </Button>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Joining..." : "Join Now"}
+          <Button type="submit" disabled={isBusy || !!errors.batchCode}>
+            {isBusy ? "Joining..." : "Join Now"}
           </Button>
         </div>
       </form>

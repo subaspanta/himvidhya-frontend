@@ -1,36 +1,30 @@
 import { ClassCard, ClassDetails, JoinRequest } from "@/features/batches/types";
 import { apiClient } from "@/shared/api/axiosClient";
 import type { ApiResponse } from "@/shared/types";
-import { mapClassDto, mapClassListDto } from "./home.mapper";
+import { mapClassDto, mapClassListDto, mapJoinRequest } from "./home.mapper";
 
 export type CreateClassPayload = {
   name: string;
   subject: string;
-  description?: string;
 };
 
-type CreateClassResponseData = ApiResponse<{ class: unknown }>["data"];
-type EnrolledClassesResponseData = ApiResponse<{ classes: unknown[] }>["data"];
 type ClassDetailsResponseData = ApiResponse<{ class: ClassDetails }>["data"];
-type JoinRequestResponseData = ApiResponse<{
-  joinRequest: JoinRequest;
-}>["data"];
-type JoinRequestsResponseData = ApiResponse<{
-  requests: JoinRequest[];
-}>["data"];
-type JoinRequestsCountResponseData = ApiResponse<{ count: number }>["data"];
 
 export async function createClassApi(
   data: CreateClassPayload,
 ): Promise<ClassCard> {
   const response = await apiClient.post("/class", data);
-  const payload = response.data as CreateClassResponseData;
-  return mapClassDto(payload.class);
+  const payload = response.data as { class: unknown };
+  const mapped = mapClassDto(payload.class);
+  if (!mapped) {
+    throw new Error("Failed to parse created class data");
+  }
+  return mapped;
 }
 
 export async function getEnrolledClasses(): Promise<ClassCard[]> {
   const response = await apiClient.get("/class/my");
-  const payload = response.data as EnrolledClassesResponseData;
+  const payload = response.data as { classes: unknown[] };
   return mapClassListDto(payload.classes || []);
 }
 
@@ -43,19 +37,20 @@ export async function getClassDetails(id: string): Promise<ClassDetails> {
 // Now returns JoinRequest (pending) not ClassCard
 export async function joinClass(code: string): Promise<JoinRequest> {
   const response = await apiClient.post("/class/join", { code });
-  const payload = response.data as JoinRequestResponseData;
-  return payload.joinRequest;
+  const payload = response.data as { joinRequest: unknown };
+  return mapJoinRequest(payload.joinRequest);
 }
 
 export async function getJoinRequests(): Promise<JoinRequest[]> {
   const response = await apiClient.get("/class/requests");
-  const payload = response.data as JoinRequestsResponseData;
-  return payload.requests || [];
+  const payload = response.data as { requests: unknown[] };
+  const raw = payload.requests || [];
+  return raw.map(mapJoinRequest); // ✅ parse each through Zod
 }
 
 export async function getJoinRequestsCount(): Promise<number> {
   const response = await apiClient.get("/class/requests/count");
-  const payload = response.data as JoinRequestsCountResponseData;
+  const payload = response.data as { count: number };
   return payload.count ?? 0;
 }
 
@@ -65,14 +60,14 @@ export async function approveJoinRequest(
   const response = await apiClient.patch(
     `/class/requests/${requestId}/approve`,
   );
-  const payload = response.data as JoinRequestResponseData;
-  return payload.joinRequest;
+  const payload = response.data as { joinRequest: unknown };
+  return mapJoinRequest(payload.joinRequest);
 }
 
 export async function rejectJoinRequest(
   requestId: string,
 ): Promise<JoinRequest> {
   const response = await apiClient.patch(`/class/requests/${requestId}/reject`);
-  const payload = response.data as JoinRequestResponseData;
-  return payload.joinRequest;
+  const payload = response.data as { joinRequest: unknown };
+  return mapJoinRequest(payload.joinRequest);
 }

@@ -13,7 +13,7 @@ export const useForgetPassword = () => {
     ForgotPasswordPayload
   >({
     mutationFn: forgotPassword,
-    onSuccess: (data) => {
+    onSuccess: () => {
       // Success logic handled in component
     },
     onError: (error) => {

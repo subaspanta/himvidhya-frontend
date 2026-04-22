@@ -1,6 +1,5 @@
 // features/class/components/UpcomingDeadlines.tsx
 import { Button } from "@/components/ui/button";
-import { Calendar } from "lucide-react";
 
 interface Deadline {
   title: string;
@@ -18,7 +17,7 @@ export default function UpcomingDeadlines({ deadlines }: Props) {
       <div className="container mx-auto px-6 py-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-primary uppercase tracking-wide">
-            📌 Upcoming Deadlines
+             Upcoming Deadlines
           </h2>
           <Button variant="ghost" size="sm" className="text-xs">
             + Add Deadline

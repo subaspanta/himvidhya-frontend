@@ -14,7 +14,7 @@ export interface AuthModalsProps {
   onSuccess?: (userData?: User) => void;
 }
 export interface LoginFormProps {
-  onSuccess?: () => void;
+  onSuccess?: (userData?: User) => void;
   navigation: AuthNavigation;
 }
 export interface RegisterFormProps {

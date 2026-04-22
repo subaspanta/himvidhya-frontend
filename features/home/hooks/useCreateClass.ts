@@ -15,7 +15,7 @@ export const useCreateClass = () => {
         error?.response?.data || error.message,
       );
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       // ensure enrolled classes list is refreshed so new class appears
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.enrolledClasses });
     },

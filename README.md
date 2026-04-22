@@ -160,6 +160,40 @@ Sources: [client/features/auth/hooks](client/features/auth/hooks), [client/featu
 9. **Add frontend architecture docs.**  
    Replace stale chat-focused README with current module/data-flow docs.
 
+## 8) Fedora fresh setup and package health checks
+
+Use Node 24 from nvm to keep local and CI behavior consistent:
+
+```bash
+cd ..
+nvm use
+cd client
+```
+
+Clean reinstall:
+
+```bash
+rm -rf node_modules .next
+npm ci
+```
+
+Dependency and app health checks:
+
+```bash
+npm run health:deps
+npm run lint
+npm run typecheck
+npm run build
+```
+
+Run the app:
+
+```bash
+npm run dev
+```
+
+Note: this repo currently runs Next.js in webpack mode (`next dev --webpack`) to avoid a Turbopack permission panic seen on Fedora.
+
 ---
 
 ### Bottom line

@@ -1,25 +1,18 @@
 "use client";
 
 import { HeroSection } from "@/features/landing";
-import { AuthModals } from "./AuthModals";
-import type { AuthModal } from "../types/ui.types";
-import { useAuthNavigation } from "../hooks/useAuthNavigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-type Props = { mode: AuthModal };
+export const AuthPageShell = () => {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-export const AuthPageShell = ({ mode }: Props) => {
-  const { navigation } = useAuthNavigation("page");
-  const modalNavigation = {
-    toLogin: navigation.goToLogin,
-    toRegister: navigation.goToRegister,
-    toForgotPassword: navigation.goToForgotPassword,
-    close: navigation.close,
+  const openRegister = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("auth", "register");
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  return (
-    <>
-      <HeroSection onGetStartedClick={navigation.goToRegister} />
-      <AuthModals openModal={mode} navigation={modalNavigation} />
-    </>
-  );
+  return <HeroSection onGetStartedClick={openRegister} />;
 };
