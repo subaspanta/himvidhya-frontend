@@ -16,15 +16,16 @@ export const Navbar: React.FC<NavbarBaseProps> = ({
   variant,
   navLinks: customLinks,
   className,
-  onLoginClick: onLoginClickProp,
-  onSignUpClick: onSignUpClickProp,
+
   onLogoutClick: onLogoutClickProp,
   onSettingsClick: onSettingsClickProp,
   onNotificationClick: onNotificationClickProp,
+  onLoginClick: onLoginClickProp,
+  onSignUpClick: onSignUpClickProp,
 }) => {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, authChecked } = useAuthStore();
   const { mutate: logout } = useLogout();
   const theme = getNavbarTheme(variant ?? "dashboard");
   const searchParams = useSearchParams();
@@ -43,7 +44,7 @@ export const Navbar: React.FC<NavbarBaseProps> = ({
   const { defaultLogout, defaultSettings, defaultNotification } =
     createDefaultActions(router, logout);
 
-  const isLoggedIn = isAuthenticated;
+  const isLoggedIn = authChecked && isAuthenticated;
   const userDropdownProps: AuthenticatedProps | null = isLoggedIn
     ? {
         isLoggedIn: true,
@@ -72,10 +73,8 @@ export const Navbar: React.FC<NavbarBaseProps> = ({
             isLoggedIn={isLoggedIn}
             variant={variant}
             userDropdownProps={userDropdownProps}
-            onLoginClick={onLoginClickProp ?? (() => setAuthQuery("login"))}
-            onRegisterClick={
-              onSignUpClickProp ?? (() => setAuthQuery("register"))
-            }
+            onLoginClick={() => setAuthQuery("login")}
+            onRegisterClick={() => setAuthQuery("register")}
           />
         ) : (
           <DashboardNavbarContent

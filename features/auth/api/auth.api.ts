@@ -4,29 +4,25 @@ import type { User } from "../types/domain.types";
 import type {
   RegisterData,
   LoginCredentials,
-  AuthUserDTO,
-  CurrentUserDTO,
   ForgotPasswordPayload,
   ForgotPasswordResponse,
 } from "../types/api.types";
+import { AuthUserDTOSchema, CurrentUserDTOSchema } from "../types/api.schemas";
 import { mapAuthUserDTO, mapCurrentUserDTO } from "../types/auth.mapper";
+import { validateDTO } from "@/shared/api/validate";
 
 export const registerUser = async (data: RegisterData): Promise<User> => {
   const response = await apiClient.post("/auth/register", data);
-
-  const user = response.data.user as AuthUserDTO;
-
-  return mapAuthUserDTO(user);
+  const validDTO = validateDTO(AuthUserDTOSchema, response.data.user);
+  return mapAuthUserDTO(validDTO);
 };
 
 export const loginUser = async (
   credentials: LoginCredentials,
 ): Promise<User> => {
   const response = await apiClient.post("/auth/login", credentials);
-
-  const user = response.data.user as AuthUserDTO;
-
-  return mapAuthUserDTO(user);
+  const validDTO = validateDTO(AuthUserDTOSchema, response.data.user);
+  return mapAuthUserDTO(validDTO);
 };
 
 type ResponseWithMeta = {
@@ -69,26 +65,14 @@ export const resetPassword = async (
     otp,
     password,
   });
-
-  const user = response.data.user as AuthUserDTO;
-
-  return mapAuthUserDTO(user);
+  const validDTO = validateDTO(AuthUserDTOSchema, response.data.user);
+  return mapAuthUserDTO(validDTO);
 };
-
-// export const getProfile = async (): Promise<User> => {
-//   const response = await apiClient.get("/auth/me");
-
-//   const user = response.data;
-
-//   return mapUser(user);
-// };
 
 export const getCurrentUser = async (): Promise<User> => {
   const response = await apiClient.get("/auth/me");
-
-  const user = response.data as CurrentUserDTO;
-
-  return mapCurrentUserDTO(user);
+  const validDTO = validateDTO(CurrentUserDTOSchema, response.data);
+  return mapCurrentUserDTO(validDTO);
 };
 
 export const logoutUser = async (): Promise<void> => {

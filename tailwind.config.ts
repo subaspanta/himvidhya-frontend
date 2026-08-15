@@ -1,5 +1,10 @@
 import type { Config } from "tailwindcss";
 
+// NOT LOADED by the Tailwind build: v4 is CSS-first and this project's
+// globals.css has no `@config` directive pointing here. Real tokens live in
+// app/globals.css's `@theme inline` block. This file is still read by the
+// shadcn CLI (see components.json's tailwind.config field), which is the
+// only reason it remains in the repo.
 const config: Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",

@@ -11,7 +11,11 @@ type AuthSessionExpiredListener = (event: AuthSessionExpiredEvent) => void;
 
 const listeners = new Set<AuthSessionExpiredListener>();
 
-let emitted = false; // prevent multiple emissions
+let emitted = false; // prevent duplicate emissions for a single expiry burst
+
+export const resetAuthSessionExpiredEmitter = (): void => {
+  emitted = false;
+};
 
 const resolveRequestedPath = (): string | null => {
   if (typeof window === "undefined") return null;

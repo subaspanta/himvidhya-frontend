@@ -1,7 +1,10 @@
 "use client";
 
 import { PROTECTED_PREFIXES } from "@/config/constants";
-import { subscribeAuthSessionExpired } from "@/shared/api/authSessionEvents";
+import {
+  resetAuthSessionExpiredEmitter,
+  subscribeAuthSessionExpired,
+} from "@/shared/api/authSessionEvents";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useAuthStore } from "../store/auth.store";
@@ -34,9 +37,17 @@ export const AuthSessionBoundary = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const pathnameRef = useRef(pathname);
   const handledRef = useRef(false);
+
+  // Reset the handled flag when user is authenticated, so future session expirations can be caught.
+  useEffect(() => {
+    if (isAuthenticated) {
+      handledRef.current = false;
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     pathnameRef.current = pathname;
@@ -53,6 +64,7 @@ export const AuthSessionBoundary = () => {
       // clear client state here (NOT in transport)
       queryClient.clear();
       logout();
+      resetAuthSessionExpiredEmitter();
 
       if (!isProtectedPath(currentPath) || isAuthOpen) {
         return;
