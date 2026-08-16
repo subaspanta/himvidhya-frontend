@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import ToasterProvider from "@/providers/toaster-provider";
 import { AuthInitializer } from "@/features/auth/components/AuthInitializer";
 import { AuthSessionBoundary } from "@/features/auth/components/AuthSessionBoundary";
@@ -25,9 +26,13 @@ export default function RootLayout({
       <body>
         <RootProvider>
           <AuthInitializer />
-          <AuthSessionBoundary />
+          <Suspense fallback={null}>
+            <AuthSessionBoundary />
+          </Suspense>
           {children}
-          <AuthQueryModalHost />
+          <Suspense fallback={null}>
+            <AuthQueryModalHost />
+          </Suspense>
           <div id="modal-root"></div>
         </RootProvider>
         <ToasterProvider />

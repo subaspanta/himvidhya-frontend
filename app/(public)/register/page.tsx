@@ -1,13 +1,15 @@
 import { redirect } from "next/navigation";
 
 type RegisterPageProps = {
-  searchParams?: Record<string, string | string[] | undefined>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export default function RegisterPage({ searchParams }: RegisterPageProps) {
+export default async function RegisterPage({
+  searchParams,
+}: RegisterPageProps) {
   const params = new URLSearchParams();
 
-  for (const [key, value] of Object.entries(searchParams ?? {})) {
+  for (const [key, value] of Object.entries((await searchParams) ?? {})) {
     if (typeof value === "string") {
       params.set(key, value);
       continue;
