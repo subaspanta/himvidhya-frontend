@@ -86,7 +86,6 @@ export default function TeacherDashboardPage() {
                     unreadMessages: batch.unreadMessages,
                     status: batch.status,
                     owner: batch.owner,
-                    members: batch.members,
                   }}
                 />
               ))}

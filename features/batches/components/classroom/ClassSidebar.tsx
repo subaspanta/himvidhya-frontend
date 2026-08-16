@@ -14,7 +14,7 @@ export default function ClassSidebar({ classData }: Props) {
       <div className="bg-card border border-border rounded-lg p-6">
         <h3 className="text-lg font-semibold mb-4">Class Members</h3>
         <p className="text-2xl font-bold text-primary">
-          {classData.members.length}
+          {classData.membersCount}
         </p>
         <p className="text-xs text-muted-foreground">students enrolled</p>
         {/* Avatar group + View List button */}

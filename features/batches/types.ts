@@ -19,7 +19,6 @@ export interface ClassCard {
     role: string;
     avatar: string | null;
   };
-  members?: ClassMember[];
 }
 
 // Shape returned by GET /class/:id
@@ -44,6 +43,8 @@ export interface ClassDetails {
   updatedAt: string;
 }
 
+// ClassMember is student-only — the class owner is never a member row
+// (ownership is read from ClassDetails.owner / ClassCard.owner).
 export interface ClassMember {
   user: {
     _id: string;
@@ -52,7 +53,6 @@ export interface ClassMember {
     role: string;
     avatar: string | null;
   };
-  role: "teacher" | "student";
   joinedAt: string;
 }
 
