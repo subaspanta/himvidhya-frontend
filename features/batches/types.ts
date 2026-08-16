@@ -2,11 +2,14 @@
  * Class/Batch Types — matches API response shapes exactly
  */
 
-// Shape returned by GET /class/my
+// Shape returned by GET /classes
 export interface ClassCard {
   id: string;
   name: string;
   subject: string;
+  description?: string;
+  college?: string;
+  semester?: string;
   code: string;
   studentCount: number;
   lastActivity: string | null;
@@ -21,7 +24,7 @@ export interface ClassCard {
   };
 }
 
-// Shape returned by GET /class/:id
+// Shape returned by GET /classes/:id
 export interface ClassDetails {
   _id: string;
   name: string;
@@ -56,7 +59,7 @@ export interface ClassMember {
   joinedAt: string;
 }
 
-// Shape returned by POST /class/join (now returns joinRequest not class)
+// Shape returned by POST /classes/join (now returns joinRequest not class)
 export interface JoinRequest {
   _id: string;
   class: string;
