@@ -1,6 +1,14 @@
 import { z } from "zod";
 import { ClassCard, JoinRequest } from "@/features/batches/types";
 
+const ClassOwnerDtoSchema = z.object({
+  _id: z.string(),
+  name: z.string(),
+  email: z.string(),
+  role: z.string(),
+  avatar: z.string().nullable(),
+});
+
 export const ClassDtoSchema = z
   .object({
     _id: z.string().optional(),
@@ -12,6 +20,7 @@ export const ClassDtoSchema = z
     lastActivity: z.string().nullable().optional(),
     unreadMessages: z.number().optional().default(0),
     status: z.enum(["active", "archived"]).optional().default("active"),
+    owner: ClassOwnerDtoSchema.optional(),
   })
   .passthrough();
 
@@ -72,6 +81,7 @@ export const mapClassDto = (item: unknown): ClassCard | null => {
     lastActivity: parsedItem.lastActivity ?? null,
     unreadMessages: parsedItem.unreadMessages ?? 0,
     status: parsedItem.status ?? "active",
+    owner: parsedItem.owner,
   };
 };
 export const mapClassListDto = (items: unknown[]): ClassCard[] => {

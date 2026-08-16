@@ -2,7 +2,7 @@
 
 import React from "react";
 import { AxiosError } from "axios";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import TextField from "@/components/ui/text-field";
 import PasswordField from "@/features/landing/components/PasswordField";
@@ -18,7 +18,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     setValue,
     formState: { errors },
     setError,
@@ -27,7 +27,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
     defaultValues: { role: "student" },
   });
 
-  const role = watch("role");
+  const role = useWatch({ control, name: "role" });
 
   const { mutate, isPending: isLoading, error: authError } = useRegister();
 
