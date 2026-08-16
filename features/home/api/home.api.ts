@@ -63,6 +63,20 @@ export async function restoreClassApi(classId: string): Promise<ClassCard> {
   return mapped;
 }
 
+export async function regenerateJoinCodeApi(
+  classId: string,
+): Promise<ClassCard> {
+  const response = await apiClient.post(
+    `/classes/${classId}/join-code/regenerate`,
+  );
+  const payload = response.data as { class: unknown };
+  const mapped = mapClassDto(payload.class);
+  if (!mapped) {
+    throw new Error("Failed to parse class data after code regeneration");
+  }
+  return mapped;
+}
+
 export async function getEnrolledClasses(): Promise<ClassCard[]> {
   const response = await apiClient.get("/classes");
   const payload = response.data as { classes: unknown[] };

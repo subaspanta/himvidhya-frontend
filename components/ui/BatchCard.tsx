@@ -10,6 +10,7 @@ import {
   Edit,
   Archive,
   ArchiveRestore,
+  RefreshCw,
   ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ import { EditClassForm } from "@/features/batches/components/dashboard/EditClass
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useArchiveClass } from "@/features/home/hooks/useArchiveClass";
 import { useRestoreClass } from "@/features/home/hooks/useRestoreClass";
+import { useRegenerateJoinCode } from "@/features/home/hooks/useRegenerateJoinCode";
 
 interface BatchCardProps {
   batch: ClassCard;
@@ -50,9 +52,12 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isArchiveConfirmOpen, setIsArchiveConfirmOpen] = useState(false);
+  const [isRegenerateConfirmOpen, setIsRegenerateConfirmOpen] =
+    useState(false);
 
   const archiveClass = useArchiveClass();
   const restoreClass = useRestoreClass();
+  const regenerateJoinCode = useRegenerateJoinCode();
 
   const copyCodeToClipboard = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -96,6 +101,25 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
       onError: (error) => {
         toast.error(
           extractErrorMessage(error, "Unable to restore class."),
+        );
+      },
+    });
+  };
+
+  const openRegenerateConfirm = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsRegenerateConfirmOpen(true);
+  };
+
+  const confirmRegenerate = () => {
+    regenerateJoinCode.mutate(batch.id, {
+      onSuccess: (updated) => {
+        toast.success(`New join code: ${updated.code}`);
+        setIsRegenerateConfirmOpen(false);
+      },
+      onError: (error) => {
+        toast.error(
+          extractErrorMessage(error, "Unable to regenerate join code."),
         );
       },
     });
@@ -157,6 +181,12 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
                 <DropdownMenuItem onClick={openEdit}>
                   <Edit className="w-4 h-4 mr-2" />
                   Edit Batch
+                </DropdownMenuItem>
+              )}
+              {isOwner && batch.status === "active" && (
+                <DropdownMenuItem onClick={openRegenerateConfirm}>
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Regenerate Code
                 </DropdownMenuItem>
               )}
               {isOwner && batch.status === "active" && (
@@ -227,6 +257,34 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
             disabled={archiveClass.isPending}
           >
             {archiveClass.isPending ? "Archiving..." : "Archive"}
+          </Button>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={isRegenerateConfirmOpen}
+        onClose={() => setIsRegenerateConfirmOpen(false)}
+        title="Regenerate join code?"
+      >
+        <p className="text-sm text-muted-foreground mb-6">
+          The current code (
+          <code className="font-mono font-semibold">{batch.code}</code>)
+          will stop working immediately. Existing members are unaffected.
+        </p>
+        <div className="flex gap-3 justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setIsRegenerateConfirmOpen(false)}
+            disabled={regenerateJoinCode.isPending}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            onClick={confirmRegenerate}
+            disabled={regenerateJoinCode.isPending}
+          >
+            {regenerateJoinCode.isPending ? "Regenerating..." : "Regenerate"}
           </Button>
         </div>
       </Modal>

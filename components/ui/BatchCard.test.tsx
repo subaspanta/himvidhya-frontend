@@ -25,6 +25,14 @@ vi.mock("@/features/home/hooks/useRestoreClass", () => ({
   }),
 }));
 
+const regenerateMutate = vi.fn();
+vi.mock("@/features/home/hooks/useRegenerateJoinCode", () => ({
+  useRegenerateJoinCode: () => ({
+    mutate: regenerateMutate,
+    isPending: false,
+  }),
+}));
+
 vi.mock("@/features/home/hooks/useUpdateClass", () => ({
   useUpdateClass: () => ({
     mutateAsync: vi.fn(),
@@ -60,6 +68,7 @@ describe("BatchCard", () => {
     push.mockClear();
     archiveMutate.mockClear();
     restoreMutate.mockClear();
+    regenerateMutate.mockClear();
     mockUser = null;
   });
 
@@ -127,5 +136,37 @@ describe("BatchCard", () => {
 
     expect(restoreMutate).toHaveBeenCalledTimes(1);
     expect(restoreMutate).toHaveBeenCalledWith("class-1", expect.anything());
+  });
+
+  it("asks for confirmation before regenerating the join code", async () => {
+    mockUser = { id: "owner-1", role: "teacher" };
+    const user = userEvent.setup();
+    render(<BatchCard batch={ownerBatch} />);
+
+    await user.click(screen.getByRole("button", { name: "Batch options" }));
+    await user.click(screen.getByText("Regenerate Code"));
+
+    expect(regenerateMutate).not.toHaveBeenCalled();
+    expect(
+      screen.getByRole("heading", { name: "Regenerate join code?" }),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Regenerate" }));
+
+    expect(regenerateMutate).toHaveBeenCalledTimes(1);
+    expect(regenerateMutate).toHaveBeenCalledWith(
+      "class-1",
+      expect.anything(),
+    );
+  });
+
+  it("hides Regenerate Code for a non-owner", async () => {
+    mockUser = { id: "student-1", role: "student" };
+    const user = userEvent.setup();
+    render(<BatchCard batch={ownerBatch} />);
+
+    await user.click(screen.getByRole("button", { name: "Batch options" }));
+
+    expect(screen.queryByText("Regenerate Code")).not.toBeInTheDocument();
   });
 });
