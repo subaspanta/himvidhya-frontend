@@ -18,11 +18,16 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
     setError,
   } = useForm<RegisterFormData>({
     mode: "onChange",
+    defaultValues: { role: "student" },
   });
+
+  const role = watch("role");
 
   const { mutate, isPending: isLoading, error: authError } = useRegister();
 
@@ -32,6 +37,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         name: data.name,
         email: data.email,
         password: data.password,
+        role: data.role,
       },
       {
         onSuccess: () => {
@@ -89,6 +95,28 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
             required
             {...register("password")}
           />
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">
+              I am a
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                type="button"
+                variant={role === "student" ? "default" : "outline"}
+                onClick={() => setValue("role", "student")}
+              >
+                Student
+              </Button>
+              <Button
+                type="button"
+                variant={role === "teacher" ? "default" : "outline"}
+                onClick={() => setValue("role", "teacher")}
+              >
+                Teacher
+              </Button>
+            </div>
+          </div>
         </div>
 
         {authError && (
