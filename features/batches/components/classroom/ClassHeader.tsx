@@ -33,7 +33,7 @@ export default function ClassHeader({ classData }: Props) {
             <div>
               <h1 className="text-lg font-bold">{classData.name}</h1>
               <p className="text-xs text-muted-foreground">
-                {classData.creator.name} • {classData.subject}
+                {classData.owner.name} • {classData.subject}
               </p>
             </div>
           </div>

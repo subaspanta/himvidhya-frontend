@@ -46,7 +46,7 @@ export default function ClassSidebar({ classData }: Props) {
           </div>
           <div>
             <p className="text-muted-foreground">Instructor</p>
-            <p className="font-medium">{classData.creator.name}</p>
+            <p className="font-medium">{classData.owner.name}</p>
           </div>
           <div>
             <p className="text-muted-foreground">Created</p>

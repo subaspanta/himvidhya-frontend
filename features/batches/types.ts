@@ -9,13 +9,10 @@ export interface ClassCard {
   subject: string;
   code: string;
   studentCount: number;
-  maxStudents: number;
   lastActivity: string | null;
   unreadMessages: number;
-  attendanceRate: number;
-  nextDeadline: string | null;
   status: "active" | "archived";
-  creator?: {
+  owner?: {
     _id: string;
     name: string;
     email: string;
@@ -33,7 +30,7 @@ export interface ClassDetails {
   description?: string;
   joinCode: string;
   status: "active" | "archived";
-  creator: {
+  owner: {
     _id: string;
     name: string;
     email: string;
@@ -42,9 +39,6 @@ export interface ClassDetails {
   };
   members: ClassMember[];
   membersCount: number;
-  maxStudents: number;
-  attendanceRate: number;
-  nextDeadline: string | null;
   announcements?: Announcement[];
   createdAt: string;
   updatedAt: string;

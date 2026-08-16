@@ -9,11 +9,8 @@ export const ClassDtoSchema = z
     subject: z.string().optional().default(""),
     code: z.string().optional().default(""),
     studentCount: z.number().optional().default(0),
-    maxStudents: z.number().optional().default(0),
     lastActivity: z.string().nullable().optional(),
     unreadMessages: z.number().optional().default(0),
-    attendanceRate: z.number().optional().default(0),
-    nextDeadline: z.string().nullable().optional(),
     status: z.enum(["active", "archived"]).optional().default("active"),
   })
   .passthrough();
@@ -72,11 +69,8 @@ export const mapClassDto = (item: unknown): ClassCard | null => {
     subject: parsedItem.subject ?? "",
     code: parsedItem.code ?? "",
     studentCount: parsedItem.studentCount ?? 0,
-    maxStudents: parsedItem.maxStudents ?? 0,
     lastActivity: parsedItem.lastActivity ?? null,
     unreadMessages: parsedItem.unreadMessages ?? 0,
-    attendanceRate: parsedItem.attendanceRate ?? 0,
-    nextDeadline: parsedItem.nextDeadline ?? null,
     status: parsedItem.status ?? "active",
   };
 };
