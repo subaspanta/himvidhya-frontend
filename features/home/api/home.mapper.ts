@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ClassCard, JoinRequest } from "@/features/batches/types";
+import { ClassCard, ClassMember, JoinRequest } from "@/features/batches/types";
 
 const ClassOwnerDtoSchema = z.object({
   _id: z.string(),
@@ -122,4 +122,37 @@ export function mapJoinRequest(raw: unknown): JoinRequest {
     throw new Error("Invalid join request data received from server");
   }
   return result.data;
+}
+
+const ClassMemberSchema = z.object({
+  user: z.object({
+    _id: z.string(),
+    name: z.string(),
+    email: z.string(),
+    role: z.string(),
+    avatar: z.string().nullable(),
+  }),
+  joinedAt: z.string(),
+});
+
+// A roster silently missing students is worse than a visible error, so
+// this follows mapJoinRequest's throwing policy rather than mapClassDto's
+// drop-invalid-and-continue one.
+export function mapClassMember(raw: unknown): ClassMember {
+  const result = ClassMemberSchema.safeParse(raw);
+  if (!result.success) {
+    console.error(
+      "[mapper] ClassMember parse failed:",
+      result.error.flatten(),
+    );
+    throw new Error("Invalid class member data received from server");
+  }
+  return result.data;
+}
+
+export function mapClassMembersList(items: unknown[]): ClassMember[] {
+  if (!Array.isArray(items)) {
+    throw new Error("Invalid class members list received from server");
+  }
+  return items.map(mapClassMember);
 }

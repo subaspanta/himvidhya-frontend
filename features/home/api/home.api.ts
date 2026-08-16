@@ -1,7 +1,17 @@
-import { ClassCard, ClassDetails, JoinRequest } from "@/features/batches/types";
+import {
+  ClassCard,
+  ClassDetails,
+  ClassMember,
+  JoinRequest,
+} from "@/features/batches/types";
 import { apiClient } from "@/shared/api/axiosClient";
 import type { ApiResponse } from "@/shared/types";
-import { mapClassDto, mapClassListDto, mapJoinRequest } from "./home.mapper";
+import {
+  mapClassDto,
+  mapClassListDto,
+  mapClassMembersList,
+  mapJoinRequest,
+} from "./home.mapper";
 
 export type CreateClassPayload = {
   name: string;
@@ -81,6 +91,14 @@ export async function getEnrolledClasses(): Promise<ClassCard[]> {
   const response = await apiClient.get("/classes");
   const payload = response.data as { classes: unknown[] };
   return mapClassListDto(payload.classes || []);
+}
+
+export async function getClassMembers(
+  classId: string,
+): Promise<ClassMember[]> {
+  const response = await apiClient.get(`/classes/${classId}/members`);
+  const payload = response.data as { members: unknown[] };
+  return mapClassMembersList(payload.members || []);
 }
 
 export async function getClassDetails(id: string): Promise<ClassDetails> {

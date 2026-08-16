@@ -40,6 +40,14 @@ vi.mock("@/features/home/hooks/useUpdateClass", () => ({
   }),
 }));
 
+vi.mock("@/features/home/hooks/useClassMembers", () => ({
+  useClassMembers: () => ({
+    data: [],
+    isLoading: false,
+    isError: false,
+  }),
+}));
+
 let mockUser: { id: string; role: string } | null = null;
 vi.mock("@/features/auth/store/auth.store", () => ({
   useAuthStore: () => ({ user: mockUser }),
@@ -168,5 +176,15 @@ describe("BatchCard", () => {
     await user.click(screen.getByRole("button", { name: "Batch options" }));
 
     expect(screen.queryByText("Regenerate Code")).not.toBeInTheDocument();
+  });
+
+  it("shows View Members for both the owner and a non-owner member", async () => {
+    mockUser = { id: "student-1", role: "student" };
+    const user = userEvent.setup();
+    render(<BatchCard batch={ownerBatch} />);
+
+    await user.click(screen.getByRole("button", { name: "Batch options" }));
+
+    expect(screen.getByText("View Members")).toBeInTheDocument();
   });
 });

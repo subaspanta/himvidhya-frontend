@@ -26,6 +26,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import toast from "react-hot-toast";
 import type { ClassCard } from "@/features/batches/types";
 import { EditClassForm } from "@/features/batches/components/dashboard/EditClassForm";
+import { ClassMembersModal } from "@/features/batches/components/dashboard/ClassMembersModal";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useArchiveClass } from "@/features/home/hooks/useArchiveClass";
 import { useRestoreClass } from "@/features/home/hooks/useRestoreClass";
@@ -51,6 +52,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const isOwner = !!user && batch.owner?._id === user.id;
 
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isMembersOpen, setIsMembersOpen] = useState(false);
   const [isArchiveConfirmOpen, setIsArchiveConfirmOpen] = useState(false);
   const [isRegenerateConfirmOpen, setIsRegenerateConfirmOpen] =
     useState(false);
@@ -73,6 +75,11 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const openEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsEditOpen(true);
+  };
+
+  const openMembers = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsMembersOpen(true);
   };
 
   const openArchiveConfirm = (e: React.MouseEvent) => {
@@ -177,6 +184,10 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
                 <Copy className="w-4 h-4 mr-2" />
                 Copy Code
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={openMembers}>
+                <Users className="w-4 h-4 mr-2" />
+                View Members
+              </DropdownMenuItem>
               {isOwner && (
                 <DropdownMenuItem onClick={openEdit}>
                   <Edit className="w-4 h-4 mr-2" />
@@ -231,6 +242,11 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
         isOpen={isEditOpen}
         onClose={() => setIsEditOpen(false)}
         classData={batch}
+      />
+      <ClassMembersModal
+        isOpen={isMembersOpen}
+        onClose={() => setIsMembersOpen(false)}
+        batch={batch}
       />
       <Modal
         isOpen={isArchiveConfirmOpen}
