@@ -2,13 +2,14 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 import {
   MoreHorizontal,
   Copy,
   Users,
   Edit,
   Archive,
-  Delete,
+  ArchiveRestore,
   ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,22 +17,42 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Modal } from "@/components/ui/modal";
 import { cn } from "@/shared/utils";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import toast from "react-hot-toast";
 import type { ClassCard } from "@/features/batches/types";
 import { EditClassForm } from "@/features/batches/components/dashboard/EditClassForm";
+import { useAuthStore } from "@/features/auth/store/auth.store";
+import { useArchiveClass } from "@/features/home/hooks/useArchiveClass";
+import { useRestoreClass } from "@/features/home/hooks/useRestoreClass";
 
 interface BatchCardProps {
   batch: ClassCard;
 }
 
+function extractErrorMessage(error: unknown, fallback: string): string {
+  if (error instanceof AxiosError) {
+    return (
+      (error.response?.data as { message?: string } | undefined)?.message ||
+      error.message
+    );
+  }
+  return fallback;
+}
+
 const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const router = useRouter();
+  const { user } = useAuthStore();
+  const isOwner = !!user && batch.owner?._id === user.id;
+
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isArchiveConfirmOpen, setIsArchiveConfirmOpen] = useState(false);
+
+  const archiveClass = useArchiveClass();
+  const restoreClass = useRestoreClass();
 
   const copyCodeToClipboard = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -47,6 +68,37 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const openEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsEditOpen(true);
+  };
+
+  const openArchiveConfirm = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsArchiveConfirmOpen(true);
+  };
+
+  const confirmArchive = () => {
+    archiveClass.mutate(batch.id, {
+      onSuccess: () => {
+        toast.success("Class archived");
+        setIsArchiveConfirmOpen(false);
+      },
+      onError: (error) => {
+        toast.error(
+          extractErrorMessage(error, "Unable to archive class."),
+        );
+      },
+    });
+  };
+
+  const handleRestore = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    restoreClass.mutate(batch.id, {
+      onSuccess: () => toast.success("Class restored"),
+      onError: (error) => {
+        toast.error(
+          extractErrorMessage(error, "Unable to restore class."),
+        );
+      },
+    });
   };
 
   const initials = batch.name
@@ -101,19 +153,24 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
                 <Copy className="w-4 h-4 mr-2" />
                 Copy Code
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={openEdit}>
-                <Edit className="w-4 h-4 mr-2" />
-                Edit Batch
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Archive className="w-4 h-4 mr-2" />
-                Archive Batch
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">
-                <Delete className="w-4 h-4 mr-2" />
-                Delete Batch
-              </DropdownMenuItem>
+              {isOwner && (
+                <DropdownMenuItem onClick={openEdit}>
+                  <Edit className="w-4 h-4 mr-2" />
+                  Edit Batch
+                </DropdownMenuItem>
+              )}
+              {isOwner && batch.status === "active" && (
+                <DropdownMenuItem onClick={openArchiveConfirm}>
+                  <Archive className="w-4 h-4 mr-2" />
+                  Archive Batch
+                </DropdownMenuItem>
+              )}
+              {isOwner && batch.status === "archived" && (
+                <DropdownMenuItem onClick={handleRestore}>
+                  <ArchiveRestore className="w-4 h-4 mr-2" />
+                  Restore Batch
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -145,6 +202,34 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
         onClose={() => setIsEditOpen(false)}
         classData={batch}
       />
+      <Modal
+        isOpen={isArchiveConfirmOpen}
+        onClose={() => setIsArchiveConfirmOpen(false)}
+        title="Archive this class?"
+      >
+        <p className="text-sm text-muted-foreground mb-6">
+          Existing members keep read access, but no new posts, comments or
+          join requests can be added until you restore it.
+        </p>
+        <div className="flex gap-3 justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setIsArchiveConfirmOpen(false)}
+            disabled={archiveClass.isPending}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={confirmArchive}
+            disabled={archiveClass.isPending}
+          >
+            {archiveClass.isPending ? "Archiving..." : "Archive"}
+          </Button>
+        </div>
+      </Modal>
     </Card>
   );
 };

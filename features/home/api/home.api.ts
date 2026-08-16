@@ -43,6 +43,26 @@ export async function updateClassApi(
   return mapped;
 }
 
+export async function archiveClassApi(classId: string): Promise<ClassCard> {
+  const response = await apiClient.post(`/classes/${classId}/archive`);
+  const payload = response.data as { class: unknown };
+  const mapped = mapClassDto(payload.class);
+  if (!mapped) {
+    throw new Error("Failed to parse archived class data");
+  }
+  return mapped;
+}
+
+export async function restoreClassApi(classId: string): Promise<ClassCard> {
+  const response = await apiClient.post(`/classes/${classId}/restore`);
+  const payload = response.data as { class: unknown };
+  const mapped = mapClassDto(payload.class);
+  if (!mapped) {
+    throw new Error("Failed to parse restored class data");
+  }
+  return mapped;
+}
+
 export async function getEnrolledClasses(): Promise<ClassCard[]> {
   const response = await apiClient.get("/classes");
   const payload = response.data as { classes: unknown[] };
