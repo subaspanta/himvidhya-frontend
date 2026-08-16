@@ -12,7 +12,7 @@ export const ClassCardItem: React.FC<ClassCardItemProps> = ({
   onClick,
   variant = "grid",
 }) => {
-  const { creator, name, subject, members } = classData;
+  const { owner, name, subject, members } = classData;
 
   return (
     <div
@@ -27,7 +27,7 @@ export const ClassCardItem: React.FC<ClassCardItemProps> = ({
         {/* Avatar */}
         <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
           <span className="text-xs font-bold text-primary">
-            {creator?.avatar || name.substring(0, 2).toUpperCase()}
+            {owner?.avatar || name.substring(0, 2).toUpperCase()}
           </span>
         </div>
 
@@ -43,7 +43,7 @@ export const ClassCardItem: React.FC<ClassCardItemProps> = ({
               {subject}
             </span>
             <span className="text-xs text-muted-foreground">
-              {creator?.name}
+              {owner?.name}
             </span>
           </div>
         </div>

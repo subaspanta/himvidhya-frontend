@@ -13,13 +13,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 type Props = {
-  sortBy: "newest" | "name" | "attendance";
-  setSortBy: (v: "newest" | "name" | "attendance") => void;
+  sortBy: "newest" | "name";
+  setSortBy: (v: "newest" | "name") => void;
   className?: string;
 };
 
 const labelFor = (key: Props["sortBy"]) =>
-  key === "newest" ? "Newest" : key === "name" ? "Name (A-Z)" : "Attendance";
+  key === "newest" ? "Newest" : "Name (A-Z)";
 
 const SortMenu: React.FC<Props> = ({ sortBy, setSortBy, className }) => {
   return (
@@ -48,12 +48,6 @@ const SortMenu: React.FC<Props> = ({ sortBy, setSortBy, className }) => {
         <DropdownMenuItem onClick={() => setSortBy("name")}>
           <span>Name (A-Z)</span>
           {sortBy === "name" && <Check className="ml-2 h-4 w-4 text-primary" />}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setSortBy("attendance")}>
-          <span>Attendance (Low-High)</span>
-          {sortBy === "attendance" && (
-            <Check className="ml-2 h-4 w-4 text-primary" />
-          )}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -27,9 +27,7 @@ export type NavbarBaseProps = {
   onLogoutClick?: () => void;
   onSettingsClick?: () => void;
   onNotificationClick?: () => void;
-  onLoginClick?: () => void;
   onRegisterClick?: () => void;
-  onSignUpClick?: () => void;
 };
 
 export type NavbarProps = NavbarBaseProps;

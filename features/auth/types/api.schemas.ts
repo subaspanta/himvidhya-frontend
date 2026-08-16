@@ -1,7 +1,6 @@
 import { z } from "zod";
 
-// Role is presumably an enum or string literal, we should match it
-const RoleSchema = z.enum(["admin", "teacher", "student"]); // Adjust this based on actual roles
+const RoleSchema = z.enum(["teacher", "student"]);
 
 export const AuthUserDTOSchema = z.object({
   _id: z.string(),

@@ -16,9 +16,7 @@ export default function TeacherDashboardPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showActive, setShowActive] = useState(true);
   const [showArchived, setShowArchived] = useState(false);
-  const [sortBy, setSortBy] = useState<"newest" | "name" | "attendance">(
-    "newest",
-  );
+  const [sortBy, setSortBy] = useState<"newest" | "name">("newest");
   const { data: enrolledClasses = [], isLoading } = useGetEnrolledClasses();
 
   let filteredBatches: ClassCard[] = (enrolledClasses || [])
@@ -27,7 +25,7 @@ export default function TeacherDashboardPage() {
       (cls: ClassCard) =>
         cls.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         cls.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        cls.creator?.name?.toLowerCase().includes(searchQuery.toLowerCase()),
+        cls.owner?.name?.toLowerCase().includes(searchQuery.toLowerCase()),
     )
     .filter((cls: ClassCard): boolean => {
       if (showActive) return cls.status === "active";
@@ -38,12 +36,6 @@ export default function TeacherDashboardPage() {
   filteredBatches = filteredBatches.sort((a: ClassCard, b: ClassCard) => {
       if (sortBy === "name") {
         return (a.name || "").localeCompare(b.name || "");
-      }
-
-      if (sortBy === "attendance") {
-        const aAtt = a.attendanceRate ?? 0;
-        const bAtt = b.attendanceRate ?? 0;
-        return aAtt - bAtt;
       }
 
       const aId = a.id || "";
@@ -90,13 +82,10 @@ export default function TeacherDashboardPage() {
                     subject: batch.subject,
                     code: batch.code,
                     studentCount: batch.studentCount,
-                    maxStudents: batch.maxStudents,
                     lastActivity: batch.lastActivity,
                     unreadMessages: batch.unreadMessages,
-                    attendanceRate: batch.attendanceRate,
-                    nextDeadline: batch.nextDeadline,
                     status: batch.status,
-                    creator: batch.creator,
+                    owner: batch.owner,
                     members: batch.members,
                   }}
                 />

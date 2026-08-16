@@ -1,7 +1,7 @@
 export class ContractError extends Error {
-  public data: any;
+  public data: unknown;
 
-  constructor(message: string, data?: any) {
+  constructor(message: string, data?: unknown) {
     super(message);
     this.name = "ContractError";
     this.data = data;
