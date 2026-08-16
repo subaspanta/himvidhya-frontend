@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   MoreHorizontal,
@@ -23,6 +23,7 @@ import { cn } from "@/shared/utils";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import toast from "react-hot-toast";
 import type { ClassCard } from "@/features/batches/types";
+import { EditClassForm } from "@/features/batches/components/dashboard/EditClassForm";
 
 interface BatchCardProps {
   batch: ClassCard;
@@ -30,6 +31,7 @@ interface BatchCardProps {
 
 const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const router = useRouter();
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const copyCodeToClipboard = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -40,6 +42,11 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const openBatch = (e: React.MouseEvent) => {
     e.stopPropagation();
     router.push(`/class/${batch.id}`);
+  };
+
+  const openEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsEditOpen(true);
   };
 
   const initials = batch.name
@@ -94,7 +101,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
                 <Copy className="w-4 h-4 mr-2" />
                 Copy Code
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={openEdit}>
                 <Edit className="w-4 h-4 mr-2" />
                 Edit Batch
               </DropdownMenuItem>
@@ -133,6 +140,11 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
           </button>
         </div>
       </CardContent>
+      <EditClassForm
+        isOpen={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+        classData={batch}
+      />
     </Card>
   );
 };

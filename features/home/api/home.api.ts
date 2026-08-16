@@ -8,6 +8,14 @@ export type CreateClassPayload = {
   subject: string;
 };
 
+export type UpdateClassPayload = Partial<{
+  name: string;
+  description: string;
+  subject: string;
+  college: string;
+  semester: string;
+}>;
+
 type ClassDetailsResponseData = ApiResponse<{ class: ClassDetails }>["data"];
 
 export async function createClassApi(
@@ -18,6 +26,19 @@ export async function createClassApi(
   const mapped = mapClassDto(payload.class);
   if (!mapped) {
     throw new Error("Failed to parse created class data");
+  }
+  return mapped;
+}
+
+export async function updateClassApi(
+  classId: string,
+  data: UpdateClassPayload,
+): Promise<ClassCard> {
+  const response = await apiClient.patch(`/classes/${classId}`, data);
+  const payload = response.data as { class: unknown };
+  const mapped = mapClassDto(payload.class);
+  if (!mapped) {
+    throw new Error("Failed to parse updated class data");
   }
   return mapped;
 }
