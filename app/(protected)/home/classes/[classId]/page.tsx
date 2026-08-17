@@ -1,4 +1,4 @@
-import ClassFeedPage from "@/features/posts/pages/ClassFeedPage";
+import { ClassFeedPage } from "@/features/posts/pages/ClassFeedPage";
 
 export default async function ClassFeedRoute({
   params,

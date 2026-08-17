@@ -56,5 +56,3 @@ export function ClassFeedPage({ classId }: ClassFeedPageProps) {
     </div>
   );
 }
-
-export default ClassFeedPage;

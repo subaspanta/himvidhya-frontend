@@ -107,5 +107,3 @@ export function CreatePostForm({ classId }: CreatePostFormProps) {
     </Card>
   );
 }
-
-export default CreatePostForm;

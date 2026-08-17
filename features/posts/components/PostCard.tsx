@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import type { Post, PostAuthor } from "../types";
+import type { Post } from "../types";
 
 interface PostCardProps {
   post: Post;
@@ -13,7 +13,7 @@ interface PostCardProps {
 
 function authorName(authorId: Post["authorId"]): string | null {
   if (typeof authorId === "string") return null;
-  return (authorId as PostAuthor).name;
+  return authorId.name;
 }
 
 export function PostCard({ post, isOwner, onPin, onUnpin }: PostCardProps) {
@@ -70,5 +70,3 @@ export function PostCard({ post, isOwner, onPin, onUnpin }: PostCardProps) {
     </Card>
   );
 }
-
-export default PostCard;

@@ -98,5 +98,3 @@ export function PostFeed({ classId, isOwner }: PostFeedProps) {
     </div>
   );
 }
-
-export default PostFeed;
