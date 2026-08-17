@@ -18,5 +18,5 @@ export const mapCurrentUserDTO = (dto: CurrentUserDTO): User => ({
   role: dto.role,
   avatar: dto.avatar,
   isVerified: dto.meta.isVerified,
-  isActive: true,
+  isActive: dto.isActive,
 });

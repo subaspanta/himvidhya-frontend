@@ -20,6 +20,7 @@ export const CurrentUserDTOSchema = z.object({
   email: z.string().email(),
   avatar: z.string().nullable(),
   role: RoleSchema,
+  isActive: z.boolean(),
   meta: z.object({
     isVerified: z.boolean(),
   }),
