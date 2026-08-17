@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { AxiosError } from "axios";
 import { Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { Spinner } from "@/shared/loading/Spinner";
+import { extractErrorMessage } from "@/shared/utils";
 import { useClassMembers } from "@/features/home/hooks/useClassMembers";
 import { useRemoveClassMember } from "@/features/home/hooks/useRemoveClassMember";
 import type { ClassCard } from "../../types";
@@ -16,16 +16,6 @@ interface ClassMembersModalProps {
   onClose: () => void;
   batch: ClassCard;
   isOwner: boolean;
-}
-
-function extractErrorMessage(error: unknown, fallback: string): string {
-  if (error instanceof AxiosError) {
-    return (
-      (error.response?.data as { message?: string } | undefined)?.message ||
-      error.message
-    );
-  }
-  return fallback;
 }
 
 export function ClassMembersModal({

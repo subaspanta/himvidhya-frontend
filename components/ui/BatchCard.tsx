@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { AxiosError } from "axios";
 import {
   MoreHorizontal,
   Copy,
@@ -22,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Modal } from "@/components/ui/modal";
-import { cn } from "@/shared/utils";
+import { cn, extractErrorMessage } from "@/shared/utils";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import toast from "react-hot-toast";
 import type { ClassCard } from "@/features/batches/types";
@@ -36,16 +35,6 @@ import { useLeaveClass } from "@/features/home/hooks/useLeaveClass";
 
 interface BatchCardProps {
   batch: ClassCard;
-}
-
-function extractErrorMessage(error: unknown, fallback: string): string {
-  if (error instanceof AxiosError) {
-    return (
-      (error.response?.data as { message?: string } | undefined)?.message ||
-      error.message
-    );
-  }
-  return fallback;
 }
 
 const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
