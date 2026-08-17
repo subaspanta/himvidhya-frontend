@@ -91,6 +91,13 @@ export async function leaveClassApi(classId: string): Promise<void> {
   await apiClient.delete(`/classes/${classId}/members/me`);
 }
 
+export async function removeClassMemberApi(
+  classId: string,
+  userId: string,
+): Promise<void> {
+  await apiClient.delete(`/classes/${classId}/members/${userId}`);
+}
+
 export async function getEnrolledClasses(): Promise<ClassCard[]> {
   const response = await apiClient.get("/classes");
   const payload = response.data as { classes: unknown[] };

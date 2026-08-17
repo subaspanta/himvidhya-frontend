@@ -277,6 +277,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
         isOpen={isMembersOpen}
         onClose={() => setIsMembersOpen(false)}
         batch={batch}
+        isOwner={isOwner}
       />
       <Modal
         isOpen={isArchiveConfirmOpen}

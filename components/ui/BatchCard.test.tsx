@@ -56,6 +56,13 @@ vi.mock("@/features/home/hooks/useClassMembers", () => ({
   }),
 }));
 
+vi.mock("@/features/home/hooks/useRemoveClassMember", () => ({
+  useRemoveClassMember: () => ({
+    mutate: vi.fn(),
+    isPending: false,
+  }),
+}));
+
 let mockUser: { id: string; role: string } | null = null;
 vi.mock("@/features/auth/store/auth.store", () => ({
   useAuthStore: () => ({ user: mockUser }),
