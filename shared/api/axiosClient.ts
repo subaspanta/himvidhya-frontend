@@ -35,7 +35,10 @@ const processQueue = (error: Error | null) => {
 apiClient.interceptors.response.use(
   (response) => {
     const envelope = response?.data as
-      | (ApiResponse<unknown> & { timestamp?: string })
+      | (ApiResponse<unknown> & {
+          timestamp?: string;
+          meta?: Record<string, unknown>;
+        })
       | undefined;
 
     const payload = envelope?.data ?? response?.data;
@@ -43,6 +46,7 @@ apiClient.interceptors.response.use(
       success: envelope?.success,
       message: envelope?.message,
       timestamp: envelope?.timestamp,
+      ...envelope?.meta,
     };
 
     return { ...response, data: payload, meta };

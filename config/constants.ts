@@ -15,6 +15,9 @@ export const QUERY_KEYS = {
   // Join requests
   joinRequests: ["joinRequests"],
   joinRequestsCount: ["joinRequestsCount"],
+
+  // Posts
+  classPosts: (classId: string) => ["classPosts", classId],
 };
 
 export const PUBLIC_PATHS = new Set([
