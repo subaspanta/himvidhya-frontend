@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { ClassCard, ClassMember, JoinRequest } from "@/features/classes/types";
+import {
+  ClassCard,
+  ClassDetails,
+  ClassMember,
+  JoinRequest,
+} from "@/features/classes/types";
 
 const ClassOwnerDtoSchema = z.object({
   _id: z.string(),
@@ -11,19 +16,18 @@ const ClassOwnerDtoSchema = z.object({
 
 export const ClassDtoSchema = z
   .object({
-    _id: z.string().optional(),
-    id: z.string().optional(),
+    id: z.string(),
     name: z.string(),
     subject: z.string().optional().default(""),
     description: z.string().optional(),
     college: z.string().optional(),
     semester: z.string().optional(),
-    code: z.string().optional().default(""),
-    studentCount: z.number().optional().default(0),
-    lastActivity: z.string().nullable().optional(),
-    unreadMessages: z.number().optional().default(0),
-    status: z.enum(["active", "archived"]).optional().default("active"),
-    owner: ClassOwnerDtoSchema.optional(),
+    code: z.string(),
+    studentCount: z.number(),
+    lastActivity: z.string().nullable(),
+    status: z.enum(["active", "archived"]),
+    createdAt: z.string(),
+    owner: ClassOwnerDtoSchema,
   })
   .passthrough();
 
@@ -69,24 +73,18 @@ export const mapClassDto = (item: unknown): ClassCard | null => {
 
   const parsedItem = mapped.data;
 
-  const id = parsedItem._id || parsedItem.id;
-  if (!id) {
-    console.error("[mapper] ClassCard missing id field:", parsedItem);
-    return null;
-  }
-
   return {
-    id,
+    id: parsedItem.id,
     name: parsedItem.name,
     subject: parsedItem.subject ?? "",
     description: parsedItem.description,
     college: parsedItem.college,
     semester: parsedItem.semester,
-    code: parsedItem.code ?? "",
-    studentCount: parsedItem.studentCount ?? 0,
-    lastActivity: parsedItem.lastActivity ?? null,
-    unreadMessages: parsedItem.unreadMessages ?? 0,
-    status: parsedItem.status ?? "active",
+    code: parsedItem.code,
+    studentCount: parsedItem.studentCount,
+    lastActivity: parsedItem.lastActivity,
+    status: parsedItem.status,
+    createdAt: parsedItem.createdAt,
     owner: parsedItem.owner,
   };
 };
@@ -104,6 +102,42 @@ export const mapClassListDto = (items: unknown[]): ClassCard[] => {
 
   return valid;
 };
+
+const ClassDetailsDtoSchema = ClassDtoSchema.extend({
+  membersCount: z.number(),
+});
+
+// A class detail is a single, critical response (the whole page depends on
+// it), so this follows mapJoinRequest's throwing policy rather than
+// mapClassDto's drop-invalid-and-continue one.
+export function mapClassDetails(raw: unknown): ClassDetails {
+  const result = ClassDetailsDtoSchema.safeParse(raw);
+  if (!result.success) {
+    console.error(
+      "[mapper] ClassDetails parse failed:",
+      result.error.flatten(),
+    );
+    throw new Error("Invalid class details data received from server");
+  }
+
+  const parsed = result.data;
+
+  return {
+    id: parsed.id,
+    name: parsed.name,
+    subject: parsed.subject ?? "",
+    description: parsed.description,
+    college: parsed.college,
+    semester: parsed.semester,
+    code: parsed.code,
+    studentCount: parsed.studentCount,
+    lastActivity: parsed.lastActivity,
+    status: parsed.status,
+    createdAt: parsed.createdAt,
+    owner: parsed.owner,
+    membersCount: parsed.membersCount,
+  };
+}
 
 const JoinRequestSchema = z.object({
   _id: z.string(),

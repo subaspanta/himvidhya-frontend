@@ -2,7 +2,9 @@
  * Class/Batch Types — matches API response shapes exactly
  */
 
-// Shape returned by GET /classes
+// Shape returned by every class-returning endpoint: GET /classes and all
+// five class-mutation endpoints (create/update/archive/restore/regenerate
+// join code) — the server returns this same card DTO from all of them.
 export interface ClassCard {
   id: string;
   name: string;
@@ -13,9 +15,9 @@ export interface ClassCard {
   code: string;
   studentCount: number;
   lastActivity: string | null;
-  unreadMessages: number;
   status: "active" | "archived";
-  owner?: {
+  createdAt: string;
+  owner: {
     _id: string;
     name: string;
     email: string;
@@ -24,26 +26,11 @@ export interface ClassCard {
   };
 }
 
-// Shape returned by GET /classes/:id
-export interface ClassDetails {
-  _id: string;
-  name: string;
-  subject: string;
-  description?: string;
-  joinCode: string;
-  status: "active" | "archived";
-  owner: {
-    _id: string;
-    name: string;
-    email: string;
-    role: string;
-    avatar: string | null;
-  };
-  members: ClassMember[];
+// Shape returned by GET /classes/:id — the card DTO plus membersCount. The
+// roster itself lives at GET /classes/:classId/members (item 13); this
+// response carries only the count, not the full member list.
+export interface ClassDetails extends ClassCard {
   membersCount: number;
-  announcements?: Announcement[];
-  createdAt: string;
-  updatedAt: string;
 }
 
 // ClassMember is student-only — the class owner is never a member row
@@ -67,19 +54,5 @@ export interface JoinRequest {
   type: "request" | "invite";
   status: "pending" | "approved" | "rejected";
   rejectionCount: number;
-  createdAt: string;
-}
-
-export interface Announcement {
-  id: string; // Used by UI
-  _id?: string;
-  title: string;
-  content: string;
-  author: {
-    _id?: string;
-    id?: string;
-    name: string;
-    role: string;
-  };
   createdAt: string;
 }

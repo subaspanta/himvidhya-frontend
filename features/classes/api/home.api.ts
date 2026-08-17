@@ -5,8 +5,8 @@ import {
   JoinRequest,
 } from "@/features/classes/types";
 import { apiClient } from "@/shared/api/axiosClient";
-import type { ApiResponse } from "@/shared/types";
 import {
+  mapClassDetails,
   mapClassDto,
   mapClassListDto,
   mapClassMembersList,
@@ -25,8 +25,6 @@ export type UpdateClassPayload = Partial<{
   college: string;
   semester: string;
 }>;
-
-type ClassDetailsResponseData = ApiResponse<{ class: ClassDetails }>["data"];
 
 export async function createClassApi(
   data: CreateClassPayload,
@@ -114,8 +112,8 @@ export async function getClassMembers(
 
 export async function getClassDetails(id: string): Promise<ClassDetails> {
   const response = await apiClient.get(`/classes/${id}`);
-  const payload = response.data as ClassDetailsResponseData;
-  return payload.class; // We can map this later
+  const payload = response.data as { class: unknown };
+  return mapClassDetails(payload.class);
 }
 
 // Now returns JoinRequest (pending) not ClassCard

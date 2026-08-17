@@ -38,9 +38,9 @@ export default function TeacherDashboardPage() {
         return (a.name || "").localeCompare(b.name || "");
       }
 
-      const aId = a.id || "";
-      const bId = b.id || "";
-      return aId.localeCompare(bId) * -1;
+      return (
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
     });
 
   return (
@@ -83,8 +83,8 @@ export default function TeacherDashboardPage() {
                     code: batch.code,
                     studentCount: batch.studentCount,
                     lastActivity: batch.lastActivity,
-                    unreadMessages: batch.unreadMessages,
                     status: batch.status,
+                    createdAt: batch.createdAt,
                     owner: batch.owner,
                   }}
                 />

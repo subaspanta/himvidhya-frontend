@@ -25,8 +25,15 @@ const classData: ClassCard = {
   code: "ABC123",
   studentCount: 3,
   lastActivity: null,
-  unreadMessages: 0,
   status: "active",
+  createdAt: "2026-01-01T00:00:00.000Z",
+  owner: {
+    _id: "owner-1",
+    name: "Teacher One",
+    email: "teacher@example.com",
+    role: "teacher",
+    avatar: null,
+  },
 };
 
 describe("EditClassForm", () => {
