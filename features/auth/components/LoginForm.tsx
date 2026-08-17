@@ -4,7 +4,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import TextField from "@/components/ui/text-field";
-import PasswordField from "@/features/landing/components/PasswordField";
+import PasswordField from "@/components/ui/PasswordField";
 import toast from "react-hot-toast";
 import type { LoginFormData } from "../types/form.types";
 import type { LoginFormProps } from "../types/ui.types";

@@ -2,7 +2,7 @@ import React, { ForwardedRef, InputHTMLAttributes } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/shared/utils";
 
-function friendlyName(name?: string) {
+export function friendlyName(name?: string) {
   if (!name) return "";
   return name
     .trim()

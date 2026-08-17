@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import DashboardHeader from "@/components/layout/DashboardHeader";
-import BatchCard from "@/components/ui/BatchCard";
+import BatchCard from "@/features/classes/components/BatchCard";
 import { useGetEnrolledClasses } from "@/features/classes/hooks/useGetEnrolledClasses";
 import EmptyBatches from "@/components/common/EmptyBatches";
 import { Spinner } from "@/shared/loading/Spinner";
@@ -38,15 +38,22 @@ export default function TeacherDashboardPage() {
         return (a.name || "").localeCompare(b.name || "");
       }
 
-      const aId = a.id || "";
-      const bId = b.id || "";
-      return aId.localeCompare(bId) * -1;
+      return (
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
     });
 
   return (
     <div className="w-full text-foreground pb-8">
       <div className="w-full mx-auto">
-        {user && <DashboardHeader profile={user} />}
+        {user && (
+          <DashboardHeader
+            profile={user}
+            activeClassCount={
+              enrolledClasses.filter((cls) => cls.status === "active").length
+            }
+          />
+        )}
 
         <div className="w-full">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 ">
@@ -83,8 +90,8 @@ export default function TeacherDashboardPage() {
                     code: batch.code,
                     studentCount: batch.studentCount,
                     lastActivity: batch.lastActivity,
-                    unreadMessages: batch.unreadMessages,
                     status: batch.status,
+                    createdAt: batch.createdAt,
                     owner: batch.owner,
                   }}
                 />

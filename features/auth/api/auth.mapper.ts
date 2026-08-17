@@ -1,5 +1,5 @@
-import type { User } from "./domain.types";
-import type { AuthUserDTO, CurrentUserDTO } from "./api.types";
+import type { User } from "../types/domain.types";
+import type { AuthUserDTO, CurrentUserDTO } from "../types/api.types";
 
 export const mapAuthUserDTO = (dto: AuthUserDTO): User => ({
   id: dto._id,
@@ -18,5 +18,5 @@ export const mapCurrentUserDTO = (dto: CurrentUserDTO): User => ({
   role: dto.role,
   avatar: dto.avatar,
   isVerified: dto.meta.isVerified,
-  isActive: true,
+  isActive: dto.isActive,
 });

@@ -11,14 +11,8 @@ interface PostCardProps {
   onUnpin?: (postId: string) => void;
 }
 
-function authorName(authorId: Post["authorId"]): string | null {
-  if (typeof authorId === "string") return null;
-  return authorId.name;
-}
-
 export function PostCard({ post, isOwner, onPin, onUnpin }: PostCardProps) {
   const isDeleted = Boolean(post.deletedAt);
-  const author = authorName(post.authorId);
 
   return (
     <Card className="p-5">
@@ -54,9 +48,9 @@ export function PostCard({ post, isOwner, onPin, onUnpin }: PostCardProps) {
         )}
       </CardHeader>
 
-      {author && (
-        <p className="text-xs text-muted-foreground -mt-4">{author}</p>
-      )}
+      <p className="text-xs text-muted-foreground -mt-4">
+        {post.authorId.name}
+      </p>
 
       {isDeleted ? (
         <p className="text-sm text-muted-foreground italic">

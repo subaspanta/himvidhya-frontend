@@ -3,15 +3,17 @@ import {
   ClassDetails,
   ClassMember,
   JoinRequest,
+  TeacherJoinRequest,
 } from "@/features/classes/types";
 import { apiClient } from "@/shared/api/axiosClient";
-import type { ApiResponse } from "@/shared/types";
 import {
+  mapClassDetails,
   mapClassDto,
   mapClassListDto,
   mapClassMembersList,
   mapJoinRequest,
-} from "./home.mapper";
+  mapTeacherJoinRequestsList,
+} from "./classes.mapper";
 
 export type CreateClassPayload = {
   name: string;
@@ -25,8 +27,6 @@ export type UpdateClassPayload = Partial<{
   college: string;
   semester: string;
 }>;
-
-type ClassDetailsResponseData = ApiResponse<{ class: ClassDetails }>["data"];
 
 export async function createClassApi(
   data: CreateClassPayload,
@@ -114,8 +114,8 @@ export async function getClassMembers(
 
 export async function getClassDetails(id: string): Promise<ClassDetails> {
   const response = await apiClient.get(`/classes/${id}`);
-  const payload = response.data as ClassDetailsResponseData;
-  return payload.class; // We can map this later
+  const payload = response.data as { class: unknown };
+  return mapClassDetails(payload.class);
 }
 
 // Now returns JoinRequest (pending) not ClassCard
@@ -125,11 +125,10 @@ export async function joinClass(code: string): Promise<JoinRequest> {
   return mapJoinRequest(payload.joinRequest);
 }
 
-export async function getJoinRequests(): Promise<JoinRequest[]> {
+export async function getJoinRequests(): Promise<TeacherJoinRequest[]> {
   const response = await apiClient.get("/classes/requests");
   const payload = response.data as { requests: unknown[] };
-  const raw = payload.requests || [];
-  return raw.map(mapJoinRequest); // ✅ parse each through Zod
+  return mapTeacherJoinRequestsList(payload.requests || []);
 }
 
 export async function getJoinRequestsCount(): Promise<number> {

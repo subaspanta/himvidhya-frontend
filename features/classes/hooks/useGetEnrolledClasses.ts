@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import type { ClassCard } from "@/features/classes/types";
-import { getEnrolledClasses } from "../api/home.api";
+import { getEnrolledClasses } from "../api/classes.api";
 import { QUERY_KEYS } from "@/config/constants";
 
 export const useGetEnrolledClasses = (

@@ -2,131 +2,134 @@
 
 import React from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
+import toast from "react-hot-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Spinner } from "@/shared/loading/Spinner";
+import { extractErrorMessage } from "@/shared/utils";
+import { useAuthStore } from "@/features/auth/store/auth.store";
+import { useJoinRequests } from "@/features/classes/hooks/useJoinRequests";
+import { useJoinRequestsCount } from "@/features/classes/hooks/useJoinRequestsCount";
+import { useApproveJoinRequest } from "@/features/classes/hooks/useApproveJoinRequest";
+import { useRejectJoinRequest } from "@/features/classes/hooks/useRejectJoinRequest";
 
+// Join requests are teacher-only server-side (authorize({ roles: ["teacher"] })
+// on GET /classes/requests), so this widget renders nothing for a student —
+// there is no student-facing content for this sidebar today.
 export default function RightAside() {
+  const { user } = useAuthStore();
+  const isTeacher = user?.role === "teacher";
+
+  const {
+    data: requests = [],
+    isLoading,
+    isError,
+  } = useJoinRequests({ enabled: isTeacher });
+  const { data: count = 0 } = useJoinRequestsCount({ enabled: isTeacher });
+  const approve = useApproveJoinRequest();
+  const reject = useRejectJoinRequest();
+
+  if (!isTeacher) {
+    return null;
+  }
+
+  const handleApprove = (requestId: string) => {
+    approve.mutate(requestId, {
+      onError: (error) => {
+        toast.error(extractErrorMessage(error, "Unable to approve request."));
+      },
+    });
+  };
+
+  const handleReject = (requestId: string) => {
+    reject.mutate(requestId, {
+      onError: (error) => {
+        toast.error(extractErrorMessage(error, "Unable to reject request."));
+      },
+    });
+  };
+
   return (
     <aside className="w-full lg:w-[300px] shrink-0 flex flex-col gap-8 lg:sticky lg:top-8 lg:self-start">
-      {/* Upcoming Classes Widget */}
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-medium text-base text-foreground">
-            Upcoming Classes
-          </h3>
-          <a
-            href="#"
-            className="text-sm font-medium text-primary hover:underline cursor-pointer"
-          >
-            View Calendar
-          </a>
-        </div>
-
-        <div className="flex flex-col">
-          {[
-            {
-              title: "Advanced React & TS",
-              subtitle: "Performance Optimization",
-              time: "10:00 AM",
-            },
-            {
-              title: "UI Design Patterns",
-              subtitle: "Micro-Interactions",
-              time: "02:30 PM",
-            },
-            {
-              title: "Fullstack Systems",
-              subtitle: "Database Sharding",
-              time: "04:00 PM",
-            },
-          ].map((cls, idx) => (
-            <div
-              key={idx}
-              className="flex items-start gap-3 py-3 border-b border-border last:border-0"
-            >
-              <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-medium text-foreground truncate">
-                  {cls.title}
-                </h4>
-                <p className="text-xs text-muted-foreground truncate">
-                  {cls.subtitle}
-                </p>
-              </div>
-              <span className="text-xs font-medium text-primary mt-0.5 shrink-0">
-                {cls.time}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <button className="w-full mt-4 py-2 px-4 rounded-md border border-border text-sm font-medium hover:bg-muted transition-colors">
-          Show Full Schedule
-        </button>
-      </section>
-
-      {/* Join Requests Widget */}
       <section>
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-medium text-base text-foreground">
             Join Requests
           </h3>
-          <span className="text-xs font-medium bg-primary/10 text-primary py-1 px-2 rounded-full shrink-0">
-            2 New
-          </span>
+          {count > 0 && (
+            <span className="text-xs font-medium bg-primary/10 text-primary py-1 px-2 rounded-full shrink-0">
+              {count} New
+            </span>
+          )}
         </div>
 
-        <div className="flex flex-col gap-3">
-          {[
-            {
-              name: "Sarah Jenkins",
-              batch: "UI Design Patterns",
-              initial: "S",
-              avatarUrl: undefined,
-            },
-            {
-              name: "Marcus Chen",
-              batch: "Advanced React & TS",
-              initial: "M",
-              avatarUrl: undefined,
-            },
-          ].map((req, idx) => (
-            <div
-              key={idx}
-              className="flex items-center justify-between p-3 rounded-lg border border-border"
-            >
-              <div className="flex items-center gap-3 min-w-0">
-                <Avatar className="w-9 h-9 shrink-0">
-                  {req.avatarUrl ? (
-                    <AvatarImage src={req.avatarUrl} alt={req.name} />
-                  ) : (
-                    <AvatarFallback className="bg-primary/10 text-foreground font-medium text-sm">
-                      {req.initial}
-                    </AvatarFallback>
-                  )}
-                </Avatar>
-                <div className="min-w-0">
-                  <h4 className="text-sm font-medium text-foreground truncate">
-                    {req.name}
-                  </h4>
-                  <p className="text-xs text-muted-foreground truncate">
-                    {req.batch}
-                  </p>
+        {isLoading ? (
+          <Spinner size={20} />
+        ) : isError ? (
+          <p className="text-sm text-muted-foreground">
+            Unable to load requests.
+          </p>
+        ) : requests.length === 0 ? (
+          <p className="text-sm text-muted-foreground">
+            No pending requests.
+          </p>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {requests.map((req) => {
+              const isApproving =
+                approve.isPending && approve.variables === req._id;
+              const isRejecting =
+                reject.isPending && reject.variables === req._id;
+              const isBusy = isApproving || isRejecting;
+
+              return (
+                <div
+                  key={req._id}
+                  className="flex items-center justify-between p-3 rounded-lg border border-border"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Avatar className="w-9 h-9 shrink-0">
+                      {req.user.avatar ? (
+                        <AvatarImage src={req.user.avatar} alt={req.user.name} />
+                      ) : (
+                        <AvatarFallback className="bg-primary/10 text-foreground font-medium text-sm">
+                          {req.user.name.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      )}
+                    </Avatar>
+                    <div className="min-w-0">
+                      <h4 className="text-sm font-medium text-foreground truncate">
+                        {req.user.name}
+                      </h4>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {req.class.name}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-1.5 shrink-0 ml-2">
+                    <button
+                      type="button"
+                      onClick={() => handleReject(req._id)}
+                      disabled={isBusy}
+                      aria-label="Reject request"
+                      className="p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <XCircle className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleApprove(req._id)}
+                      disabled={isBusy}
+                      aria-label="Approve request"
+                      className="p-1.5 rounded-md text-primary bg-primary/10 hover:bg-primary/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <CheckCircle2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="flex gap-1.5 shrink-0 ml-2">
-                <button className="p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors">
-                  <XCircle className="w-4 h-4" />
-                </button>
-                <button className="p-1.5 rounded-md text-primary bg-primary/10 hover:bg-primary/20 transition-colors">
-                  <CheckCircle2 className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <button className="w-full mt-4 py-2 px-4 rounded-md bg-muted/50 text-foreground text-sm font-medium hover:bg-muted transition-colors">
-          Review All Requests
-        </button>
+              );
+            })}
+          </div>
+        )}
       </section>
     </aside>
   );

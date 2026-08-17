@@ -49,6 +49,7 @@ export type CurrentUserDTO = {
   email: string;
   avatar: string | null;
   role: Role;
+  isActive: boolean;
   meta: {
     isVerified: boolean;
   };

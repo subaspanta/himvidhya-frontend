@@ -18,7 +18,6 @@ export interface LoginFormProps {
   navigation: AuthNavigation;
 }
 export interface RegisterFormProps {
-  onSuccess?: () => void;
   navigation: AuthNavigation;
 }
 

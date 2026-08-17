@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { joinClass } from "../api/home.api";
+import { joinClass } from "../api/classes.api";
 import { JoinRequest } from "@/features/classes/types";
 
 export const useJoinClass = () => {

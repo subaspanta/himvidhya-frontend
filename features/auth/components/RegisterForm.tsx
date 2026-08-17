@@ -5,14 +5,13 @@ import { AxiosError } from "axios";
 import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import TextField from "@/components/ui/text-field";
-import PasswordField from "@/features/landing/components/PasswordField";
+import PasswordField from "@/components/ui/PasswordField";
 import toast from "react-hot-toast";
 import type { RegisterFormData } from "../types/form.types";
 import type { RegisterFormProps } from "../types/ui.types";
 import { useRegister } from "../hooks/useRegister";
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({
-  onSuccess,
   navigation,
 }) => {
   const {
@@ -43,7 +42,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         onSuccess: () => {
           toast.success("Registration successful! Please log in.");
           navigation.toLogin();
-          if (onSuccess) onSuccess();
         },
         onError: (error) => {
           setError("root", { message: "Registration failed" });

@@ -62,7 +62,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
 
   const openBatch = (e: React.MouseEvent) => {
     e.stopPropagation();
-    router.push(`/class/${batch.id}`);
+    router.push(`/home/classes/${batch.id}`);
   };
 
   const openEdit = (e: React.MouseEvent) => {

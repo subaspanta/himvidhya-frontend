@@ -14,7 +14,7 @@ const PostDtoSchema = z.object({
   title: z.string(),
   content: z.string(),
   classId: z.string(),
-  authorId: z.union([z.string(), PostAuthorDtoSchema]),
+  authorId: PostAuthorDtoSchema,
   isPinned: z.boolean(),
   deletedAt: z.string().nullable(),
   createdAt: z.string(),
@@ -23,7 +23,7 @@ const PostDtoSchema = z.object({
 
 const isDev = process.env.NODE_ENV !== "production";
 
-// Follows mapClassDto's drop-invalid-and-continue policy (home.mapper.ts):
+// Follows mapClassDto's drop-invalid-and-continue policy (classes.mapper.ts):
 // a malformed post in a feed page shouldn't blank the whole page.
 export const mapPostDto = (item: unknown): Post | null => {
   const result = PostDtoSchema.safeParse(item);

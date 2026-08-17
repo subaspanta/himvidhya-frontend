@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { leaveClassApi } from "../api/home.api";
+import { leaveClassApi } from "../api/classes.api";
 import { QUERY_KEYS } from "@/config/constants";
 
 export const useLeaveClass = () => {
