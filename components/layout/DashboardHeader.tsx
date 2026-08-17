@@ -3,20 +3,17 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { User } from "@/features/auth";
 import useCreateClass from "@/features/classes/hooks/useCreateClass";
-import { ClassCard } from "@/features/classes";
 import { CreateClassForm } from "@/features/classes/components/CreateClassForm";
 import { JoinClassForm } from "@/features/classes/components/JoinClassForm";
 
 interface DashboardHeaderProps {
   profile: User;
   activeClassCount: number;
-  onClassCreated?: (cls: ClassCard) => void;
 }
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   profile,
   activeClassCount,
-  onClassCreated,
 }) => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
@@ -28,10 +25,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     description: string;
   }) => {
     createMutate(data, {
-      onSuccess: (newClass) => {
-        if (newClass) {
-          if (typeof onClassCreated === "function") onClassCreated(newClass);
-        }
+      onSuccess: () => {
         setIsCreateModalOpen(false);
       },
       onError: (err) => {

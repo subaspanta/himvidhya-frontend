@@ -3,9 +3,11 @@ import { Suspense } from "react";
 import ToasterProvider from "@/providers/toaster-provider";
 import { AuthInitializer } from "@/features/auth/components/AuthInitializer";
 import { AuthSessionBoundary } from "@/features/auth/components/AuthSessionBoundary";
+import { AuthGate } from "@/features/auth/components/AuthGate";
 import "./globals.css";
 import RootProvider from "@/providers/root-provider";
 import { AuthQueryModalHost } from "@/features/auth/components/AuthQueryModalHost";
+import { PageLoader } from "@/shared/loading/PageLoader";
 
 export const metadata: Metadata = {
   title: "HimVidhya",
@@ -29,7 +31,9 @@ export default function RootLayout({
           <Suspense fallback={null}>
             <AuthSessionBoundary />
           </Suspense>
-          {children}
+          <Suspense fallback={<PageLoader />}>
+            <AuthGate>{children}</AuthGate>
+          </Suspense>
           <Suspense fallback={null}>
             <AuthQueryModalHost />
           </Suspense>

@@ -12,7 +12,6 @@ import type { RegisterFormProps } from "../types/ui.types";
 import { useRegister } from "../hooks/useRegister";
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({
-  onSuccess,
   navigation,
 }) => {
   const {
@@ -43,7 +42,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         onSuccess: () => {
           toast.success("Registration successful! Please log in.");
           navigation.toLogin();
-          if (onSuccess) onSuccess();
         },
         onError: (error) => {
           setError("root", { message: "Registration failed" });

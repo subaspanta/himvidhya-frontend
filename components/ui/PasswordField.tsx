@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ForwardedRef, InputHTMLAttributes, useState } from "react";
-import Icon from "@/components/icons";
+import { Eye, EyeSlash } from "@phosphor-icons/react";
 import { cn } from "@/shared/utils";
 import { friendlyName } from "./text-field";
 
@@ -68,11 +68,17 @@ const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
             )}
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            <Icon
-              name={showPassword ? "eyeOff" : "eye"}
-              size="md"
-              className="text-current bg-transparent rounded-md"
-            />
+            {showPassword ? (
+              <EyeSlash
+                size={20}
+                className="text-current bg-transparent rounded-md"
+              />
+            ) : (
+              <Eye
+                size={20}
+                className="text-current bg-transparent rounded-md"
+              />
+            )}
           </button>
         </div>
 
