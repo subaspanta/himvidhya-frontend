@@ -4,12 +4,12 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import TextField from "@/components/ui/text-field";
 import { Modal } from "@/components/ui/modal";
 import { useUpdateClass } from "@/features/classes/hooks/useUpdateClass";
+import { extractErrorMessage } from "@/shared/utils";
 import type { ClassCard } from "../types";
 
 const editClassSchema = z.object({
@@ -92,11 +92,10 @@ export function EditClassForm({
       toast.success("Class updated");
       onClose();
     } catch (error) {
-      const message =
-        error instanceof AxiosError
-          ? (error.response?.data as { message?: string } | undefined)
-              ?.message || error.message
-          : "Unable to update class. Please try again.";
+      const message = extractErrorMessage(
+        error,
+        "Unable to update class. Please try again.",
+      );
 
       setError("root", {
         type: "server",

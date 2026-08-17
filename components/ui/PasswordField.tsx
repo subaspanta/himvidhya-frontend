@@ -1,24 +1,9 @@
 "use client";
 
 import React, { ForwardedRef, InputHTMLAttributes, useState } from "react";
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
 import Icon from "@/components/icons";
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-
-function friendlyName(name?: string) {
-  if (!name) return "";
-  return name
-    .trim()
-    .replace("_id", "")
-    .replace(/[^\w]+/g, " ")
-    .split(" ")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
-    .join(" ");
-}
+import { cn } from "@/shared/utils";
+import { friendlyName } from "./text-field";
 
 type PasswordFieldProps = {
   label?: string;

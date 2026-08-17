@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import DashboardHeader from "@/components/layout/DashboardHeader";
-import BatchCard from "@/components/ui/BatchCard";
+import BatchCard from "@/features/classes/components/BatchCard";
 import { useGetEnrolledClasses } from "@/features/classes/hooks/useGetEnrolledClasses";
 import EmptyBatches from "@/components/common/EmptyBatches";
 import { Spinner } from "@/shared/loading/Spinner";
