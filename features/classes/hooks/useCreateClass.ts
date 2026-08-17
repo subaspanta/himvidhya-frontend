@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { createClassApi, type CreateClassPayload } from "../api/home.api";
+import { createClassApi, type CreateClassPayload } from "../api/classes.api";
 import { ClassCard } from "@/features/classes";
 import { QUERY_KEYS } from "@/config/constants";
 

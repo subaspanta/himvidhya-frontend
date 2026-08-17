@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { removeClassMemberApi } from "../api/home.api";
+import { removeClassMemberApi } from "../api/classes.api";
 import { QUERY_KEYS } from "@/config/constants";
 
 type RemoveClassMemberVariables = {

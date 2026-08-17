@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { regenerateJoinCodeApi } from "../api/home.api";
+import { regenerateJoinCodeApi } from "../api/classes.api";
 import { ClassCard } from "@/features/classes";
 import { QUERY_KEYS } from "@/config/constants";
 

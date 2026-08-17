@@ -11,7 +11,7 @@ import {
   mapClassListDto,
   mapClassMembersList,
   mapJoinRequest,
-} from "./home.mapper";
+} from "./classes.mapper";
 
 export type CreateClassPayload = {
   name: string;
