@@ -1,9 +1,20 @@
 import { Role } from "@/features/auth/types/domain.types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { AxiosError } from "axios";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function extractErrorMessage(error: unknown, fallback: string): string {
+  if (error instanceof AxiosError) {
+    return (
+      (error.response?.data as { message?: string } | undefined)?.message ||
+      error.message
+    );
+  }
+  return fallback;
 }
 
 export const hasRole = (userRole: Role, allowedUser?: Role[]) => {

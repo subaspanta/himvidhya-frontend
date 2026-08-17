@@ -10,6 +10,7 @@ export const QUERY_KEYS = {
   // Classes
   enrolledClasses: ["enrolledClasses"],
   classById: (id: string) => ["class", id],
+  classMembers: (id: string) => ["classMembers", id],
 
   // Join requests
   joinRequests: ["joinRequests"],

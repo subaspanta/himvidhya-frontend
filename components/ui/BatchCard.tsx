@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   MoreHorizontal,
@@ -8,7 +8,9 @@ import {
   Users,
   Edit,
   Archive,
-  Delete,
+  ArchiveRestore,
+  RefreshCw,
+  LogOut,
   ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,13 +18,20 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/shared/utils";
+import { Modal } from "@/components/ui/modal";
+import { cn, extractErrorMessage } from "@/shared/utils";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import toast from "react-hot-toast";
 import type { ClassCard } from "@/features/batches/types";
+import { EditClassForm } from "@/features/batches/components/dashboard/EditClassForm";
+import { ClassMembersModal } from "@/features/batches/components/dashboard/ClassMembersModal";
+import { useAuthStore } from "@/features/auth/store/auth.store";
+import { useArchiveClass } from "@/features/home/hooks/useArchiveClass";
+import { useRestoreClass } from "@/features/home/hooks/useRestoreClass";
+import { useRegenerateJoinCode } from "@/features/home/hooks/useRegenerateJoinCode";
+import { useLeaveClass } from "@/features/home/hooks/useLeaveClass";
 
 interface BatchCardProps {
   batch: ClassCard;
@@ -30,6 +39,20 @@ interface BatchCardProps {
 
 const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const router = useRouter();
+  const { user } = useAuthStore();
+  const isOwner = !!user && batch.owner?._id === user.id;
+
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isMembersOpen, setIsMembersOpen] = useState(false);
+  const [isArchiveConfirmOpen, setIsArchiveConfirmOpen] = useState(false);
+  const [isRegenerateConfirmOpen, setIsRegenerateConfirmOpen] =
+    useState(false);
+  const [isLeaveConfirmOpen, setIsLeaveConfirmOpen] = useState(false);
+
+  const archiveClass = useArchiveClass();
+  const restoreClass = useRestoreClass();
+  const regenerateJoinCode = useRegenerateJoinCode();
+  const leaveClass = useLeaveClass();
 
   const copyCodeToClipboard = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -40,6 +63,83 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const openBatch = (e: React.MouseEvent) => {
     e.stopPropagation();
     router.push(`/class/${batch.id}`);
+  };
+
+  const openEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsEditOpen(true);
+  };
+
+  const openMembers = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsMembersOpen(true);
+  };
+
+  const openArchiveConfirm = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsArchiveConfirmOpen(true);
+  };
+
+  const confirmArchive = () => {
+    archiveClass.mutate(batch.id, {
+      onSuccess: () => {
+        toast.success("Class archived");
+        setIsArchiveConfirmOpen(false);
+      },
+      onError: (error) => {
+        toast.error(
+          extractErrorMessage(error, "Unable to archive class."),
+        );
+      },
+    });
+  };
+
+  const handleRestore = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    restoreClass.mutate(batch.id, {
+      onSuccess: () => toast.success("Class restored"),
+      onError: (error) => {
+        toast.error(
+          extractErrorMessage(error, "Unable to restore class."),
+        );
+      },
+    });
+  };
+
+  const openRegenerateConfirm = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsRegenerateConfirmOpen(true);
+  };
+
+  const confirmRegenerate = () => {
+    regenerateJoinCode.mutate(batch.id, {
+      onSuccess: (updated) => {
+        toast.success(`New join code: ${updated.code}`);
+        setIsRegenerateConfirmOpen(false);
+      },
+      onError: (error) => {
+        toast.error(
+          extractErrorMessage(error, "Unable to regenerate join code."),
+        );
+      },
+    });
+  };
+
+  const openLeaveConfirm = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsLeaveConfirmOpen(true);
+  };
+
+  const confirmLeave = () => {
+    leaveClass.mutate(batch.id, {
+      onSuccess: () => {
+        toast.success("You left the class");
+        setIsLeaveConfirmOpen(false);
+      },
+      onError: (error) => {
+        toast.error(extractErrorMessage(error, "Unable to leave class."));
+      },
+    });
   };
 
   const initials = batch.name
@@ -94,19 +194,43 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
                 <Copy className="w-4 h-4 mr-2" />
                 Copy Code
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Edit className="w-4 h-4 mr-2" />
-                Edit Batch
+              <DropdownMenuItem onClick={openMembers}>
+                <Users className="w-4 h-4 mr-2" />
+                View Members
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Archive className="w-4 h-4 mr-2" />
-                Archive Batch
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">
-                <Delete className="w-4 h-4 mr-2" />
-                Delete Batch
-              </DropdownMenuItem>
+              {isOwner && (
+                <DropdownMenuItem onClick={openEdit}>
+                  <Edit className="w-4 h-4 mr-2" />
+                  Edit Batch
+                </DropdownMenuItem>
+              )}
+              {isOwner && batch.status === "active" && (
+                <DropdownMenuItem onClick={openRegenerateConfirm}>
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Regenerate Code
+                </DropdownMenuItem>
+              )}
+              {isOwner && batch.status === "active" && (
+                <DropdownMenuItem onClick={openArchiveConfirm}>
+                  <Archive className="w-4 h-4 mr-2" />
+                  Archive Batch
+                </DropdownMenuItem>
+              )}
+              {isOwner && batch.status === "archived" && (
+                <DropdownMenuItem onClick={handleRestore}>
+                  <ArchiveRestore className="w-4 h-4 mr-2" />
+                  Restore Batch
+                </DropdownMenuItem>
+              )}
+              {!isOwner && (
+                <DropdownMenuItem
+                  onClick={openLeaveConfirm}
+                  className="text-destructive focus:text-destructive focus:bg-destructive/10"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Leave Class
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -133,6 +257,100 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
           </button>
         </div>
       </CardContent>
+      <EditClassForm
+        isOpen={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+        classData={batch}
+      />
+      <ClassMembersModal
+        isOpen={isMembersOpen}
+        onClose={() => setIsMembersOpen(false)}
+        batch={batch}
+        isOwner={isOwner}
+      />
+      <Modal
+        isOpen={isArchiveConfirmOpen}
+        onClose={() => setIsArchiveConfirmOpen(false)}
+        title="Archive this class?"
+      >
+        <p className="text-sm text-muted-foreground mb-6">
+          Existing members keep read access, but no new posts, comments or
+          join requests can be added until you restore it.
+        </p>
+        <div className="flex gap-3 justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setIsArchiveConfirmOpen(false)}
+            disabled={archiveClass.isPending}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={confirmArchive}
+            disabled={archiveClass.isPending}
+          >
+            {archiveClass.isPending ? "Archiving..." : "Archive"}
+          </Button>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={isRegenerateConfirmOpen}
+        onClose={() => setIsRegenerateConfirmOpen(false)}
+        title="Regenerate join code?"
+      >
+        <p className="text-sm text-muted-foreground mb-6">
+          The current code (
+          <code className="font-mono font-semibold">{batch.code}</code>)
+          will stop working immediately. Existing members are unaffected.
+        </p>
+        <div className="flex gap-3 justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setIsRegenerateConfirmOpen(false)}
+            disabled={regenerateJoinCode.isPending}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            onClick={confirmRegenerate}
+            disabled={regenerateJoinCode.isPending}
+          >
+            {regenerateJoinCode.isPending ? "Regenerating..." : "Regenerate"}
+          </Button>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={isLeaveConfirmOpen}
+        onClose={() => setIsLeaveConfirmOpen(false)}
+        title="Leave this class?"
+      >
+        <p className="text-sm text-muted-foreground mb-6">
+          You&apos;ll lose access until you rejoin with the class code.
+        </p>
+        <div className="flex gap-3 justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setIsLeaveConfirmOpen(false)}
+            disabled={leaveClass.isPending}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={confirmLeave}
+            disabled={leaveClass.isPending}
+          >
+            {leaveClass.isPending ? "Leaving..." : "Leave"}
+          </Button>
+        </div>
+      </Modal>
     </Card>
   );
 };
