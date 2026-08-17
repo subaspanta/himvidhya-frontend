@@ -46,7 +46,14 @@ export default function TeacherDashboardPage() {
   return (
     <div className="w-full text-foreground pb-8">
       <div className="w-full mx-auto">
-        {user && <DashboardHeader profile={user} />}
+        {user && (
+          <DashboardHeader
+            profile={user}
+            activeClassCount={
+              enrolledClasses.filter((cls) => cls.status === "active").length
+            }
+          />
+        )}
 
         <div className="w-full">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 ">

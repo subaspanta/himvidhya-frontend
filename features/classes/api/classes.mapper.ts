@@ -4,6 +4,7 @@ import {
   ClassDetails,
   ClassMember,
   JoinRequest,
+  TeacherJoinRequest,
 } from "@/features/classes/types";
 
 const ClassOwnerDtoSchema = z.object({
@@ -156,6 +157,55 @@ export function mapJoinRequest(raw: unknown): JoinRequest {
     throw new Error("Invalid join request data received from server");
   }
   return result.data;
+}
+
+const TeacherJoinRequestSchema = z.object({
+  _id: z.string(),
+  class: z.object({
+    _id: z.string(),
+    name: z.string(),
+    subject: z.string(),
+  }),
+  user: z.object({
+    _id: z.string(),
+    name: z.string(),
+    email: z.string(),
+    avatar: z.string().nullable(),
+  }),
+  type: z.enum(["request", "invite"]),
+  status: z.enum(["pending", "approved", "rejected"]),
+  rejectionCount: z.number().default(0),
+  createdAt: z.string(),
+});
+
+// The teacher's join-request sidebar queue is a small, secondary list --
+// one malformed row (e.g. referencing a class deleted out-of-band)
+// shouldn't blank the whole widget, so this follows mapClassDto's
+// drop-invalid-and-continue policy rather than mapJoinRequest's throwing
+// one above.
+export function mapTeacherJoinRequest(raw: unknown): TeacherJoinRequest | null {
+  const result = TeacherJoinRequestSchema.safeParse(raw);
+  if (!result.success) {
+    if (isDev) {
+      console.warn(
+        "[mapper] Dropping invalid teacher join request:",
+        result.error.flatten(),
+      );
+    }
+    return null;
+  }
+  return result.data;
+}
+
+export function mapTeacherJoinRequestsList(
+  items: unknown[],
+): TeacherJoinRequest[] {
+  if (!Array.isArray(items)) return [];
+
+  const results = items.map(mapTeacherJoinRequest);
+  return results.filter(
+    (item): item is TeacherJoinRequest => item !== null,
+  );
 }
 
 const ClassMemberSchema = z.object({

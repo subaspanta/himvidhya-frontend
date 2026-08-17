@@ -9,11 +9,13 @@ import { JoinClassForm } from "@/features/classes/components/JoinClassForm";
 
 interface DashboardHeaderProps {
   profile: User;
+  activeClassCount: number;
   onClassCreated?: (cls: ClassCard) => void;
 }
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   profile,
+  activeClassCount,
   onClassCreated,
 }) => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -53,9 +55,12 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               </span>
             </div>
             <p className="text-muted-foreground mt-1 text-xl ">
-              You have
-              <span className="font-mono text-primary"> 3 classes </span>
-              scheduled for today.
+              You have{" "}
+              <span className="font-mono text-primary">
+                {activeClassCount} active{" "}
+                {activeClassCount === 1 ? "class" : "classes"}
+              </span>
+              .
             </p>
           </div>
         </div>

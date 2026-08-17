@@ -46,11 +46,33 @@ export interface ClassMember {
   joinedAt: string;
 }
 
-// Shape returned by POST /classes/join (now returns joinRequest not class)
+// Shape returned by POST /classes/join and the approve/reject mutations —
+// class/user are unpopulated ids in all three of those responses.
 export interface JoinRequest {
   _id: string;
   class: string;
   user: string;
+  type: "request" | "invite";
+  status: "pending" | "approved" | "rejected";
+  rejectionCount: number;
+  createdAt: string;
+}
+
+// Shape returned by GET /classes/requests — the teacher-facing queue, with
+// class and user populated (unlike JoinRequest above).
+export interface TeacherJoinRequest {
+  _id: string;
+  class: {
+    _id: string;
+    name: string;
+    subject: string;
+  };
+  user: {
+    _id: string;
+    name: string;
+    email: string;
+    avatar: string | null;
+  };
   type: "request" | "invite";
   status: "pending" | "approved" | "rejected";
   rejectionCount: number;

@@ -3,6 +3,7 @@ import {
   ClassDetails,
   ClassMember,
   JoinRequest,
+  TeacherJoinRequest,
 } from "@/features/classes/types";
 import { apiClient } from "@/shared/api/axiosClient";
 import {
@@ -11,6 +12,7 @@ import {
   mapClassListDto,
   mapClassMembersList,
   mapJoinRequest,
+  mapTeacherJoinRequestsList,
 } from "./classes.mapper";
 
 export type CreateClassPayload = {
@@ -119,6 +121,38 @@ export async function getClassDetails(id: string): Promise<ClassDetails> {
 // Now returns JoinRequest (pending) not ClassCard
 export async function joinClass(code: string): Promise<JoinRequest> {
   const response = await apiClient.post("/classes/join", { code });
+  const payload = response.data as { joinRequest: unknown };
+  return mapJoinRequest(payload.joinRequest);
+}
+
+export async function getJoinRequests(): Promise<TeacherJoinRequest[]> {
+  const response = await apiClient.get("/classes/requests");
+  const payload = response.data as { requests: unknown[] };
+  return mapTeacherJoinRequestsList(payload.requests || []);
+}
+
+export async function getJoinRequestsCount(): Promise<number> {
+  const response = await apiClient.get("/classes/requests/count");
+  const payload = response.data as { count: number };
+  return payload.count ?? 0;
+}
+
+export async function approveJoinRequest(
+  requestId: string,
+): Promise<JoinRequest> {
+  const response = await apiClient.patch(
+    `/classes/requests/${requestId}/approve`,
+  );
+  const payload = response.data as { joinRequest: unknown };
+  return mapJoinRequest(payload.joinRequest);
+}
+
+export async function rejectJoinRequest(
+  requestId: string,
+): Promise<JoinRequest> {
+  const response = await apiClient.patch(
+    `/classes/requests/${requestId}/reject`,
+  );
   const payload = response.data as { joinRequest: unknown };
   return mapJoinRequest(payload.joinRequest);
 }
