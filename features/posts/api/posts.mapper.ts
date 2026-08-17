@@ -14,7 +14,7 @@ const PostDtoSchema = z.object({
   title: z.string(),
   content: z.string(),
   classId: z.string(),
-  authorId: z.union([z.string(), PostAuthorDtoSchema]),
+  authorId: PostAuthorDtoSchema,
   isPinned: z.boolean(),
   deletedAt: z.string().nullable(),
   createdAt: z.string(),

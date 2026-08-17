@@ -9,16 +9,14 @@ export interface PostAuthor {
 }
 
 // Shape returned by GET /classes/:classId/posts, GET /posts/:postId, and
-// every post mutation response. authorId is a raw id string on the feed
-// list (lean, unpopulated) and a populated PostAuthor object on the
-// single-post GET (getPostByIdService populates it) -- mirrors ClassCard's
-// owner field ambiguity for the same reason.
+// every post mutation response. authorId is populated on every one of
+// these endpoints (post.service.js).
 export interface Post {
   id: string;
   title: string;
   content: string;
   classId: string;
-  authorId: string | PostAuthor;
+  authorId: PostAuthor;
   isPinned: boolean;
   deletedAt: string | null;
   createdAt: string;

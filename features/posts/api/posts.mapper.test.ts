@@ -6,15 +6,6 @@ const validRawPost = {
   title: "Welcome",
   content: "First day of class",
   classId: "class-1",
-  authorId: "user-1",
-  isPinned: false,
-  deletedAt: null,
-  createdAt: "2026-08-17T00:00:00.000Z",
-  updatedAt: "2026-08-17T00:00:00.000Z",
-};
-
-const validRawPostWithPopulatedAuthor = {
-  ...validRawPost,
   authorId: {
     _id: "user-1",
     name: "Teacher One",
@@ -22,20 +13,18 @@ const validRawPostWithPopulatedAuthor = {
     role: "teacher",
     avatar: null,
   },
+  isPinned: false,
+  deletedAt: null,
+  createdAt: "2026-08-17T00:00:00.000Z",
+  updatedAt: "2026-08-17T00:00:00.000Z",
 };
 
 describe("mapPostDto", () => {
-  it("maps a valid post with a raw string authorId", () => {
+  it("maps a valid post with a populated authorId object", () => {
     const result = mapPostDto(validRawPost);
     expect(result).not.toBeNull();
     expect(result?.id).toBe("post-1");
-    expect(result?.authorId).toBe("user-1");
     expect(result?.isPinned).toBe(false);
-  });
-
-  it("maps a valid post with a populated authorId object", () => {
-    const result = mapPostDto(validRawPostWithPopulatedAuthor);
-    expect(result).not.toBeNull();
     expect(result?.authorId).toEqual({
       _id: "user-1",
       name: "Teacher One",
@@ -53,7 +42,7 @@ describe("mapPostDto", () => {
 
 describe("mapPostListDto", () => {
   it("maps a list of valid posts", () => {
-    const result = mapPostListDto([validRawPost, validRawPostWithPopulatedAuthor]);
+    const result = mapPostListDto([validRawPost, validRawPost]);
     expect(result).toHaveLength(2);
   });
 
