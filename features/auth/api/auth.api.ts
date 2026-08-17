@@ -8,7 +8,7 @@ import type {
   ForgotPasswordResponse,
 } from "../types/api.types";
 import { AuthUserDTOSchema, CurrentUserDTOSchema } from "../types/api.schemas";
-import { mapAuthUserDTO, mapCurrentUserDTO } from "../types/auth.mapper";
+import { mapAuthUserDTO, mapCurrentUserDTO } from "./auth.mapper";
 import { validateDTO } from "@/shared/api/validate";
 
 export const registerUser = async (data: RegisterData): Promise<User> => {
