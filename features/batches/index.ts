@@ -1,4 +1,3 @@
-export { ClassCardItem } from "./components/dashboard/ClassCardItem";
 export type {
   ClassCard,
   ClassDetails,
