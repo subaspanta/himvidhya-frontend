@@ -24,14 +24,14 @@ import { Modal } from "@/components/ui/modal";
 import { cn, extractErrorMessage } from "@/shared/utils";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import toast from "react-hot-toast";
-import type { ClassCard } from "@/features/batches/types";
-import { EditClassForm } from "@/features/batches/components/dashboard/EditClassForm";
-import { ClassMembersModal } from "@/features/batches/components/dashboard/ClassMembersModal";
+import type { ClassCard } from "@/features/classes/types";
+import { EditClassForm } from "@/features/classes/components/EditClassForm";
+import { ClassMembersModal } from "@/features/classes/components/ClassMembersModal";
 import { useAuthStore } from "@/features/auth/store/auth.store";
-import { useArchiveClass } from "@/features/home/hooks/useArchiveClass";
-import { useRestoreClass } from "@/features/home/hooks/useRestoreClass";
-import { useRegenerateJoinCode } from "@/features/home/hooks/useRegenerateJoinCode";
-import { useLeaveClass } from "@/features/home/hooks/useLeaveClass";
+import { useArchiveClass } from "@/features/classes/hooks/useArchiveClass";
+import { useRestoreClass } from "@/features/classes/hooks/useRestoreClass";
+import { useRegenerateJoinCode } from "@/features/classes/hooks/useRegenerateJoinCode";
+import { useLeaveClass } from "@/features/classes/hooks/useLeaveClass";
 
 interface BatchCardProps {
   batch: ClassCard;

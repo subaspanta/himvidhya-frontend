@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ClassMembersModal } from "./ClassMembersModal";
-import type { ClassCard, ClassMember } from "../../types";
+import type { ClassCard, ClassMember } from "../types";
 
 let mockReturn: {
   data: ClassMember[] | undefined;
@@ -10,12 +10,12 @@ let mockReturn: {
   isError: boolean;
 };
 
-vi.mock("@/features/home/hooks/useClassMembers", () => ({
+vi.mock("@/features/classes/hooks/useClassMembers", () => ({
   useClassMembers: () => mockReturn,
 }));
 
 const removeMutate = vi.fn();
-vi.mock("@/features/home/hooks/useRemoveClassMember", () => ({
+vi.mock("@/features/classes/hooks/useRemoveClassMember", () => ({
   useRemoveClassMember: () => ({
     mutate: removeMutate,
     isPending: false,

@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import BatchCard from "./BatchCard";
-import type { ClassCard } from "@/features/batches/types";
+import type { ClassCard } from "@/features/classes/types";
 
 const push = vi.fn();
 vi.mock("next/navigation", () => ({
@@ -10,7 +10,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 const archiveMutate = vi.fn();
-vi.mock("@/features/home/hooks/useArchiveClass", () => ({
+vi.mock("@/features/classes/hooks/useArchiveClass", () => ({
   useArchiveClass: () => ({
     mutate: archiveMutate,
     isPending: false,
@@ -18,7 +18,7 @@ vi.mock("@/features/home/hooks/useArchiveClass", () => ({
 }));
 
 const restoreMutate = vi.fn();
-vi.mock("@/features/home/hooks/useRestoreClass", () => ({
+vi.mock("@/features/classes/hooks/useRestoreClass", () => ({
   useRestoreClass: () => ({
     mutate: restoreMutate,
     isPending: false,
@@ -26,7 +26,7 @@ vi.mock("@/features/home/hooks/useRestoreClass", () => ({
 }));
 
 const regenerateMutate = vi.fn();
-vi.mock("@/features/home/hooks/useRegenerateJoinCode", () => ({
+vi.mock("@/features/classes/hooks/useRegenerateJoinCode", () => ({
   useRegenerateJoinCode: () => ({
     mutate: regenerateMutate,
     isPending: false,
@@ -34,21 +34,21 @@ vi.mock("@/features/home/hooks/useRegenerateJoinCode", () => ({
 }));
 
 const leaveMutate = vi.fn();
-vi.mock("@/features/home/hooks/useLeaveClass", () => ({
+vi.mock("@/features/classes/hooks/useLeaveClass", () => ({
   useLeaveClass: () => ({
     mutate: leaveMutate,
     isPending: false,
   }),
 }));
 
-vi.mock("@/features/home/hooks/useUpdateClass", () => ({
+vi.mock("@/features/classes/hooks/useUpdateClass", () => ({
   useUpdateClass: () => ({
     mutateAsync: vi.fn(),
     isPending: false,
   }),
 }));
 
-vi.mock("@/features/home/hooks/useClassMembers", () => ({
+vi.mock("@/features/classes/hooks/useClassMembers", () => ({
   useClassMembers: () => ({
     data: [],
     isLoading: false,
@@ -56,7 +56,7 @@ vi.mock("@/features/home/hooks/useClassMembers", () => ({
   }),
 }));
 
-vi.mock("@/features/home/hooks/useRemoveClassMember", () => ({
+vi.mock("@/features/classes/hooks/useRemoveClassMember", () => ({
   useRemoveClassMember: () => ({
     mutate: vi.fn(),
     isPending: false,

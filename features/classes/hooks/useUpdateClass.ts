@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { updateClassApi, type UpdateClassPayload } from "../api/home.api";
-import { ClassCard } from "@/features/batches";
+import { ClassCard } from "@/features/classes";
 import { QUERY_KEYS } from "@/config/constants";
 
 type UpdateClassVariables = {

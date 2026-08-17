@@ -3,7 +3,7 @@ import {
   ClassDetails,
   ClassMember,
   JoinRequest,
-} from "@/features/batches/types";
+} from "@/features/classes/types";
 import { apiClient } from "@/shared/api/axiosClient";
 import type { ApiResponse } from "@/shared/types";
 import {

@@ -1,4 +1,4 @@
-import StudentDashboardPage from "@/features/home/pages/StudentDashboardPage";
+import StudentDashboardPage from "@/features/classes/pages/StudentDashboardPage";
 
 export default function StudentDashboardRoute() {
   return <StudentDashboardPage />;
