@@ -87,6 +87,10 @@ export async function regenerateJoinCodeApi(
   return mapped;
 }
 
+export async function leaveClassApi(classId: string): Promise<void> {
+  await apiClient.delete(`/classes/${classId}/members/me`);
+}
+
 export async function getEnrolledClasses(): Promise<ClassCard[]> {
   const response = await apiClient.get("/classes");
   const payload = response.data as { classes: unknown[] };

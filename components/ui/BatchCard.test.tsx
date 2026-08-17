@@ -33,6 +33,14 @@ vi.mock("@/features/home/hooks/useRegenerateJoinCode", () => ({
   }),
 }));
 
+const leaveMutate = vi.fn();
+vi.mock("@/features/home/hooks/useLeaveClass", () => ({
+  useLeaveClass: () => ({
+    mutate: leaveMutate,
+    isPending: false,
+  }),
+}));
+
 vi.mock("@/features/home/hooks/useUpdateClass", () => ({
   useUpdateClass: () => ({
     mutateAsync: vi.fn(),
@@ -77,6 +85,7 @@ describe("BatchCard", () => {
     archiveMutate.mockClear();
     restoreMutate.mockClear();
     regenerateMutate.mockClear();
+    leaveMutate.mockClear();
     mockUser = null;
   });
 
@@ -186,5 +195,44 @@ describe("BatchCard", () => {
     await user.click(screen.getByRole("button", { name: "Batch options" }));
 
     expect(screen.getByText("View Members")).toBeInTheDocument();
+  });
+
+  it("shows Leave Class for a non-owner member", async () => {
+    mockUser = { id: "student-1", role: "student" };
+    const user = userEvent.setup();
+    render(<BatchCard batch={ownerBatch} />);
+
+    await user.click(screen.getByRole("button", { name: "Batch options" }));
+
+    expect(screen.getByText("Leave Class")).toBeInTheDocument();
+  });
+
+  it("hides Leave Class for the owner", async () => {
+    mockUser = { id: "owner-1", role: "teacher" };
+    const user = userEvent.setup();
+    render(<BatchCard batch={ownerBatch} />);
+
+    await user.click(screen.getByRole("button", { name: "Batch options" }));
+
+    expect(screen.queryByText("Leave Class")).not.toBeInTheDocument();
+  });
+
+  it("asks for confirmation before leaving, then calls the mutation", async () => {
+    mockUser = { id: "student-1", role: "student" };
+    const user = userEvent.setup();
+    render(<BatchCard batch={ownerBatch} />);
+
+    await user.click(screen.getByRole("button", { name: "Batch options" }));
+    await user.click(screen.getByText("Leave Class"));
+
+    expect(leaveMutate).not.toHaveBeenCalled();
+    expect(
+      screen.getByRole("heading", { name: "Leave this class?" }),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Leave" }));
+
+    expect(leaveMutate).toHaveBeenCalledTimes(1);
+    expect(leaveMutate).toHaveBeenCalledWith("class-1", expect.anything());
   });
 });

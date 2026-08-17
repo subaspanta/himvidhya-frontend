@@ -11,6 +11,7 @@ import {
   Archive,
   ArchiveRestore,
   RefreshCw,
+  LogOut,
   ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,7 @@ import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useArchiveClass } from "@/features/home/hooks/useArchiveClass";
 import { useRestoreClass } from "@/features/home/hooks/useRestoreClass";
 import { useRegenerateJoinCode } from "@/features/home/hooks/useRegenerateJoinCode";
+import { useLeaveClass } from "@/features/home/hooks/useLeaveClass";
 
 interface BatchCardProps {
   batch: ClassCard;
@@ -56,10 +58,12 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const [isArchiveConfirmOpen, setIsArchiveConfirmOpen] = useState(false);
   const [isRegenerateConfirmOpen, setIsRegenerateConfirmOpen] =
     useState(false);
+  const [isLeaveConfirmOpen, setIsLeaveConfirmOpen] = useState(false);
 
   const archiveClass = useArchiveClass();
   const restoreClass = useRestoreClass();
   const regenerateJoinCode = useRegenerateJoinCode();
+  const leaveClass = useLeaveClass();
 
   const copyCodeToClipboard = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -128,6 +132,23 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
         toast.error(
           extractErrorMessage(error, "Unable to regenerate join code."),
         );
+      },
+    });
+  };
+
+  const openLeaveConfirm = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsLeaveConfirmOpen(true);
+  };
+
+  const confirmLeave = () => {
+    leaveClass.mutate(batch.id, {
+      onSuccess: () => {
+        toast.success("You left the class");
+        setIsLeaveConfirmOpen(false);
+      },
+      onError: (error) => {
+        toast.error(extractErrorMessage(error, "Unable to leave class."));
       },
     });
   };
@@ -210,6 +231,15 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
                 <DropdownMenuItem onClick={handleRestore}>
                   <ArchiveRestore className="w-4 h-4 mr-2" />
                   Restore Batch
+                </DropdownMenuItem>
+              )}
+              {!isOwner && (
+                <DropdownMenuItem
+                  onClick={openLeaveConfirm}
+                  className="text-destructive focus:text-destructive focus:bg-destructive/10"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Leave Class
                 </DropdownMenuItem>
               )}
             </DropdownMenuContent>
@@ -301,6 +331,33 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
             disabled={regenerateJoinCode.isPending}
           >
             {regenerateJoinCode.isPending ? "Regenerating..." : "Regenerate"}
+          </Button>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={isLeaveConfirmOpen}
+        onClose={() => setIsLeaveConfirmOpen(false)}
+        title="Leave this class?"
+      >
+        <p className="text-sm text-muted-foreground mb-6">
+          You&apos;ll lose access until you rejoin with the class code.
+        </p>
+        <div className="flex gap-3 justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setIsLeaveConfirmOpen(false)}
+            disabled={leaveClass.isPending}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={confirmLeave}
+            disabled={leaveClass.isPending}
+          >
+            {leaveClass.isPending ? "Leaving..." : "Leave"}
           </Button>
         </div>
       </Modal>
