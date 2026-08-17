@@ -49,12 +49,6 @@ export async function listPostsFeedApi(
   };
 }
 
-export async function getPostByIdApi(postId: string): Promise<Post> {
-  const response = await apiClient.get(`/posts/${postId}`);
-  const payload = response.data as { post: unknown };
-  return mapPostOrThrow(payload.post, "fetched");
-}
-
 export async function updatePostApi(
   postId: string,
   data: UpdatePostPayload,

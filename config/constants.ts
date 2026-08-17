@@ -12,10 +12,6 @@ export const QUERY_KEYS = {
   classById: (id: string) => ["class", id],
   classMembers: (id: string) => ["classMembers", id],
 
-  // Join requests
-  joinRequests: ["joinRequests"],
-  joinRequestsCount: ["joinRequestsCount"],
-
   // Posts
   classPosts: (classId: string) => ["classPosts", classId],
 };
