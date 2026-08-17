@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ClassCard, ClassMember, JoinRequest } from "@/features/batches/types";
+import { ClassCard, ClassMember, JoinRequest } from "@/features/classes/types";
 
 const ClassOwnerDtoSchema = z.object({
   _id: z.string(),

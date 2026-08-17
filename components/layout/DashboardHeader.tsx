@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { User } from "@/features/auth";
-import useCreateClass from "@/features/home/hooks/useCreateClass";
-import { ClassCard } from "@/features/batches";
-import { CreateClassForm } from "@/features/batches/components/dashboard/CreateClassForm";
-import { JoinClassForm } from "@/features/batches/components/dashboard/JoinClassForm";
+import useCreateClass from "@/features/classes/hooks/useCreateClass";
+import { ClassCard } from "@/features/classes";
+import { CreateClassForm } from "@/features/classes/components/CreateClassForm";
+import { JoinClassForm } from "@/features/classes/components/JoinClassForm";
 
 interface DashboardHeaderProps {
   profile: User;

@@ -1,17 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { regenerateJoinCodeApi } from "../api/home.api";
-import { ClassCard } from "@/features/batches";
+import { restoreClassApi } from "../api/home.api";
+import { ClassCard } from "@/features/classes";
 import { QUERY_KEYS } from "@/config/constants";
 
-export const useRegenerateJoinCode = () => {
+export const useRestoreClass = () => {
   const queryClient = useQueryClient();
 
   return useMutation<ClassCard, AxiosError, string>({
-    mutationFn: (classId: string) => regenerateJoinCodeApi(classId),
+    mutationFn: (classId: string) => restoreClassApi(classId),
     onError: (error) => {
       console.error(
-        "Regenerate join code failed:",
+        "Restore class failed:",
         error?.response?.data || error.message,
       );
     },
@@ -21,4 +21,4 @@ export const useRegenerateJoinCode = () => {
   });
 };
 
-export default useRegenerateJoinCode;
+export default useRestoreClass;

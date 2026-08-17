@@ -1,17 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { archiveClassApi } from "../api/home.api";
-import { ClassCard } from "@/features/batches";
+import { regenerateJoinCodeApi } from "../api/home.api";
+import { ClassCard } from "@/features/classes";
 import { QUERY_KEYS } from "@/config/constants";
 
-export const useArchiveClass = () => {
+export const useRegenerateJoinCode = () => {
   const queryClient = useQueryClient();
 
   return useMutation<ClassCard, AxiosError, string>({
-    mutationFn: (classId: string) => archiveClassApi(classId),
+    mutationFn: (classId: string) => regenerateJoinCodeApi(classId),
     onError: (error) => {
       console.error(
-        "Archive class failed:",
+        "Regenerate join code failed:",
         error?.response?.data || error.message,
       );
     },
@@ -21,4 +21,4 @@ export const useArchiveClass = () => {
   });
 };
 
-export default useArchiveClass;
+export default useRegenerateJoinCode;

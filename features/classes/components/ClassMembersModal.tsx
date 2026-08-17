@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { Spinner } from "@/shared/loading/Spinner";
 import { extractErrorMessage } from "@/shared/utils";
-import { useClassMembers } from "@/features/home/hooks/useClassMembers";
-import { useRemoveClassMember } from "@/features/home/hooks/useRemoveClassMember";
-import type { ClassCard } from "../../types";
+import { useClassMembers } from "@/features/classes/hooks/useClassMembers";
+import { useRemoveClassMember } from "@/features/classes/hooks/useRemoveClassMember";
+import type { ClassCard } from "../types";
 
 interface ClassMembersModalProps {
   isOpen: boolean;

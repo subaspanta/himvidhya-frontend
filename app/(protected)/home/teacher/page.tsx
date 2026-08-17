@@ -1,4 +1,4 @@
-import TeacherDashboardPage from "@/features/home/pages/TeacherDashboardPage";
+import TeacherDashboardPage from "@/features/classes/pages/TeacherDashboardPage";
 
 export default function TeacherDashboardRoute() {
   return <TeacherDashboardPage />;

@@ -2,11 +2,11 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { EditClassForm } from "./EditClassForm";
-import type { ClassCard } from "../../types";
+import type { ClassCard } from "../types";
 
 const mutateAsync = vi.fn().mockResolvedValue(undefined);
 
-vi.mock("@/features/home/hooks/useUpdateClass", () => ({
+vi.mock("@/features/classes/hooks/useUpdateClass", () => ({
   useUpdateClass: () => ({
     mutateAsync,
     isPending: false,

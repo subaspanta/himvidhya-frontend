@@ -9,8 +9,8 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import TextField from "@/components/ui/text-field";
 import { Modal } from "@/components/ui/modal";
-import { useUpdateClass } from "@/features/home/hooks/useUpdateClass";
-import type { ClassCard } from "../../types";
+import { useUpdateClass } from "@/features/classes/hooks/useUpdateClass";
+import type { ClassCard } from "../types";
 
 const editClassSchema = z.object({
   name: z

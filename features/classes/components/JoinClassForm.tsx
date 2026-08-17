@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import TextField from "@/components/ui/text-field";
 import { Modal } from "@/components/ui/modal";
-import { useJoinClass } from "@/features/home/hooks/useJoinClass";
+import { useJoinClass } from "@/features/classes/hooks/useJoinClass";
 
 const joinClassSchema = z.object({
   batchCode: z

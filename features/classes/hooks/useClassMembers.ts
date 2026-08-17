@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import type { ClassMember } from "@/features/batches/types";
+import type { ClassMember } from "@/features/classes/types";
 import { getClassMembers } from "../api/home.api";
 import { QUERY_KEYS } from "@/config/constants";
 
