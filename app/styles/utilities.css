@@ -61,12 +61,12 @@
     box-shadow: var(--shadow-xl);
   }
 
-  /* Indigo gradient text */
+  /* Terracotta gradient text */
   .text-gradient {
     background: linear-gradient(
       135deg,
       var(--primary) 0%,
-      rgba(99, 102, 241, 0.7) 100%
+      var(--primary-hover) 100%
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

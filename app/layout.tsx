@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Source_Serif_4 } from "next/font/google";
 import { Suspense } from "react";
 import ToasterProvider from "@/providers/toaster-provider";
 import { AuthInitializer } from "@/features/auth/components/AuthInitializer";
@@ -8,6 +9,13 @@ import "./globals.css";
 import RootProvider from "@/providers/root-provider";
 import { AuthQueryModalHost } from "@/features/auth/components/AuthQueryModalHost";
 import { PageLoader } from "@/shared/loading/PageLoader";
+
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-serif",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "HimVidhya",
@@ -24,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={sourceSerif.variable}>
       <body>
         <RootProvider>
           <AuthInitializer />
