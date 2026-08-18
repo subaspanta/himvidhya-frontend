@@ -34,11 +34,11 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             htmlFor={name}
             className={cn(
               "block text-sm font-medium transition-colors",
-              hasError ? "text-danger" : "text-foreground",
+              hasError ? "text-destructive" : "text-foreground",
             )}
           >
             {labelText}
-            {required && <span className="ml-1 text-danger">*</span>}
+            {required && <span className="ml-1 text-destructive">*</span>}
           </label>
         )}
 
@@ -53,11 +53,11 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             {...rest}
             className={cn(
               "h-11 px-4 rounded-md transition-all duration-200",
-              "bg-surface text-foreground placeholder:text-muted-foreground font-medium",
+              "bg-input text-foreground placeholder:text-muted-foreground font-medium",
               "border border-border shadow-sm",
-              "focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent",
+              "focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring",
               "disabled:opacity-50 disabled:cursor-not-allowed",
-              hasError && "border-danger focus:ring-danger focus:border-danger",
+              hasError && "border-destructive focus:ring-destructive focus:border-destructive",
             )}
           />
         </div>
@@ -65,7 +65,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         {hasError && typeof error === "string" && (
           <p
             id={`${name}-error`}
-            className="text-sm text-danger mt-1 animate-in fade-in slide-in-from-top-1"
+            className="text-sm text-destructive mt-1 animate-in fade-in slide-in-from-top-1"
           >
             {error}
           </p>

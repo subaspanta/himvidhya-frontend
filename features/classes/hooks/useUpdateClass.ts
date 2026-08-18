@@ -20,8 +20,11 @@ export const useUpdateClass = () => {
         error?.response?.data || error.message,
       );
     },
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.enrolledClasses });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.classById(variables.classId),
+      });
     },
   });
 };

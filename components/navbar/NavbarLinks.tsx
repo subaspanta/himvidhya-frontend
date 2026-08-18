@@ -23,7 +23,7 @@ export const NavbarLinks = ({
           "text-sm font-medium transition-colors px-3 py-2 rounded-md",
           // base link styles (hover behaviour included)
           theme.link ?? theme.text,
-          // active state: blue text + blue-100 bg for dashboard
+          // active state: sage text + sage-tinted bg (theme.linkActive)
           link.active && theme.linkActive,
         )}
       >

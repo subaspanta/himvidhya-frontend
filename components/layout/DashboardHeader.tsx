@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { User } from "@/features/auth";
 import useCreateClass from "@/features/classes/hooks/useCreateClass";
@@ -9,12 +9,15 @@ import { JoinClassForm } from "@/features/classes/components/JoinClassForm";
 interface DashboardHeaderProps {
   profile: User;
   activeClassCount: number;
+  role?: "teacher" | "student";
 }
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   profile,
   activeClassCount,
+  role = "teacher",
 }) => {
+  const isTeacher = role === "teacher";
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
   const { mutate: createMutate, isPending: isCreating } = useCreateClass();
@@ -44,8 +47,8 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               <h1 className="text-3xl font-heading font-bold text-foreground">
                 Good Morning, {profile.name}
               </h1>
-              <span className="inline-flex items-center justify-center bg-blue-100 dark:bg-blue-900/40 text-primary text-xs font-bold px-2 py-0.5 rounded-full border border-blue-200 dark:border-blue-800">
-                TEACHER
+              <span className="inline-flex items-center justify-center bg-primary-subtle text-primary text-xs font-bold px-2 py-0.5 rounded-full border border-primary/20">
+                {isTeacher ? "TEACHER" : "STUDENT"}
               </span>
             </div>
             <p className="text-muted-foreground mt-1 text-xl ">
@@ -60,23 +63,35 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         </div>
 
         <div className="flex items-center gap-4">
-          <Button
-            onClick={() => setIsCreateModalOpen(true)}
-            size="lg"
-            className="w-full md:w-auto gap-2 font-semibold shadow-lg shadow-primary/20 bg-primary hover:bg-blue-800"
-          >
-            <Plus className="w-5 h-5" />
-            Create New Batch
-          </Button>
+          {isTeacher ? (
+            <Button
+              onClick={() => setIsCreateModalOpen(true)}
+              size="lg"
+              className="w-full md:w-auto gap-2 font-semibold"
+            >
+              <Plus className="w-5 h-5" />
+              Create Class
+            </Button>
+          ) : (
+            <Button
+              onClick={() => setIsJoinModalOpen(true)}
+              size="lg"
+              className="w-full md:w-auto gap-2 font-semibold"
+            >
+              <LogIn className="w-5 h-5" />
+              Join Class
+            </Button>
+          )}
         </div>
       </div>
-      <CreateClassForm
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        onSubmit={handleCreateClass}
-        isLoading={isCreating}
-      />
-      {/* {user.role === "student" && */}
+      {isTeacher && (
+        <CreateClassForm
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          onSubmit={handleCreateClass}
+          isLoading={isCreating}
+        />
+      )}
       <JoinClassForm
         isOpen={isJoinModalOpen}
         onClose={() => setIsJoinModalOpen(false)}

@@ -20,7 +20,9 @@ export function PostCard({ post, isOwner, onPin, onUnpin }: PostCardProps) {
         <div className="flex items-center gap-2 flex-wrap">
           <CardTitle className="text-base">{post.title}</CardTitle>
           {post.isPinned && (
-            <span className="text-xs font-medium text-primary">Pinned</span>
+            <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-primary-subtle text-primary">
+              Pinned
+            </span>
           )}
         </div>
         {isOwner && !isDeleted && (

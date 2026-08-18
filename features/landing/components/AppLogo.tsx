@@ -4,10 +4,13 @@ import { AppLogoProps } from "../types";
 import { cn } from "@/shared/utils";
 
 export const AppLogo: React.FC<
-  AppLogoProps & { variant?: "landing" | "dashboard" }
-> = ({ size = "sm", className = "", variant = "dashboard" }) => {
+  AppLogoProps & {
+    variant?: "landing" | "dashboard";
+
+    tone?: "light" | "dark";
+  }
+> = ({ size = "sm", className = "", tone = "light" }) => {
   const dimensions = size === "sm" ? "w-32 h-8" : "w-40 h-10";
-  const textColor = variant === "landing" ? "text-white" : "text-slate-900";
 
   return (
     <div
@@ -23,7 +26,12 @@ export const AppLogo: React.FC<
           sizes="(max-width: 768px) 32px, 40px"
         />
       </div>
-      <span className={cn("text-xl font-bold tracking-tight", textColor)}>
+      <span
+        className={cn(
+          "text-xl font-bold tracking-tight",
+          tone === "dark" ? "text-primary-foreground" : "text-foreground",
+        )}
+      >
         HimVidya
       </span>
     </div>

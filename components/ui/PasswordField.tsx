@@ -31,11 +31,11 @@ const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
             htmlFor={name}
             className={cn(
               "block text-sm font-medium transition-colors",
-              hasError ? "text-danger" : "text-foreground",
+              hasError ? "text-destructive" : "text-foreground",
             )}
           >
             {labelText}
-            {required && <span className="ml-1 text-danger">*</span>}
+            {required && <span className="ml-1 text-destructive">*</span>}
           </label>
         )}
 
@@ -50,11 +50,11 @@ const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
             {...rest}
             className={cn(
               "w-full h-11 px-4 pr-12 rounded-md transition-all duration-200",
-              "bg-surface text-foreground placeholder:text-muted-foreground font-medium",
+              "bg-input text-foreground placeholder:text-muted-foreground font-medium",
               "border border-border shadow-sm",
-              "focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent",
+              "focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring",
               "disabled:opacity-50 disabled:cursor-not-allowed",
-              hasError && "border-danger focus:ring-danger focus:border-danger",
+              hasError && "border-destructive focus:ring-destructive focus:border-destructive",
             )}
           />
           <button
@@ -63,8 +63,8 @@ const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
             className={cn(
               "absolute right-3 top-1/2 -translate-y-1/2",
               "p-1.5 rounded-md transition-all duration-200",
-              "text-muted-foreground hover:text-foreground hover:bg-accent",
-              "focus:outline-none focus:ring-2 focus:ring-accent",
+              "text-muted-foreground hover:text-foreground hover:bg-accent-subtle",
+              "focus:outline-none focus:ring-2 focus:ring-accent-subtle",
             )}
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
@@ -85,7 +85,7 @@ const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(
         {hasError && typeof error === "string" && (
           <p
             id={`${name}-error`}
-            className="text-sm text-danger mt-1 animate-in fade-in slide-in-from-top-1"
+            className="text-sm text-destructive mt-1 animate-in fade-in slide-in-from-top-1"
           >
             {error}
           </p>

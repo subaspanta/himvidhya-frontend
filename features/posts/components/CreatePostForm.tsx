@@ -88,14 +88,14 @@ export function CreatePostForm({ classId }: CreatePostFormProps) {
             {...register("content")}
           />
           {errors.content?.message && (
-            <p className="text-sm text-danger mt-1">
+            <p className="text-sm text-destructive mt-1">
               {errors.content.message}
             </p>
           )}
         </div>
 
         {errors.root?.message && (
-          <p className="text-sm text-danger">{errors.root.message}</p>
+          <p className="text-sm text-destructive">{errors.root.message}</p>
         )}
 
         <div className="flex justify-end">

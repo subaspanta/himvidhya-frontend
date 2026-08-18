@@ -6,7 +6,10 @@ export interface NavLink {
 
 export type AuthenticatedProps = {
   isLoggedIn: true;
-  onLogoutClick: () => void;
+  // Optional: the sidebar-shell header omits this, since logout lives in
+  // the sidebar there instead. The horizontal public-page navbar still
+  // passes it.
+  onLogoutClick?: () => void;
   userEmail?: string;
   userName?: string;
   avatarUrl?: string;

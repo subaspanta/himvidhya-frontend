@@ -45,13 +45,13 @@ const buttonVariants = cva(
           "bg-destructive text-destructive-foreground shadow-sm hover:shadow-md hover:bg-destructive/95 rounded-[var(--radius)]", // kept strong but subtle
 
         outline:
-          "border border-border bg-background text-foreground rounded-[var(--radius)] hover:bg-accent/70 hover:text-accent-foreground hover:border-accent/70 shadow-sm transition-colors", // softer, calmer hover
+          "border border-border bg-background text-foreground rounded-[var(--radius)] hover:bg-accent-subtle hover:text-accent-subtle-foreground hover:border-accent/40 shadow-sm transition-colors", // softer, calmer hover
 
         secondary:
           "bg-muted/70 text-foreground rounded-[var(--radius)] hover:bg-muted hover:text-foreground shadow-sm transition-colors", // very subtle, almost flat
 
         ghost:
-          "hover:bg-accent/60 hover:text-accent-foreground rounded-[var(--radius)] text-foreground", // minimal, clean — perfect for icons/menus
+          "hover:bg-accent-subtle hover:text-accent-subtle-foreground rounded-[var(--radius)] text-foreground", // minimal, clean — perfect for icons/menus
 
         link: "text-primary underline-offset-4 hover:underline hover:text-primary/80 transition-colors p-0 h-auto", // clean link style, no background
       },
