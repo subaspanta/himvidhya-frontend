@@ -24,7 +24,7 @@ export function ClassFeedPage({ classId }: ClassFeedPageProps) {
 
   if (isError || !classDetails) {
     return (
-      <p className="text-sm text-danger py-8">Unable to load this class.</p>
+      <p className="text-sm text-destructive py-8">Unable to load this class.</p>
     );
   }
 
@@ -49,6 +49,12 @@ export function ClassFeedPage({ classId }: ClassFeedPageProps) {
           {classDetails.membersCount === 1 ? "member" : "members"}
         </p>
       </div>
+
+      {isArchived && (
+        <p className="text-sm px-4 py-3 rounded-lg bg-muted text-muted-foreground border border-border">
+          This class is archived. Existing content is read-only.
+        </p>
+      )}
 
       {isOwner && !isArchived && <CreatePostForm classId={classId} />}
 
