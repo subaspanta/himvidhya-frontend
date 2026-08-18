@@ -15,8 +15,11 @@ export const useRestoreClass = () => {
         error?.response?.data || error.message,
       );
     },
-    onSuccess: () => {
+    onSuccess: (_data, classId) => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.enrolledClasses });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.classById(classId),
+      });
     },
   });
 };

@@ -4,7 +4,7 @@ export function FullScreenContainer({
   backdropFilter,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }: any) {
-  const bgStyle = backgroundOverlay || "rgba(0, 0, 0, 0.5)";
+  const bgStyle = backgroundOverlay || "var(--overlay)";
   const blurStyle = backdropFilter || "blur(1px)";
 
   return (
@@ -12,7 +12,7 @@ export function FullScreenContainer({
       className="fixed inset-0 w-screen h-screen z-100 flex justify-center items-center backdrop-blur-[1px]"
       style={{
         background: bgStyle,
-        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        boxShadow: "var(--shadow-xl)",
         backdropFilter: blurStyle,
         WebkitBackdropFilter: "blur(2px)",
       }}

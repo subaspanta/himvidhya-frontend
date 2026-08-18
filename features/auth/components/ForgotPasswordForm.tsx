@@ -112,9 +112,9 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
     return (
       <div className="space-y-8 text-foreground">
         <div className="text-center space-y-2">
-          <div className="mx-auto w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mb-4">
+          <div className="mx-auto w-16 h-16 bg-primary-subtle rounded-full flex items-center justify-center mb-4">
             <svg
-              className="w-8 h-8 text-accent"
+              className="w-8 h-8 text-primary"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -132,7 +132,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
           </h2>
           <p className="text-sm text-muted-foreground">
             We sent a 6-digit code to{" "}
-            <span className="font-semibold text-accent">{userEmail}</span>
+            <span className="font-semibold text-primary">{userEmail}</span>
           </p>
         </div>
 
@@ -156,7 +156,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
                   type="button"
                   variant="ghost"
                   onClick={handleResendOTP}
-                  className="text-sm text-accent hover:text-accent/80 font-semibold p-0 h-auto"
+                  className="text-sm text-primary hover:text-primary/80 font-semibold p-0 h-auto"
                 >
                   Resend OTP
                 </Button>
@@ -179,7 +179,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
               {...resetForm.register("confirmPassword")}
             />
 
-            <div className="px-4 py-3 bg-accent/10 border border-accent/20 rounded-md text-sm text-foreground">
+            <div className="px-4 py-3 bg-primary-subtle border border-primary/20 rounded-md text-sm text-foreground">
               <p className="font-semibold mb-2">Password must include:</p>
               <ul className="space-y-1 list-disc list-inside text-muted-foreground">
                 <li>At least 8 characters</li>
@@ -211,7 +211,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
               resetForm.reset();
             }}
             variant="ghost"
-            className="text-accent hover:text-accent/80 font-bold hover:underline p-0 h-auto"
+            className="text-primary hover:text-primary/80 font-bold hover:underline p-0 h-auto"
           >
             ← Use different email
           </Button>
@@ -228,7 +228,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
         </h2>
         <p className="text-base leading-relaxed text-muted-foreground">
           No worries, we&apos;ll send you an OTP to reset it for{" "}
-          <span className="text-accent font-bold">HimVidhya</span>
+          <span className="text-primary font-bold">HimVidhya</span>
         </p>
       </div>
 
@@ -258,7 +258,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
           type="button"
           onClick={navigation.toLogin}
           variant="ghost"
-          className="text-accent hover:text-accent/80 font-bold hover:underline p-0 h-auto"
+          className="text-primary hover:text-primary/80 font-bold hover:underline p-0 h-auto"
         >
           Back to Login
         </Button>

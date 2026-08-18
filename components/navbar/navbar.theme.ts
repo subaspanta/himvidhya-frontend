@@ -1,23 +1,17 @@
-export const getNavbarTheme = (variant: "landing" | "dashboard") => {
-  const isLanding = variant === "landing";
-
+export const getNavbarTheme = (
+  variant: "landing" | "dashboard", // eslint-disable-line @typescript-eslint/no-unused-vars
+) => {
   return {
-    nav: isLanding
-      ? "bg-[var(--surface-dark)] border-[var(--surface-dark-border)] text-[var(--surface-dark-foreground)]"
-      : "bg-card border-border text-foreground",
+    nav: "bg-card border-border text-foreground",
 
-    text: isLanding
-      ? "text-[var(--surface-dark-muted)] hover:text-[var(--surface-dark-foreground)]"
-      : "text-muted-foreground hover:text-foreground",
+    text: "text-muted-foreground hover:text-foreground",
 
-    link: isLanding
-      ? "text-[var(--surface-dark-muted)] hover:text-white hover:bg-white/10"
-      : "text-muted-foreground hover:text-primary hover:bg-accent transition-colors",
+    link: "text-muted-foreground hover:text-accent-subtle-foreground hover:bg-accent-subtle transition-colors",
 
-    linkActive: isLanding ? "text-white bg-white/10" : "text-primary bg-accent",
+    // Full-strength sage clears AA text contrast (white on --accent is
+    // ~5:1), so the active state fills solid rather than using the tint.
+    linkActive: "text-accent-foreground bg-accent",
 
-    buttonGhost: isLanding
-      ? "text-[var(--surface-dark-muted)] hover:text-white hover:bg-white/10"
-      : "text-muted-foreground hover:text-foreground hover:bg-muted",
+    buttonGhost: "text-muted-foreground hover:text-foreground hover:bg-muted",
   };
 };

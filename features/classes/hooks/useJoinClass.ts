@@ -1,9 +1,12 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { joinClass } from "../api/classes.api";
 import { JoinRequest } from "@/features/classes/types";
+import { QUERY_KEYS } from "@/config/constants";
 
 export const useJoinClass = () => {
+  const queryClient = useQueryClient();
+
   return useMutation<JoinRequest, AxiosError, string>({
     mutationFn: (code: string) => joinClass(code),
     // Don't invalidate enrolled classes: this is a pending request, not membership.
@@ -12,6 +15,12 @@ export const useJoinClass = () => {
         "Join class failed:",
         error?.response?.data || error.message,
       );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.joinRequests });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.joinRequestsCount,
+      });
     },
   });
 };

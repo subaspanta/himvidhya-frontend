@@ -1,4 +1,5 @@
 import { LogOut } from "lucide-react";
+import { cn } from "@/shared/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,16 +17,29 @@ export const NavbarUserDropdown = ({
   userEmail,
   avatarUrl,
   onLogoutClick,
-}: AuthenticatedProps) => {
+  tone = "light",
+}: AuthenticatedProps & { tone?: "light" | "dark" }) => {
   const initial = userName?.trim()?.[0]?.toUpperCase() || "?";
 
   return (
     <div className="hidden md:flex items-center gap-4">
       <div className="flex flex-col">
-        <span className="font-semibold text-sm text-foreground">
+        <span
+          className={cn(
+            "font-semibold text-sm",
+            tone === "dark" ? "text-primary-foreground" : "text-foreground",
+          )}
+        >
           {userName}
         </span>
-        <span className="text-xs text-muted-foreground uppercase tracking-wider">
+        <span
+          className={cn(
+            "text-xs uppercase tracking-wider",
+            tone === "dark"
+              ? "text-primary-foreground/70"
+              : "text-muted-foreground",
+          )}
+        >
           {userEmail?.split("@")[0] || "user"}
         </span>
       </div>
@@ -51,15 +65,18 @@ export const NavbarUserDropdown = ({
             </div>
           </DropdownMenuLabel>
 
-          <DropdownMenuSeparator />
-
-          <DropdownMenuItem
-            onClick={onLogoutClick}
-            className="text-destructive focus:text-destructive"
-          >
-            <LogOut className="mr-2 h-4 w-4" />
-            Logout
-          </DropdownMenuItem>
+          {onLogoutClick && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={onLogoutClick}
+                className="text-destructive focus:text-destructive"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

@@ -103,7 +103,7 @@ export function JoinClassForm({ isOpen, onClose }: JoinClassFormProps) {
         </div>
 
         {errors.root?.message && (
-          <p className="text-sm text-danger">{errors.root.message}</p>
+          <p className="text-sm text-destructive">{errors.root.message}</p>
         )}
 
         <div className="flex gap-3 justify-end pt-4">

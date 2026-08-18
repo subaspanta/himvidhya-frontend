@@ -118,7 +118,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         </div>
 
         {authError && (
-          <div className="p-4 bg-danger/10 border border-danger/20 rounded-md text-sm text-danger text-center font-medium">
+          <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-md text-sm text-destructive text-center font-medium">
             {authError instanceof AxiosError
               ? authError.response?.data?.message || authError.message
               : "An unexpected error occurred"}

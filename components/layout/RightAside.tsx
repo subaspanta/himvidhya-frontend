@@ -12,9 +12,6 @@ import { useJoinRequestsCount } from "@/features/classes/hooks/useJoinRequestsCo
 import { useApproveJoinRequest } from "@/features/classes/hooks/useApproveJoinRequest";
 import { useRejectJoinRequest } from "@/features/classes/hooks/useRejectJoinRequest";
 
-// Join requests are teacher-only server-side (authorize({ roles: ["teacher"] })
-// on GET /classes/requests), so this widget renders nothing for a student —
-// there is no student-facing content for this sidebar today.
 export default function RightAside() {
   const { user } = useAuthStore();
   const isTeacher = user?.role === "teacher";
@@ -69,9 +66,7 @@ export default function RightAside() {
             Unable to load requests.
           </p>
         ) : requests.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            No pending requests.
-          </p>
+          <p className="text-sm text-muted-foreground">No pending requests.</p>
         ) : (
           <div className="flex flex-col gap-3">
             {requests.map((req) => {
@@ -89,7 +84,10 @@ export default function RightAside() {
                   <div className="flex items-center gap-3 min-w-0">
                     <Avatar className="w-9 h-9 shrink-0">
                       {req.user.avatar ? (
-                        <AvatarImage src={req.user.avatar} alt={req.user.name} />
+                        <AvatarImage
+                          src={req.user.avatar}
+                          alt={req.user.name}
+                        />
                       ) : (
                         <AvatarFallback className="bg-primary/10 text-foreground font-medium text-sm">
                           {req.user.name.charAt(0).toUpperCase()}
