@@ -101,11 +101,11 @@ describe("BatchCard", () => {
     const user = userEvent.setup();
     render(<BatchCard batch={ownerBatch} />);
 
-    await user.click(screen.getByRole("button", { name: "Batch options" }));
+    await user.click(screen.getByRole("button", { name: "Class options" }));
 
-    expect(screen.getByText("Edit Batch")).toBeInTheDocument();
-    expect(screen.getByText("Archive Batch")).toBeInTheDocument();
-    expect(screen.queryByText("Restore Batch")).not.toBeInTheDocument();
+    expect(screen.getByText("Edit Class")).toBeInTheDocument();
+    expect(screen.getByText("Archive Class")).toBeInTheDocument();
+    expect(screen.queryByText("Restore Class")).not.toBeInTheDocument();
   });
 
   it("shows Restore and not Archive for the owner of an archived class", async () => {
@@ -113,10 +113,10 @@ describe("BatchCard", () => {
     const user = userEvent.setup();
     render(<BatchCard batch={{ ...ownerBatch, status: "archived" }} />);
 
-    await user.click(screen.getByRole("button", { name: "Batch options" }));
+    await user.click(screen.getByRole("button", { name: "Class options" }));
 
-    expect(screen.getByText("Restore Batch")).toBeInTheDocument();
-    expect(screen.queryByText("Archive Batch")).not.toBeInTheDocument();
+    expect(screen.getByText("Restore Class")).toBeInTheDocument();
+    expect(screen.queryByText("Archive Class")).not.toBeInTheDocument();
   });
 
   it("hides Edit, Archive and Restore for a non-owner", async () => {
@@ -124,11 +124,11 @@ describe("BatchCard", () => {
     const user = userEvent.setup();
     render(<BatchCard batch={ownerBatch} />);
 
-    await user.click(screen.getByRole("button", { name: "Batch options" }));
+    await user.click(screen.getByRole("button", { name: "Class options" }));
 
-    expect(screen.queryByText("Edit Batch")).not.toBeInTheDocument();
-    expect(screen.queryByText("Archive Batch")).not.toBeInTheDocument();
-    expect(screen.queryByText("Restore Batch")).not.toBeInTheDocument();
+    expect(screen.queryByText("Edit Class")).not.toBeInTheDocument();
+    expect(screen.queryByText("Archive Class")).not.toBeInTheDocument();
+    expect(screen.queryByText("Restore Class")).not.toBeInTheDocument();
   });
 
   it("asks for confirmation before archiving, then calls the mutation", async () => {
@@ -136,8 +136,8 @@ describe("BatchCard", () => {
     const user = userEvent.setup();
     render(<BatchCard batch={ownerBatch} />);
 
-    await user.click(screen.getByRole("button", { name: "Batch options" }));
-    await user.click(screen.getByText("Archive Batch"));
+    await user.click(screen.getByRole("button", { name: "Class options" }));
+    await user.click(screen.getByText("Archive Class"));
 
     expect(archiveMutate).not.toHaveBeenCalled();
     expect(
@@ -155,8 +155,8 @@ describe("BatchCard", () => {
     const user = userEvent.setup();
     render(<BatchCard batch={{ ...ownerBatch, status: "archived" }} />);
 
-    await user.click(screen.getByRole("button", { name: "Batch options" }));
-    await user.click(screen.getByText("Restore Batch"));
+    await user.click(screen.getByRole("button", { name: "Class options" }));
+    await user.click(screen.getByText("Restore Class"));
 
     expect(restoreMutate).toHaveBeenCalledTimes(1);
     expect(restoreMutate).toHaveBeenCalledWith("class-1", expect.anything());
@@ -167,7 +167,7 @@ describe("BatchCard", () => {
     const user = userEvent.setup();
     render(<BatchCard batch={ownerBatch} />);
 
-    await user.click(screen.getByRole("button", { name: "Batch options" }));
+    await user.click(screen.getByRole("button", { name: "Class options" }));
     await user.click(screen.getByText("Regenerate Code"));
 
     expect(regenerateMutate).not.toHaveBeenCalled();
@@ -189,7 +189,7 @@ describe("BatchCard", () => {
     const user = userEvent.setup();
     render(<BatchCard batch={ownerBatch} />);
 
-    await user.click(screen.getByRole("button", { name: "Batch options" }));
+    await user.click(screen.getByRole("button", { name: "Class options" }));
 
     expect(screen.queryByText("Regenerate Code")).not.toBeInTheDocument();
   });
@@ -199,7 +199,7 @@ describe("BatchCard", () => {
     const user = userEvent.setup();
     render(<BatchCard batch={ownerBatch} />);
 
-    await user.click(screen.getByRole("button", { name: "Batch options" }));
+    await user.click(screen.getByRole("button", { name: "Class options" }));
 
     expect(screen.getByText("View Members")).toBeInTheDocument();
   });
@@ -209,7 +209,7 @@ describe("BatchCard", () => {
     const user = userEvent.setup();
     render(<BatchCard batch={ownerBatch} />);
 
-    await user.click(screen.getByRole("button", { name: "Batch options" }));
+    await user.click(screen.getByRole("button", { name: "Class options" }));
 
     expect(screen.getByText("Leave Class")).toBeInTheDocument();
   });
@@ -219,7 +219,7 @@ describe("BatchCard", () => {
     const user = userEvent.setup();
     render(<BatchCard batch={ownerBatch} />);
 
-    await user.click(screen.getByRole("button", { name: "Batch options" }));
+    await user.click(screen.getByRole("button", { name: "Class options" }));
 
     expect(screen.queryByText("Leave Class")).not.toBeInTheDocument();
   });
@@ -229,7 +229,7 @@ describe("BatchCard", () => {
     const user = userEvent.setup();
     render(<BatchCard batch={ownerBatch} />);
 
-    await user.click(screen.getByRole("button", { name: "Batch options" }));
+    await user.click(screen.getByRole("button", { name: "Class options" }));
     await user.click(screen.getByText("Leave Class"));
 
     expect(leaveMutate).not.toHaveBeenCalled();

@@ -142,7 +142,7 @@ export function EditClassForm({
             {...register("description")}
           />
           {errors.description?.message && (
-            <p className="text-sm text-danger mt-1">
+            <p className="text-sm text-destructive mt-1">
               {errors.description.message}
             </p>
           )}
@@ -163,7 +163,7 @@ export function EditClassForm({
         />
 
         {errors.root?.message && (
-          <p className="text-sm text-danger">{errors.root.message}</p>
+          <p className="text-sm text-destructive">{errors.root.message}</p>
         )}
 
         <div className="flex gap-3 justify-end pt-4">

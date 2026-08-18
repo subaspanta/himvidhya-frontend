@@ -9,6 +9,7 @@ export const useJoinRequestsCount = (
   return useQuery<number, AxiosError>({
     queryKey: QUERY_KEYS.joinRequestsCount,
     queryFn: getJoinRequestsCount,
+    refetchInterval: 15000,
     ...options,
   });
 };

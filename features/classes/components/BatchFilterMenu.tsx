@@ -42,7 +42,7 @@ const BatchFilterMenu: React.FC<Props> = ({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel>Batch Status</DropdownMenuLabel>
+        <DropdownMenuLabel>Class Status</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuCheckboxItem
           checked={showActive}
@@ -52,7 +52,7 @@ const BatchFilterMenu: React.FC<Props> = ({
             setShowArchived?.(false);
           }}
         >
-          Active Batches
+          Active Classes
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           checked={showArchived}

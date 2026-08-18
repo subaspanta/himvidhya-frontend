@@ -13,6 +13,7 @@ export const useJoinRequests = (
   return useQuery<TeacherJoinRequest[], AxiosError>({
     queryKey: QUERY_KEYS.joinRequests,
     queryFn: getJoinRequests,
+    refetchInterval: 15000,
     ...options,
   });
 };

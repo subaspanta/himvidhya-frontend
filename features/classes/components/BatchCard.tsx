@@ -57,7 +57,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const copyCodeToClipboard = (e: React.MouseEvent) => {
     e.stopPropagation();
     navigator.clipboard.writeText(batch.code);
-    toast.success("Batch code copied!");
+    toast.success("Class code copied!");
   };
 
   const openBatch = (e: React.MouseEvent) => {
@@ -154,8 +154,8 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
     <Card
       className={cn(
         "group relative overflow-hidden transition-all duration-300",
-        "bg-card border border-border rounded-2xl",
-        "hover:shadow-md hover:border-primary/30 hover:scale-[1.02]",
+        "bg-card border border-border rounded-xl",
+        "hover:shadow-sm hover:border-primary/40",
         "flex flex-col gap-0 py-0",
       )}
     >
@@ -164,7 +164,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
             {/* Icon */}
-            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm tracking-wide shrink-0">
+            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm tracking-wide shrink-0">
               {initials}
             </div>
 
@@ -186,7 +186,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
                 className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted/60"
               >
                 <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Batch options</span>
+                <span className="sr-only">Class options</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-44">
@@ -201,7 +201,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
               {isOwner && (
                 <DropdownMenuItem onClick={openEdit}>
                   <Edit className="w-4 h-4 mr-2" />
-                  Edit Batch
+                  Edit Class
                 </DropdownMenuItem>
               )}
               {isOwner && batch.status === "active" && (
@@ -213,13 +213,13 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
               {isOwner && batch.status === "active" && (
                 <DropdownMenuItem onClick={openArchiveConfirm}>
                   <Archive className="w-4 h-4 mr-2" />
-                  Archive Batch
+                  Archive Class
                 </DropdownMenuItem>
               )}
               {isOwner && batch.status === "archived" && (
                 <DropdownMenuItem onClick={handleRestore}>
                   <ArchiveRestore className="w-4 h-4 mr-2" />
-                  Restore Batch
+                  Restore Class
                 </DropdownMenuItem>
               )}
               {!isOwner && (

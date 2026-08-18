@@ -81,7 +81,7 @@ export function ClassMembersModal({
         )}
 
         {isError && (
-          <p className="text-sm text-danger py-4">
+          <p className="text-sm text-destructive py-4">
             Unable to load members. Please try again.
           </p>
         )}
