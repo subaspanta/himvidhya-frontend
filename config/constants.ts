@@ -19,6 +19,9 @@ export const QUERY_KEYS = {
   // Posts
   classPosts: (classId: string) => ["classPosts", classId],
 
+  // Comments
+  postComments: (postId: string) => ["postComments", postId],
+
   // Materials
   // No q -> ["classMaterials", classId], a true prefix of every q-variant
   // below it, so invalidating without q clears all search variants too.
