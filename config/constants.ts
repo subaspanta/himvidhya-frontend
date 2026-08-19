@@ -18,6 +18,9 @@ export const QUERY_KEYS = {
 
   // Posts
   classPosts: (classId: string) => ["classPosts", classId],
+
+  // Comments
+  postComments: (postId: string) => ["postComments", postId],
 };
 
 export const PUBLIC_PATHS = new Set([
