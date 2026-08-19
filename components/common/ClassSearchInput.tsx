@@ -10,13 +10,15 @@ interface ClassSearchInputProps {
   placeholder?: string;
   debounceMs?: number;
   className?: string;
+  /** Defaults preserve the original dashboard call sites unchanged. */
+  id?: string;
+  label?: string;
 }
 
 /**
- * Debounced search box shared by the teacher and student dashboards.
- * Filters client-side today (D18's server-side search is a separate
- * backend task) — the debounce still matters so the filter doesn't
- * re-run on every keystroke.
+ * Debounced search box shared by the teacher/student dashboards and the
+ * class Materials panel (server-side search, D18). The dashboards still
+ * filter client-side; Materials passes `q` straight to the API.
  */
 export function ClassSearchInput({
   value,
@@ -24,6 +26,8 @@ export function ClassSearchInput({
   placeholder = "Search classes...",
   debounceMs = 300,
   className,
+  id = "class-search",
+  label = "Search classes",
 }: ClassSearchInputProps) {
   const [draft, setDraft] = useState(value);
 
@@ -40,13 +44,13 @@ export function ClassSearchInput({
 
   return (
     <div className={className}>
-      <label htmlFor="class-search" className="sr-only">
-        Search classes
+      <label htmlFor={id} className="sr-only">
+        {label}
       </label>
       <div className="relative">
         <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          id="class-search"
+          id={id}
           type="search"
           value={draft}
           onChange={(e) => setDraft(e.target.value)}

@@ -18,6 +18,12 @@ export const QUERY_KEYS = {
 
   // Posts
   classPosts: (classId: string) => ["classPosts", classId],
+
+  // Materials
+  // No q -> ["classMaterials", classId], a true prefix of every q-variant
+  // below it, so invalidating without q clears all search variants too.
+  classMaterials: (classId: string, q?: string) =>
+    q ? ["classMaterials", classId, q] : ["classMaterials", classId],
 };
 
 export const PUBLIC_PATHS = new Set([
