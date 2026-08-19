@@ -22,8 +22,6 @@ export function CommentList({ postId, canModerate }: CommentListProps) {
 
   return (
     <div className="border-t border-border pt-3 mt-3 space-y-3">
-      <CommentComposer postId={postId} />
-
       {isLoading && <CommentSkeletonGroup />}
 
       {isError && (
@@ -64,6 +62,10 @@ export function CommentList({ postId, canModerate }: CommentListProps) {
           </Button>
         </div>
       )}
+
+      {/* Pinned at the bottom of the thread, Classroom-style, rather than
+          above the list. */}
+      <CommentComposer postId={postId} />
     </div>
   );
 }

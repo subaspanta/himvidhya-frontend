@@ -4,7 +4,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { extractErrorMessage } from "@/shared/utils";
+import { extractErrorMessage, formatRelativeTime } from "@/shared/utils";
 import { useUpdateComment } from "../hooks/useUpdateComment";
 import { useDeleteComment } from "../hooks/useDeleteComment";
 import type { Comment } from "../types";
@@ -78,6 +78,9 @@ export function CommentItem({ comment, postId, isAuthor, canModerate }: CommentI
               Teacher
             </span>
           )}
+          <span className="text-xs text-muted-foreground">
+            {formatRelativeTime(comment.createdAt)}
+          </span>
         </div>
 
         {isDeleted ? (
