@@ -9,7 +9,7 @@ interface ClassFeedPageProps {
 }
 
 // The Stream tab's content only -- header, archived banner, and tab nav
-// now live in ClassLayoutShell, shared across Stream/Materials/People.
+// now live in ClassLayoutShell, shared across Stream/People.
 export function ClassFeedPage({ classId }: ClassFeedPageProps) {
   const { isOwner, isArchived } = useClassContext();
 

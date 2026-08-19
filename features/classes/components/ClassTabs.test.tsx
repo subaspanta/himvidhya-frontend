@@ -13,16 +13,7 @@ describe("ClassTabs", () => {
     render(<ClassTabs classId="class-1" />);
 
     expect(screen.getByRole("link", { name: "Stream" })).toHaveAttribute("aria-current", "page");
-    expect(screen.getByRole("link", { name: "Materials" })).not.toHaveAttribute("aria-current");
     expect(screen.getByRole("link", { name: "People" })).not.toHaveAttribute("aria-current");
-  });
-
-  it("marks Materials active on the materials route", () => {
-    mockPathname = "/home/classes/class-1/materials";
-    render(<ClassTabs classId="class-1" />);
-
-    expect(screen.getByRole("link", { name: "Materials" })).toHaveAttribute("aria-current", "page");
-    expect(screen.getByRole("link", { name: "Stream" })).not.toHaveAttribute("aria-current");
   });
 
   it("marks People active on the people route", () => {
@@ -39,10 +30,6 @@ describe("ClassTabs", () => {
     expect(screen.getByRole("link", { name: "Stream" })).toHaveAttribute(
       "href",
       "/home/classes/class-1",
-    );
-    expect(screen.getByRole("link", { name: "Materials" })).toHaveAttribute(
-      "href",
-      "/home/classes/class-1/materials",
     );
     expect(screen.getByRole("link", { name: "People" })).toHaveAttribute(
       "href",

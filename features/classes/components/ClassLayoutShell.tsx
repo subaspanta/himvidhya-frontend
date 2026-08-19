@@ -13,10 +13,10 @@ interface ClassLayoutShellProps {
   children: ReactNode;
 }
 
-// Shared shell for all three class tabs (Stream/Materials/People): fetches
-// classDetails once, renders the header + tab nav, and hands isOwner/
-// isArchived to every tab page through ClassContext so none of them needs
-// its own useClassDetails + useAuthStore pair.
+// Shared shell for both class tabs (Stream/People): fetches classDetails
+// once, renders the header + tab nav, and hands isOwner/isArchived to every
+// tab page through ClassContext so none of them needs its own
+// useClassDetails + useAuthStore pair.
 export function ClassLayoutShell({ classId, children }: ClassLayoutShellProps) {
   const { user } = useAuthStore();
   const { data: classDetails, isLoading, isError } = useClassDetails(classId);

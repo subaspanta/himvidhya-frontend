@@ -13,7 +13,6 @@ export function ClassTabs({ classId }: ClassTabsProps) {
 
   const tabs = [
     { label: "Stream", href: `/home/classes/${classId}` },
-    { label: "Materials", href: `/home/classes/${classId}/materials` },
     { label: "People", href: `/home/classes/${classId}/people` },
   ];
 

@@ -4,6 +4,13 @@ import userEvent from "@testing-library/user-event";
 import { PostCard } from "./PostCard";
 import type { Post } from "../types";
 
+vi.mock("../hooks/useDownloadPostAttachment", () => ({
+  useDownloadPostAttachment: () => ({
+    mutate: vi.fn(),
+    isPending: false,
+  }),
+}));
+
 const post: Post = {
   id: "post-1",
   title: "Welcome to class",
@@ -18,6 +25,7 @@ const post: Post = {
   },
   isPinned: false,
   deletedAt: null,
+  attachments: [],
   createdAt: "2026-08-17T00:00:00.000Z",
   updatedAt: "2026-08-17T00:00:00.000Z",
 };
@@ -72,6 +80,6 @@ describe("PostCard", () => {
     );
 
     expect(screen.queryByText(post.content)).not.toBeInTheDocument();
-    expect(screen.getByText(/this post was deleted/i)).toBeInTheDocument();
+    expect(screen.getByText(/this announcement was deleted/i)).toBeInTheDocument();
   });
 });

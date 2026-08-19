@@ -37,6 +37,7 @@ const post: Post = {
   },
   isPinned: false,
   deletedAt: null,
+  attachments: [],
   createdAt: "2026-08-17T00:00:00.000Z",
   updatedAt: "2026-08-17T00:00:00.000Z",
 };

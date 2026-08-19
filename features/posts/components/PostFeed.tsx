@@ -50,14 +50,14 @@ export function PostFeed({ classId, isOwner }: PostFeedProps) {
     return (
       <div>
         <PostFeedSkeleton />
-        <p className="sr-only">Loading posts...</p>
+        <p className="sr-only">Loading announcements...</p>
       </div>
     );
   }
 
   if (isError) {
     return (
-      <p className="text-sm text-destructive py-4">Unable to load posts.</p>
+      <p className="text-sm text-destructive py-4">Unable to load announcements.</p>
     );
   }
 
@@ -66,10 +66,10 @@ export function PostFeed({ classId, isOwner }: PostFeedProps) {
   if (posts.length === 0) {
     return (
       <div className="py-8 text-center">
-        <p className="text-sm text-muted-foreground">No posts yet.</p>
+        <p className="text-sm text-muted-foreground">No announcements yet.</p>
         {isOwner && (
           <p className="text-sm text-muted-foreground mt-1">
-            Share your first post above.
+            Share your first announcement above.
           </p>
         )}
       </div>

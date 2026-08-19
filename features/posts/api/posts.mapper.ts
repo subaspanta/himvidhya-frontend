@@ -9,6 +9,33 @@ const PostAuthorDtoSchema = z.object({
   avatar: z.string().nullable(),
 });
 
+const PostFileAttachmentDtoSchema = z.object({
+  _id: z.string(),
+  type: z.literal("file"),
+  fileName: z.string(),
+  mimeType: z.string(),
+  size: z.number(),
+});
+
+const PostLinkAttachmentDtoSchema = z.object({
+  _id: z.string(),
+  type: z.literal("link"),
+  url: z.string(),
+});
+
+const PostYoutubeAttachmentDtoSchema = z.object({
+  _id: z.string(),
+  type: z.literal("youtube"),
+  url: z.string(),
+  thumbnailUrl: z.string(),
+});
+
+const PostAttachmentDtoSchema = z.discriminatedUnion("type", [
+  PostFileAttachmentDtoSchema,
+  PostLinkAttachmentDtoSchema,
+  PostYoutubeAttachmentDtoSchema,
+]);
+
 const PostDtoSchema = z.object({
   _id: z.string(),
   title: z.string(),
@@ -17,6 +44,9 @@ const PostDtoSchema = z.object({
   authorId: PostAuthorDtoSchema,
   isPinned: z.boolean(),
   deletedAt: z.string().nullable(),
+  // Backward-compatible default: every server response includes this, but
+  // older cached responses (or hand-built fixtures) without it still parse.
+  attachments: z.array(PostAttachmentDtoSchema).optional().default([]),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
@@ -48,6 +78,7 @@ export const mapPostDto = (item: unknown): Post | null => {
     authorId: parsed.authorId,
     isPinned: parsed.isPinned,
     deletedAt: parsed.deletedAt,
+    attachments: parsed.attachments,
     createdAt: parsed.createdAt,
     updatedAt: parsed.updatedAt,
   };
