@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Spinner } from "@/shared/loading/Spinner";
 import { Button } from "@/components/ui/button";
+import { PostCardSkeleton, PostFeedSkeleton } from "@/components/ui/skeleton";
 import { usePostsFeed } from "../hooks/usePostsFeed";
 import { usePinPost } from "../hooks/usePinPost";
 import { useUnpinPost } from "../hooks/useUnpinPost";
@@ -48,8 +48,8 @@ export function PostFeed({ classId, isOwner }: PostFeedProps) {
 
   if (isLoading) {
     return (
-      <div className="py-8">
-        <Spinner size={24} />
+      <div>
+        <PostFeedSkeleton />
         <p className="sr-only">Loading posts...</p>
       </div>
     );
@@ -92,11 +92,7 @@ export function PostFeed({ classId, isOwner }: PostFeedProps) {
           keyboard/reduced-motion-reachable fallback for the same action. */}
       <div ref={sentinelRef} aria-hidden />
 
-      {isFetchingNextPage && (
-        <div className="py-4">
-          <Spinner size={20} />
-        </div>
-      )}
+      {isFetchingNextPage && <PostCardSkeleton />}
 
       {hasNextPage && !isFetchingNextPage && (
         <div className="flex justify-center py-2">

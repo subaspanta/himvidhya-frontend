@@ -1,7 +1,3 @@
-/* ================================================================
-   FONTS
-   ================================================================ */
-
 @font-face {
   font-family: "Satoshi";
   src:
@@ -23,11 +19,6 @@
   font-style: italic;
   font-display: swap;
 }
-
-/* ================================================================
-   DESIGN TOKENS — Light Mode
-   Forest Green Admin — sidebar-shell reference (MGM College style)
-   ================================================================ */
 
 :root {
   color-scheme: light;

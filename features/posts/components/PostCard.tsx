@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardTitle } from "@/components/ui/card";
 import type { Post } from "../types";
 
 interface PostCardProps {
@@ -15,18 +15,23 @@ export function PostCard({ post, isOwner, onPin, onUnpin }: PostCardProps) {
   const isDeleted = Boolean(post.deletedAt);
 
   return (
-    <Card className="p-5">
-      <CardHeader className="px-0 flex-row items-start justify-between gap-2">
-        <div className="flex items-center gap-2 flex-wrap">
-          <CardTitle className="text-base">{post.title}</CardTitle>
-          {post.isPinned && (
-            <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-primary-subtle text-primary">
-              Pinned
-            </span>
-          )}
+    <Card className="p-5 gap-3">
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0 space-y-1">
+          <div className="flex items-center gap-2 flex-wrap">
+            <CardTitle className="text-base">{post.title}</CardTitle>
+            {post.isPinned && (
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-primary-subtle text-primary">
+                Pinned
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {post.authorId.name}
+          </p>
         </div>
         {isOwner && !isDeleted && (
-          <div>
+          <div className="shrink-0">
             {post.isPinned ? (
               <Button
                 type="button"
@@ -48,11 +53,7 @@ export function PostCard({ post, isOwner, onPin, onUnpin }: PostCardProps) {
             )}
           </div>
         )}
-      </CardHeader>
-
-      <p className="text-xs text-muted-foreground -mt-4">
-        {post.authorId.name}
-      </p>
+      </div>
 
       {isDeleted ? (
         <p className="text-sm text-muted-foreground italic">

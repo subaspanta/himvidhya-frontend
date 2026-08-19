@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+import { AppLogoMark } from "./AppLogoMark";
 import { AppLogoProps } from "../types";
 import { cn } from "@/shared/utils";
 
@@ -11,20 +11,19 @@ export const AppLogo: React.FC<
   }
 > = ({ size = "sm", className = "", tone = "light" }) => {
   const dimensions = size === "sm" ? "w-32 h-8" : "w-40 h-10";
+  const markDimensions = size === "sm" ? "w-8 h-8" : "w-10 h-10";
 
   return (
     <div
-      className={`relative flex items-center gap-2 ${dimensions} ${className}`}
+      className={`flex items-center gap-2 ${dimensions} ${className}`}
     >
-      <div className="relative h-full aspect-square">
-        <Image
-          src="/Logo.svg"
-          alt="HimVidya Logo"
-          className="object-contain"
-          priority
-          fill
-          sizes="(max-width: 768px) 32px, 40px"
-        />
+      <div
+        className={cn(
+          "flex shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground p-1.5",
+          markDimensions,
+        )}
+      >
+        <AppLogoMark className="h-full w-full" />
       </div>
       <span
         className={cn(
@@ -32,7 +31,7 @@ export const AppLogo: React.FC<
           tone === "dark" ? "text-primary-foreground" : "text-foreground",
         )}
       >
-        HimVidya
+        HimVidhya
       </span>
     </div>
   );

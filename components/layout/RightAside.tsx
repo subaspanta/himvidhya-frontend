@@ -4,7 +4,7 @@ import React from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import toast from "react-hot-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Spinner } from "@/shared/loading/Spinner";
+import { ListRowSkeletonGroup } from "@/components/ui/skeleton";
 import { extractErrorMessage } from "@/shared/utils";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useJoinRequests } from "@/features/classes/hooks/useJoinRequests";
@@ -60,7 +60,7 @@ export default function RightAside() {
         </div>
 
         {isLoading ? (
-          <Spinner size={20} />
+          <ListRowSkeletonGroup count={2} />
         ) : isError ? (
           <p className="text-sm text-muted-foreground">
             Unable to load requests.
