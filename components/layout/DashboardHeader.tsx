@@ -12,6 +12,13 @@ interface DashboardHeaderProps {
   role?: "teacher" | "student";
 }
 
+function getGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 18) return "Good afternoon";
+  return "Good evening";
+}
+
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   profile,
   activeClassCount,
@@ -21,6 +28,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
   const { mutate: createMutate, isPending: isCreating } = useCreateClass();
+  const [greeting] = useState(getGreeting);
 
   const handleCreateClass = (data: {
     name: string;
@@ -45,7 +53,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-3xl font-heading font-bold text-foreground">
-                Good Morning, {profile.name}
+                {greeting}, {profile.name}
               </h1>
               <span className="inline-flex items-center justify-center bg-primary-subtle text-primary text-xs font-bold px-2 py-0.5 rounded-full border border-primary/20">
                 {isTeacher ? "TEACHER" : "STUDENT"}
