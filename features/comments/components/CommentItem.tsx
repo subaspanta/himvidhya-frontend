@@ -109,7 +109,7 @@ export function CommentItem({ comment, postId, isAuthor, canModerate }: CommentI
             </div>
           </div>
         ) : (
-          <p className="text-sm text-foreground whitespace-pre-wrap mt-0.5">{comment.content}</p>
+          <p className="text-sm text-foreground whitespace-pre-wrap mt-0.5 max-w-prose">{comment.content}</p>
         )}
 
         {!isDeleted && !isEditing && (isAuthor || canDelete) && (

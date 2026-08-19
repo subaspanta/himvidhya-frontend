@@ -65,7 +65,7 @@ export function PostCard({ post, isOwner, onPin, onUnpin }: PostCardProps) {
           This post was deleted.
         </p>
       ) : (
-        <p className="text-sm text-foreground whitespace-pre-wrap">
+        <p className="text-sm text-foreground whitespace-pre-wrap max-w-prose">
           {post.content}
         </p>
       )}

@@ -66,7 +66,7 @@ export function Sidebar({ className, onNavigate }: SidebarProps) {
           logout();
         }}
         disabled={isLoggingOut}
-        className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-muted-foreground hover:bg-accent-subtle hover:text-accent-subtle-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="mt-auto flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-muted-foreground hover:bg-accent-subtle hover:text-accent-subtle-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <LogOut className="w-4 h-4 shrink-0" />
         {isLoggingOut ? "Logging out..." : "Log Out"}

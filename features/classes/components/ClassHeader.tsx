@@ -7,7 +7,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import type { ClassDetails } from "../types";
 
-const ACCENT_TOKENS = ["--chart-1", "--chart-2", "--chart-3", "--chart-4", "--chart-5"];
+// --chart-5 ("stone", a near-gray neutral) is deliberately excluded --
+// it doesn't read as an accent, just a flat gray tile that looks broken
+// rather than colored.
+const ACCENT_TOKENS = ["--chart-1", "--chart-2", "--chart-3", "--chart-4"];
 
 // Deterministic, not random -- the same class always gets the same
 // accent, purely so a list of classes reads as distinct places without
@@ -57,17 +60,15 @@ export function ClassHeader({ classDetails, isOwner, isArchived }: ClassHeaderPr
         </div>
 
         <div className="min-w-0 flex-1 space-y-1">
-          {classDetails.subject && (
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              {classDetails.subject}
-            </p>
-          )}
           <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground leading-tight">
               {classDetails.name}
             </h1>
             {isArchived && <Badge variant="secondary">Archived</Badge>}
           </div>
+          {classDetails.subject && (
+            <p className="text-sm text-muted-foreground">{classDetails.subject}</p>
+          )}
 
           <div className="flex items-center gap-4 flex-wrap pt-1">
             <div className="flex items-center gap-2">

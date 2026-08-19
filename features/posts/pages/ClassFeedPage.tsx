@@ -14,7 +14,7 @@ export function ClassFeedPage({ classId }: ClassFeedPageProps) {
   const { isOwner, isArchived } = useClassContext();
 
   return (
-    <div className="max-w-2xl space-y-4">
+    <div className="space-y-4">
       {isOwner && !isArchived && <CreatePostForm classId={classId} />}
       <PostFeed classId={classId} isOwner={isOwner} />
     </div>

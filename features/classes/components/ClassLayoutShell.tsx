@@ -23,7 +23,7 @@ export function ClassLayoutShell({ classId, children }: ClassLayoutShellProps) {
 
   if (isLoading) {
     return (
-      <div className="w-full pb-8">
+      <div className="max-w-4xl mx-auto w-full pb-8">
         <ClassHeaderSkeleton />
         <p className="sr-only">Loading class...</p>
       </div>
@@ -32,7 +32,9 @@ export function ClassLayoutShell({ classId, children }: ClassLayoutShellProps) {
 
   if (isError || !classDetails) {
     return (
-      <p className="text-sm text-destructive py-8">Unable to load this class.</p>
+      <p className="max-w-4xl mx-auto text-sm text-destructive py-8">
+        Unable to load this class.
+      </p>
     );
   }
 
@@ -43,7 +45,11 @@ export function ClassLayoutShell({ classId, children }: ClassLayoutShellProps) {
 
   return (
     <ClassProvider value={{ classDetails, isOwner, isArchived }}>
-      <div className="w-full text-foreground pb-8 space-y-6">
+      {/* One shared reading column for header, tabs, and every tab panel --
+          this page has no RightAside (unlike the dashboards), so without a
+          cap the content would either stretch edge-to-edge or, worse, sit
+          left-aligned in a wide container with dead space to the right. */}
+      <div className="max-w-4xl mx-auto w-full text-foreground pb-8 space-y-6">
         <ClassHeader classDetails={classDetails} isOwner={isOwner} isArchived={isArchived} />
         <ClassTabs classId={classId} />
         {children}
