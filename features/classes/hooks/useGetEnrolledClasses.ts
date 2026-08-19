@@ -13,6 +13,11 @@ export const useGetEnrolledClasses = (
   return useQuery<ClassCard[], AxiosError>({
     queryKey: QUERY_KEYS.enrolledClasses,
     queryFn: getEnrolledClasses,
+    // No realtime layer (websocket/SSE) in this app: a teacher approving a
+    // join request in their own session has no way to push that to an
+    // already-open student dashboard. Poll instead, same as
+    // useJoinRequestsCount's teacher-side badge.
+    refetchInterval: 15000,
     ...options,
   });
 };

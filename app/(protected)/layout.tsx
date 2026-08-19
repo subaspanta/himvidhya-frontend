@@ -1,11 +1,16 @@
 "use client";
 
 import React from "react";
-import { Footer } from "@/features/landing";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { Sidebar } from "@/components/layout/Sidebar";
-import RightAside from "@/components/layout/RightAside";
 
+// The two-column content+RightAside composition used to live here,
+// forcing every protected page (including the class page) into a ~60%
+// column. Only the teacher dashboard actually needs RightAside (pending
+// join requests) — it now owns that composition itself, and every other
+// page gets the full content width.
+//
+// No Footer here -- it's marketing/landing-only (see (public)/layout.tsx).
 export default function DashboardLayout({
   children,
 }: {
@@ -16,20 +21,9 @@ export default function DashboardLayout({
       <AppHeader />
       <div className="flex flex-1 min-h-0">
         <Sidebar className="hidden lg:flex" />
-        <div className="flex-1 min-w-0 flex flex-col">
-          <main className="flex-1 max-w-[1440px] w-full mx-auto">
-            <div className="flex flex-col lg:flex-row gap-6 p-4 md:p-6 lg:p-8 w-full">
-              <div className="w-full lg:flex-1 min-w-0 lg:pr-6 border-r-0 lg:border-r border-border">
-                {children}
-              </div>
-              <RightAside />
-            </div>
-          </main>
-          <Footer
-            variant="dashboard"
-            className="w-full max-w-[1440px] mx-auto p-4 md:p-6 lg:p-8"
-          />
-        </div>
+        <main className="flex-1 min-w-0 max-w-[1440px] w-full mx-auto">
+          <div className="p-4 md:p-6 lg:p-8 w-full">{children}</div>
+        </main>
       </div>
     </div>
   );

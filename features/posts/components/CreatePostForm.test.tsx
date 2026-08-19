@@ -12,6 +12,19 @@ vi.mock("../hooks/useCreatePost", () => ({
   }),
 }));
 
+vi.mock("../hooks/useUploadPostAttachment", () => ({
+  useUploadPostAttachment: () => ({
+    mutateAsync: vi.fn(),
+    isPending: false,
+  }),
+}));
+
+vi.mock("../hooks/useDiscardPostAttachmentUpload", () => ({
+  useDiscardPostAttachmentUpload: () => ({
+    mutate: vi.fn(),
+  }),
+}));
+
 describe("CreatePostForm", () => {
   beforeEach(() => {
     mutateAsync.mockClear();

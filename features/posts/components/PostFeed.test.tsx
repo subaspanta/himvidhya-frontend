@@ -25,6 +25,12 @@ vi.mock("../hooks/usePinPost", () => ({
 vi.mock("../hooks/useUnpinPost", () => ({
   useUnpinPost: () => ({ mutate: unpinMutate }),
 }));
+vi.mock("../hooks/useDownloadPostAttachment", () => ({
+  useDownloadPostAttachment: () => ({
+    mutate: vi.fn(),
+    isPending: false,
+  }),
+}));
 
 // jsdom has no IntersectionObserver. Capture the registered callback so
 // tests can simulate the sentinel entering the viewport.
@@ -52,6 +58,7 @@ const post = (id: string, overrides: Partial<Post> = {}): Post => ({
   },
   isPinned: false,
   deletedAt: null,
+  attachments: [],
   createdAt: "2026-08-17T00:00:00.000Z",
   updatedAt: "2026-08-17T00:00:00.000Z",
   ...overrides,
@@ -83,7 +90,7 @@ describe("PostFeed", () => {
   it("shows an error state on failure", () => {
     mockReturn = { ...mockReturn, isLoading: false, isError: true };
     render(<PostFeed classId="class-1" isOwner={false} />);
-    expect(screen.getByText(/unable to load posts/i)).toBeInTheDocument();
+    expect(screen.getByText(/unable to load announcements/i)).toBeInTheDocument();
   });
 
   it("renders posts from every loaded page without duplicates", () => {

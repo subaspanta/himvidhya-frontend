@@ -8,6 +8,34 @@ export interface PostAuthor {
   avatar: string | null;
 }
 
+// storageKey never leaves the server (ADR-0005) -- a file attachment's
+// bytes are only reachable via a freshly-signed download-url call.
+export interface PostFileAttachment {
+  _id: string;
+  type: "file";
+  fileName: string;
+  mimeType: string;
+  size: number;
+}
+
+export interface PostLinkAttachment {
+  _id: string;
+  type: "link";
+  url: string;
+}
+
+export interface PostYoutubeAttachment {
+  _id: string;
+  type: "youtube";
+  url: string;
+  thumbnailUrl: string;
+}
+
+export type PostAttachment =
+  | PostFileAttachment
+  | PostLinkAttachment
+  | PostYoutubeAttachment;
+
 // Shape returned by GET /classes/:classId/posts, GET /posts/:postId, and
 // every post mutation response. authorId is populated on every one of
 // these endpoints (post.service.js).
@@ -19,6 +47,7 @@ export interface Post {
   authorId: PostAuthor;
   isPinned: boolean;
   deletedAt: string | null;
+  attachments: PostAttachment[];
   createdAt: string;
   updatedAt: string;
 }

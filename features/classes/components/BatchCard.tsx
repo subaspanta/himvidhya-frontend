@@ -274,7 +274,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
         title="Archive this class?"
       >
         <p className="text-sm text-muted-foreground mb-6">
-          Existing members keep read access, but no new posts, comments or
+          Existing members keep read access, but no new announcements, comments or
           join requests can be added until you restore it.
         </p>
         <div className="flex gap-3 justify-end">

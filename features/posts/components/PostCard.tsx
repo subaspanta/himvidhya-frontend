@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { CommentList } from "@/features/comments/components/CommentList";
 import { cn } from "@/shared/utils";
+import { PostAttachments } from "./PostAttachments";
 import type { Post } from "../types";
 
 interface PostCardProps {
@@ -62,13 +63,15 @@ export function PostCard({ post, isOwner, onPin, onUnpin }: PostCardProps) {
 
       {isDeleted ? (
         <p className="text-sm text-muted-foreground italic">
-          This post was deleted.
+          This announcement was deleted.
         </p>
       ) : (
-        <p className="text-sm text-foreground whitespace-pre-wrap">
+        <p className="text-sm text-foreground whitespace-pre-wrap max-w-prose">
           {post.content}
         </p>
       )}
+
+      {!isDeleted && <PostAttachments postId={post.id} attachments={post.attachments} />}
 
       <button
         type="button"

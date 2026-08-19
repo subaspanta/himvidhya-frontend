@@ -16,9 +16,8 @@ interface ClassSearchInputProps {
 }
 
 /**
- * Debounced search box shared by the teacher/student dashboards and the
- * class Materials panel (server-side search, D18). The dashboards still
- * filter client-side; Materials passes `q` straight to the API.
+ * Debounced search box shared by the teacher/student dashboards. Filters
+ * client-side.
  */
 export function ClassSearchInput({
   value,
