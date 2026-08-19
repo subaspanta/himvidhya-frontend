@@ -1,7 +1,11 @@
 "use client";
 
+import { useState } from "react";
+import { MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
+import { CommentList } from "@/features/comments/components/CommentList";
+import { cn } from "@/shared/utils";
 import type { Post } from "../types";
 
 interface PostCardProps {
@@ -13,6 +17,7 @@ interface PostCardProps {
 
 export function PostCard({ post, isOwner, onPin, onUnpin }: PostCardProps) {
   const isDeleted = Boolean(post.deletedAt);
+  const [areCommentsOpen, setAreCommentsOpen] = useState(false);
 
   return (
     <Card className="p-5 gap-3">
@@ -64,6 +69,21 @@ export function PostCard({ post, isOwner, onPin, onUnpin }: PostCardProps) {
           {post.content}
         </p>
       )}
+
+      <button
+        type="button"
+        onClick={() => setAreCommentsOpen((open) => !open)}
+        aria-expanded={areCommentsOpen}
+        className={cn(
+          "inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground w-fit",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded",
+        )}
+      >
+        <MessageSquare className="w-3.5 h-3.5" />
+        {areCommentsOpen ? "Hide comments" : "Comments"}
+      </button>
+
+      {areCommentsOpen && <CommentList postId={post.id} canModerate={isOwner} />}
     </Card>
   );
 }
