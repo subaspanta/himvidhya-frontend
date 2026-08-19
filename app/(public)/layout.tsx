@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Footer } from "@/features/landing";
-import { Navbar } from "@/components/navbar";
+import { Navbar, NavbarSkeleton } from "@/components/navbar";
 
 export default function PublicLayout({
   children,
@@ -9,7 +9,11 @@ export default function PublicLayout({
 }) {
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Suspense fallback={null}>
+      <Suspense
+        fallback={
+          <NavbarSkeleton className="mx-auto w-full h-12 md:p-6 lg:p-8" />
+        }
+      >
         <Navbar
           className=" mx-auto w-full h-12 md:p-6 lg:p-8"
           variant="landing"

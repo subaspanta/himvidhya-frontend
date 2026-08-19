@@ -5,7 +5,7 @@ import { Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
-import { Spinner } from "@/shared/loading/Spinner";
+import { ListRowSkeletonGroup } from "@/components/ui/skeleton";
 import { extractErrorMessage } from "@/shared/utils";
 import { useClassMembers } from "@/features/classes/hooks/useClassMembers";
 import { useRemoveClassMember } from "@/features/classes/hooks/useRemoveClassMember";
@@ -74,11 +74,7 @@ export function ClassMembersModal({
           </div>
         )}
 
-        {isLoading && (
-          <div className="flex justify-center py-6">
-            <Spinner size={24} />
-          </div>
-        )}
+        {isLoading && <ListRowSkeletonGroup count={3} />}
 
         {isError && (
           <p className="text-sm text-destructive py-4">

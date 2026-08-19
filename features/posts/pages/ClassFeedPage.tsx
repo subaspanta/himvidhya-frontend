@@ -2,7 +2,7 @@
 
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { useClassDetails } from "@/features/classes/hooks/useClassDetails";
-import { Spinner } from "@/shared/loading/Spinner";
+import { ClassHeaderSkeleton } from "@/components/ui/skeleton";
 import { CreatePostForm } from "../components/CreatePostForm";
 import { PostFeed } from "../components/PostFeed";
 
@@ -16,8 +16,9 @@ export function ClassFeedPage({ classId }: ClassFeedPageProps) {
 
   if (isLoading) {
     return (
-      <div className="py-8">
-        <Spinner size={24} />
+      <div className="w-full pb-8">
+        <ClassHeaderSkeleton />
+        <p className="sr-only">Loading class...</p>
       </div>
     );
   }

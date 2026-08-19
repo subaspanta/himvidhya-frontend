@@ -41,4 +41,71 @@ function ClassCardSkeletonGrid({ count = 3 }: { count?: number }) {
   );
 }
 
-export { Skeleton, ClassCardSkeleton, ClassCardSkeletonGrid };
+function PostCardSkeleton() {
+  return (
+    <div className="bg-card border border-border rounded-xl p-5 flex flex-col gap-3">
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0 space-y-2 flex-1">
+          <Skeleton className="h-4 w-2/5" />
+          <Skeleton className="h-3 w-1/4" />
+        </div>
+      </div>
+      <div className="space-y-2">
+        <Skeleton className="h-3 w-full" />
+        <Skeleton className="h-3 w-4/5" />
+      </div>
+    </div>
+  );
+}
+
+function PostFeedSkeleton({ count = 3 }: { count?: number }) {
+  return (
+    <div className="space-y-4">
+      {Array.from({ length: count }).map((_, i) => (
+        <PostCardSkeleton key={i} />
+      ))}
+    </div>
+  );
+}
+
+function ListRowSkeleton() {
+  return (
+    <div className="flex items-center gap-3 py-2">
+      <Skeleton className="w-9 h-9 rounded-full shrink-0" />
+      <div className="flex-1 min-w-0 space-y-2">
+        <Skeleton className="h-3.5 w-2/5" />
+        <Skeleton className="h-3 w-1/3" />
+      </div>
+    </div>
+  );
+}
+
+function ListRowSkeletonGroup({ count = 3 }: { count?: number }) {
+  return (
+    <div>
+      {Array.from({ length: count }).map((_, i) => (
+        <ListRowSkeleton key={i} />
+      ))}
+    </div>
+  );
+}
+
+function ClassHeaderSkeleton() {
+  return (
+    <div className="space-y-2">
+      <Skeleton className="h-8 w-1/3" />
+      <Skeleton className="h-4 w-24" />
+    </div>
+  );
+}
+
+export {
+  Skeleton,
+  ClassCardSkeleton,
+  ClassCardSkeletonGrid,
+  PostCardSkeleton,
+  PostFeedSkeleton,
+  ListRowSkeleton,
+  ListRowSkeletonGroup,
+  ClassHeaderSkeleton,
+};
