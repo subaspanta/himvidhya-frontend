@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { mapPostDto, mapPostListDto } from "./posts.mapper";
+import { mapPostDto, mapPostListDto } from "@/features/posts/api/posts.mapper";
 
 const validRawPost = {
   _id: "post-1",

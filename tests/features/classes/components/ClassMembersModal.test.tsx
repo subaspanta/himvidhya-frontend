@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { ClassMembersModal } from "./ClassMembersModal";
-import type { ClassCard, ClassMember } from "../types";
+import { ClassMembersModal } from "@/features/classes/components/ClassMembersModal";
+import type { ClassCard, ClassMember } from "@/features/classes/types";
 
 let mockReturn: {
   data: ClassMember[] | undefined;

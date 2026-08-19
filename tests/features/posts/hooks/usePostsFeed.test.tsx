@@ -2,11 +2,11 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
-import { usePostsFeed } from "./usePostsFeed";
-import type { PostsPage } from "../types";
+import { usePostsFeed } from "@/features/posts/hooks/usePostsFeed";
+import type { PostsPage } from "@/features/posts/types";
 
 const listPostsFeedApi = vi.fn();
-vi.mock("../api/posts.api", () => ({
+vi.mock("@/features/posts/api/posts.api", () => ({
   listPostsFeedApi: (...args: unknown[]) => listPostsFeedApi(...args),
 }));
 

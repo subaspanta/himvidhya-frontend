@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { mapCommentDto, mapCommentListDto } from "./comments.mapper";
+import { mapCommentDto, mapCommentListDto } from "@/features/comments/api/comments.mapper";
 
 const validRawComment = {
   _id: "comment-1",

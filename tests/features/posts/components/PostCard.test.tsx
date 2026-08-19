@@ -1,10 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { PostCard } from "./PostCard";
-import type { Post } from "../types";
+import { PostCard } from "@/features/posts/components/PostCard";
+import type { Post } from "@/features/posts/types";
 
-vi.mock("../hooks/useDownloadPostAttachment", () => ({
+vi.mock("@/features/posts/hooks/useDownloadPostAttachment", () => ({
   useDownloadPostAttachment: () => ({
     mutate: vi.fn(),
     isPending: false,

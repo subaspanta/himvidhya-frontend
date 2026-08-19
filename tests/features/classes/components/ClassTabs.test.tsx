@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { ClassTabs } from "./ClassTabs";
+import { ClassTabs } from "@/features/classes/components/ClassTabs";
 
 let mockPathname = "/home/classes/class-1";
 vi.mock("next/navigation", () => ({
