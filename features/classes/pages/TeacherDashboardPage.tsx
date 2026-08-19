@@ -11,6 +11,7 @@ import { ClassCardSkeletonGrid } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import BatchFilterMenu from "@/features/classes/components/BatchFilterMenu";
 import SortMenu from "@/features/classes/components/SortMenu";
+import RightAside from "@/components/layout/RightAside";
 import type { ClassCard } from "@/features/classes/types";
 
 export default function TeacherDashboardPage() {
@@ -51,8 +52,8 @@ export default function TeacherDashboardPage() {
     });
 
   return (
-    <div className="w-full text-foreground pb-8">
-      <div className="w-full mx-auto">
+    <div className="flex flex-col lg:flex-row gap-6 w-full text-foreground pb-8">
+      <div className="w-full lg:flex-1 min-w-0 lg:pr-6 border-r-0 lg:border-r border-border">
         {user && (
           <DashboardHeader
             profile={user}
@@ -128,6 +129,7 @@ export default function TeacherDashboardPage() {
           )}
         </div>
       </div>
+      <RightAside />
     </div>
   );
 }
