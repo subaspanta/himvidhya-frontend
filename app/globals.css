@@ -2,8 +2,6 @@
 
 @plugin "tailwindcss-animate";
 
-@custom-variant dark (&:is(.dark *));
-
 /* Design system: fonts, tokens, Tailwind theme mapping, base resets, utilities */
 @import "./styles/theme.css";
 @import "./styles/base.css";

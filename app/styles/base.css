@@ -91,11 +91,6 @@
     background: var(--primary-subtle);
     color: var(--primary);
   }
-
-  .dark ::selection {
-    background: var(--primary-muted);
-    color: var(--primary-foreground);
-  }
 }
 
 /* ================================================================

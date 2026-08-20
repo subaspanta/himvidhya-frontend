@@ -41,12 +41,6 @@
     border: 1px solid var(--primary-muted);
   }
 
-  .dark .badge-primary {
-    background: var(--primary-subtle);
-    color: var(--primary-accent);
-    border-color: var(--primary-muted);
-  }
-
   /* Shadow utilities */
   .shadow-xs {
     box-shadow: var(--shadow-xs);
