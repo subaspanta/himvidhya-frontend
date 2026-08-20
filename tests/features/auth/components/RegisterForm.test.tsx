@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { RegisterForm } from "./RegisterForm";
+import { RegisterForm } from "@/features/auth/components/RegisterForm";
 
 const mutate = vi.fn();
 
-vi.mock("../hooks/useRegister", () => ({
+vi.mock("@/features/auth/hooks/useRegister", () => ({
   useRegister: () => ({
     mutate,
     isPending: false,

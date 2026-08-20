@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { CommentComposer } from "./CommentComposer";
+import { CommentComposer } from "@/features/comments/components/CommentComposer";
 
 const mutateAsync = vi.fn();
-vi.mock("../hooks/useCreateComment", () => ({
+vi.mock("@/features/comments/hooks/useCreateComment", () => ({
   useCreateComment: () => ({ mutateAsync, isPending: false }),
 }));
 

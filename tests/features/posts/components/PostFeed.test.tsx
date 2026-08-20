@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { PostFeed } from "./PostFeed";
-import type { Post } from "../types";
+import { PostFeed } from "@/features/posts/components/PostFeed";
+import type { Post } from "@/features/posts/types";
 
 const fetchNextPage = vi.fn();
 let mockReturn: {
@@ -13,19 +13,19 @@ let mockReturn: {
   fetchNextPage: typeof fetchNextPage;
 };
 
-vi.mock("../hooks/usePostsFeed", () => ({
+vi.mock("@/features/posts/hooks/usePostsFeed", () => ({
   usePostsFeed: () => mockReturn,
 }));
 
 const pinMutate = vi.fn();
 const unpinMutate = vi.fn();
-vi.mock("../hooks/usePinPost", () => ({
+vi.mock("@/features/posts/hooks/usePinPost", () => ({
   usePinPost: () => ({ mutate: pinMutate }),
 }));
-vi.mock("../hooks/useUnpinPost", () => ({
+vi.mock("@/features/posts/hooks/useUnpinPost", () => ({
   useUnpinPost: () => ({ mutate: unpinMutate }),
 }));
-vi.mock("../hooks/useDownloadPostAttachment", () => ({
+vi.mock("@/features/posts/hooks/useDownloadPostAttachment", () => ({
   useDownloadPostAttachment: () => ({
     mutate: vi.fn(),
     isPending: false,

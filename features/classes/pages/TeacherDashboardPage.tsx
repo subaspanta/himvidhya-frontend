@@ -1,24 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import DashboardHeader from "@/components/layout/DashboardHeader";
 import BatchCard from "@/features/classes/components/BatchCard";
 import { useGetEnrolledClasses } from "@/features/classes/hooks/useGetEnrolledClasses";
 import EmptyBatches from "@/components/common/EmptyBatches";
-import { ClassSearchInput } from "@/components/common/ClassSearchInput";
 import { ClassCardSkeletonGrid } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import BatchFilterMenu from "@/features/classes/components/BatchFilterMenu";
 import SortMenu from "@/features/classes/components/SortMenu";
 import RightAside from "@/components/layout/RightAside";
 import type { ClassCard } from "@/features/classes/types";
 
 export default function TeacherDashboardPage() {
   const { user } = useAuthStore();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showActive, setShowActive] = useState(true);
-  const [showArchived, setShowArchived] = useState(false);
+  const searchParams = useSearchParams();
+  const showArchived = searchParams.get("status") === "archived";
   const [sortBy, setSortBy] = useState<"newest" | "name">("newest");
   const {
     data: enrolledClasses = [],
@@ -29,17 +27,9 @@ export default function TeacherDashboardPage() {
 
   let filteredBatches: ClassCard[] = (enrolledClasses || [])
     .filter(Boolean)
-    .filter(
-      (cls: ClassCard) =>
-        cls.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        cls.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        cls.owner?.name?.toLowerCase().includes(searchQuery.toLowerCase()),
-    )
-    .filter((cls: ClassCard): boolean => {
-      if (showActive) return cls.status === "active";
-      if (showArchived) return cls.status === "archived";
-      return true;
-    });
+    .filter((cls: ClassCard): boolean =>
+      showArchived ? cls.status === "archived" : cls.status === "active",
+    );
 
   filteredBatches = filteredBatches.sort((a: ClassCard, b: ClassCard) => {
       if (sortBy === "name") {
@@ -67,24 +57,13 @@ export default function TeacherDashboardPage() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 ">
             <div className="flex items-center justify-start mb-4 sm:mb-0 gap-2 ">
               <h2 className="text-xl font-bold text-foreground">
-                Active Classes
+                {showArchived ? "Archived Classes" : "Active Classes"}
               </h2>
               <span className="inline-flex items-center justify-center w-6 h-6 rounded-full border border-border text-sm font-medium text-muted-foreground">
                 {filteredBatches.length}
               </span>
             </div>
             <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
-              <ClassSearchInput
-                value={searchQuery}
-                onChange={setSearchQuery}
-                className="w-full sm:w-56"
-              />
-              <BatchFilterMenu
-                showActive={showActive}
-                showArchived={showArchived}
-                setShowActive={setShowActive}
-                setShowArchived={setShowArchived}
-              />
               <SortMenu sortBy={sortBy} setSortBy={setSortBy} />
             </div>
           </div>
@@ -121,10 +100,12 @@ export default function TeacherDashboardPage() {
             </div>
           ) : (
             <EmptyBatches
-              searchQuery={searchQuery}
-              onClear={() => setSearchQuery("")}
-              emptyTitle="No classes yet"
-              emptyDescription="You haven't created a class yet. Create one to get started."
+              emptyTitle={showArchived ? "No archived classes" : "No classes yet"}
+              emptyDescription={
+                showArchived
+                  ? "Classes you archive will show up here."
+                  : "You haven't created a class yet. Create one to get started."
+              }
             />
           )}
         </div>

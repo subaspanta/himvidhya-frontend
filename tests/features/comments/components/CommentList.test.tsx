@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { CommentList } from "./CommentList";
-import type { Comment } from "../types";
+import { CommentList } from "@/features/comments/components/CommentList";
+import type { Comment } from "@/features/comments/types";
 
 const teacherComment: Comment = {
   id: "comment-1",
@@ -45,22 +45,22 @@ let mockReturn: {
   fetchNextPage: ReturnType<typeof vi.fn>;
 };
 
-vi.mock("../hooks/useComments", () => ({
+vi.mock("@/features/comments/hooks/useComments", () => ({
   useComments: () => mockReturn,
 }));
 
 const createMutate = vi.fn();
-vi.mock("../hooks/useCreateComment", () => ({
+vi.mock("@/features/comments/hooks/useCreateComment", () => ({
   useCreateComment: () => ({ mutateAsync: createMutate, isPending: false }),
 }));
 
 const updateMutate = vi.fn();
-vi.mock("../hooks/useUpdateComment", () => ({
+vi.mock("@/features/comments/hooks/useUpdateComment", () => ({
   useUpdateComment: () => ({ mutate: updateMutate, isPending: false }),
 }));
 
 const deleteMutate = vi.fn();
-vi.mock("../hooks/useDeleteComment", () => ({
+vi.mock("@/features/comments/hooks/useDeleteComment", () => ({
   useDeleteComment: () => ({ mutate: deleteMutate, isPending: false }),
 }));
 

@@ -1,20 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Home, LogOut, type LucideIcon } from "lucide-react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Archive, Home, LogOut, type LucideIcon } from "lucide-react";
 import { cn } from "@/shared/utils";
 import { useLogout } from "@/features/auth/hooks/useLogout";
+import { useAuthStore } from "@/features/auth/store/auth.store";
 
 interface SidebarNavItem {
   label: string;
   href: string;
   icon: LucideIcon;
 }
-
-const SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
-  { label: "Home", href: "/home", icon: Home },
-];
 
 interface SidebarProps {
   className?: string;
@@ -25,7 +22,20 @@ interface SidebarProps {
 
 export function Sidebar({ className, onNavigate }: SidebarProps) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const role = useAuthStore((s) => s.role);
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
+
+  const homeBase = role === "teacher" ? "/home/teacher" : "/home/student";
+
+  const navItems: SidebarNavItem[] = [
+    { label: "Home", href: homeBase, icon: Home },
+    {
+      label: "Archived Class",
+      href: `${homeBase}?status=archived`,
+      icon: Archive,
+    },
+  ];
 
   return (
     <aside
@@ -35,9 +45,11 @@ export function Sidebar({ className, onNavigate }: SidebarProps) {
         className,
       )}
     >
-      {SIDEBAR_NAV_ITEMS.map((item) => {
+      {navItems.map((item) => {
+        const isArchivedItem = item.href.includes("status=archived");
+        const isArchivedView = searchParams.get("status") === "archived";
         const isActive =
-          pathname === item.href || pathname?.startsWith(`${item.href}/`);
+          pathname === homeBase && isArchivedItem === isArchivedView;
         const Icon = item.icon;
 
         return (

@@ -2,12 +2,12 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
-import { useCreatePost } from "./useCreatePost";
-import { useUpdatePost } from "./useUpdatePost";
-import { useDeletePost } from "./useDeletePost";
-import { usePinPost } from "./usePinPost";
-import { useUnpinPost } from "./useUnpinPost";
-import type { Post } from "../types";
+import { useCreatePost } from "@/features/posts/hooks/useCreatePost";
+import { useUpdatePost } from "@/features/posts/hooks/useUpdatePost";
+import { useDeletePost } from "@/features/posts/hooks/useDeletePost";
+import { usePinPost } from "@/features/posts/hooks/usePinPost";
+import { useUnpinPost } from "@/features/posts/hooks/useUnpinPost";
+import type { Post } from "@/features/posts/types";
 
 const createPostApi = vi.fn();
 const updatePostApi = vi.fn();
@@ -15,7 +15,7 @@ const deletePostApi = vi.fn();
 const pinPostApi = vi.fn();
 const unpinPostApi = vi.fn();
 
-vi.mock("../api/posts.api", () => ({
+vi.mock("@/features/posts/api/posts.api", () => ({
   createPostApi: (...args: unknown[]) => createPostApi(...args),
   updatePostApi: (...args: unknown[]) => updatePostApi(...args),
   deletePostApi: (...args: unknown[]) => deletePostApi(...args),

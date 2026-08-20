@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { EditClassForm } from "./EditClassForm";
-import type { ClassCard } from "../types";
+import { EditClassForm } from "@/features/classes/components/EditClassForm";
+import type { ClassCard } from "@/features/classes/types";
 
 const mutateAsync = vi.fn().mockResolvedValue(undefined);
 

@@ -1,25 +1,25 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { CreatePostForm } from "./CreatePostForm";
+import { CreatePostForm } from "@/features/posts/components/CreatePostForm";
 
 const mutateAsync = vi.fn().mockResolvedValue(undefined);
 
-vi.mock("../hooks/useCreatePost", () => ({
+vi.mock("@/features/posts/hooks/useCreatePost", () => ({
   useCreatePost: () => ({
     mutateAsync,
     isPending: false,
   }),
 }));
 
-vi.mock("../hooks/useUploadPostAttachment", () => ({
+vi.mock("@/features/posts/hooks/useUploadPostAttachment", () => ({
   useUploadPostAttachment: () => ({
     mutateAsync: vi.fn(),
     isPending: false,
   }),
 }));
 
-vi.mock("../hooks/useDiscardPostAttachmentUpload", () => ({
+vi.mock("@/features/posts/hooks/useDiscardPostAttachmentUpload", () => ({
   useDiscardPostAttachmentUpload: () => ({
     mutate: vi.fn(),
   }),

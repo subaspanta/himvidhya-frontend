@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import BatchCard from "./BatchCard";
+import BatchCard from "@/features/classes/components/BatchCard";
 import type { ClassCard } from "@/features/classes/types";
 
 const push = vi.fn();

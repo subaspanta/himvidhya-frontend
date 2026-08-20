@@ -12,8 +12,12 @@ import {
   RefreshCw,
   LogOut,
   ArrowRight,
+  Clock,
+  GraduationCap,
+  Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,7 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Modal } from "@/components/ui/modal";
-import { cn, extractErrorMessage } from "@/shared/utils";
+import { cn, extractErrorMessage, formatRelativeTime } from "@/shared/utils";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import toast from "react-hot-toast";
 import type { ClassCard } from "@/features/classes/types";
@@ -150,31 +154,60 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
     .join("")
     .toUpperCase();
 
+  const isArchived = batch.status === "archived";
+
+  const metaLine = [batch.college, batch.semester ? `Sem ${batch.semester}` : null]
+    .filter(Boolean)
+    .join(" · ");
+
   return (
     <Card
       className={cn(
-        "group relative overflow-hidden transition-all duration-300",
-        "bg-card border border-border rounded-xl",
-        "hover:shadow-sm hover:border-primary/40",
+        "group relative overflow-hidden transition-colors duration-300",
+        "bg-card border rounded-xl",
         "flex flex-col gap-0 py-0",
+        isArchived
+          ? "border-border/70"
+          : "border-border hover:shadow-sm hover:border-primary/40",
       )}
     >
       {/* Header: Icon, title, kebab */}
       <CardHeader className="px-6 pt-5 pb-3 grid-cols-1 grid-rows-1 gap-0">
         <div className="flex items-start justify-between gap-4">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-3 min-w-0">
             {/* Icon */}
-            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm tracking-wide shrink-0">
+            <div
+              className={cn(
+                "w-12 h-12 rounded-lg flex items-center justify-center font-semibold text-sm tracking-wide shrink-0",
+                isArchived
+                  ? "bg-muted text-muted-foreground"
+                  : "bg-primary/10 text-primary",
+              )}
+            >
               {initials}
             </div>
 
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-base  leading-tight truncate text-foreground">
-                {batch.name}
-              </h3>
+              <div className="flex items-center gap-2">
+                <h3 className="font-semibold text-base leading-tight truncate text-foreground min-w-0">
+                  {batch.name}
+                </h3>
+                {isArchived && (
+                  <Badge variant="secondary" className="shrink-0">
+                    <Archive className="w-3 h-3" />
+                    Archived
+                  </Badge>
+                )}
+              </div>
               <p className="text-sm md:text-base text-muted-foreground truncate mt-1">
                 {batch.subject}
               </p>
+              {metaLine && (
+                <p className="flex items-center gap-1 text-xs text-muted-foreground truncate mt-1">
+                  <GraduationCap className="w-3.5 h-3.5 shrink-0" />
+                  <span className="truncate">{metaLine}</span>
+                </p>
+              )}
             </div>
           </div>
 
@@ -236,25 +269,54 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
         </div>
       </CardHeader>
 
-      {/* Bottom row: students + manage */}
+      {batch.description && (
+        <CardContent className="px-6 pb-3">
+          <p className="text-sm text-muted-foreground line-clamp-2">
+            {batch.description}
+          </p>
+        </CardContent>
+      )}
+
+      {/* Bottom row: students + last activity + manage */}
       <CardContent className="px-6 py-4 border-t border-border/80 ">
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <Users className="w-4 h-4" />
-            <span className="font-medium text-foreground">
-              {batch.studentCount}
-            </span>
-            <span>Students</span>
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-sm text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <div className="flex items-center gap-1.5">
+              <Users className="w-4 h-4" />
+              <span className="font-medium text-foreground">
+                {batch.studentCount}
+              </span>
+              <span>{batch.studentCount === 1 ? "Student" : "Students"}</span>
+            </div>
+
+            <div className="flex items-center gap-1.5">
+              <Clock className="w-4 h-4" />
+              <span>
+                {batch.lastActivity
+                  ? formatRelativeTime(batch.lastActivity)
+                  : "No activity yet"}
+              </span>
+            </div>
           </div>
 
-          <button
+          <Button
             type="button"
             onClick={openBatch}
-            className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary/80 hover:underline"
+            size="sm"
+            variant={isOwner ? "outline" : "ghost"}
+            className={cn(
+              isOwner
+                ? "text-primary border-primary/30 hover:bg-primary/5 hover:text-primary hover:border-primary/50"
+                : "text-foreground",
+            )}
           >
-            Manage
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+            {isOwner ? "Manage" : "View Class"}
+            {isOwner ? (
+              <ArrowRight className="w-3.5 h-3.5" />
+            ) : (
+              <Eye className="w-3.5 h-3.5" />
+            )}
+          </Button>
         </div>
       </CardContent>
       <EditClassForm

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { apiClient } from "./axiosClient";
+import { apiClient } from "@/shared/api/axiosClient";
 
 // Tests the actual registered interceptor function directly — no mocking
 // library in this codebase (no axios-mock-adapter/msw), and going through a
