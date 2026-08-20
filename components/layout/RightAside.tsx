@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CheckCircle2, XCircle } from "lucide-react";
+import { CheckCircle2, XCircle, UserPlus } from "lucide-react";
 import toast from "react-hot-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ListRowSkeletonGroup } from "@/components/ui/skeleton";
@@ -49,11 +49,20 @@ export default function RightAside() {
     <aside className="w-full lg:w-[300px] shrink-0 flex flex-col gap-8 lg:sticky lg:top-8 lg:self-start">
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-medium text-base text-foreground">
-            Join Requests
-          </h3>
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+              <UserPlus className="w-4 h-4" />
+            </div>
+            <h3 className="font-semibold text-base text-foreground">
+              Join Requests
+            </h3>
+          </div>
           {count > 0 && (
-            <span className="text-xs font-medium bg-primary/10 text-primary py-1 px-2 rounded-full shrink-0">
+            <span className="relative flex items-center gap-1 text-xs font-semibold bg-primary text-primary-foreground py-1 px-2.5 rounded-full shrink-0 shadow-sm">
+              <span className="relative flex w-1.5 h-1.5">
+                <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-foreground/70" />
+                <span className="relative inline-flex w-1.5 h-1.5 rounded-full bg-primary-foreground" />
+              </span>
               {count} New
             </span>
           )}
@@ -69,7 +78,7 @@ export default function RightAside() {
           <p className="text-sm text-muted-foreground">No pending requests.</p>
         ) : (
           <div className="flex flex-col gap-3">
-            {requests.map((req) => {
+            {requests.map((req, index) => {
               const isApproving =
                 approve.isPending && approve.variables === req._id;
               const isRejecting =
@@ -79,10 +88,11 @@ export default function RightAside() {
               return (
                 <div
                   key={req._id}
-                  className="flex items-center justify-between p-3 rounded-lg border border-border"
+                  style={{ animationDelay: `${index * 60}ms` }}
+                  className="group motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-right-2 fill-mode-both flex items-center justify-between p-3 rounded-lg border border-border transition-all duration-300 hover:border-primary/40 hover:shadow-sm hover:bg-primary/[0.03]"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <Avatar className="w-9 h-9 shrink-0">
+                    <Avatar className="w-9 h-9 shrink-0 ring-2 ring-primary/15 group-hover:ring-primary/30 transition-all">
                       {req.user.avatar ? (
                         <AvatarImage
                           src={req.user.avatar}
@@ -109,7 +119,7 @@ export default function RightAside() {
                       onClick={() => handleReject(req._id)}
                       disabled={isBusy}
                       aria-label="Reject request"
-                      className="p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-1.5 rounded-full text-muted-foreground hover:text-destructive hover:bg-destructive/10 active:scale-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
                     >
                       <XCircle className="w-4 h-4" />
                     </button>
@@ -118,7 +128,7 @@ export default function RightAside() {
                       onClick={() => handleApprove(req._id)}
                       disabled={isBusy}
                       aria-label="Approve request"
-                      className="p-1.5 rounded-md text-primary bg-primary/10 hover:bg-primary/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-1.5 rounded-full text-primary-foreground bg-primary shadow-sm hover:bg-primary-hover hover:shadow-md active:scale-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
                     >
                       <CheckCircle2 className="w-4 h-4" />
                     </button>
