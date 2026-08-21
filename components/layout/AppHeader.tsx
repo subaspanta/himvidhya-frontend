@@ -49,14 +49,17 @@ export function AppHeader({ className }: { className?: string }) {
           <button
             type="button"
             onClick={() => setIsDrawerOpen(true)}
-            className="lg:hidden -ml-1 p-2 rounded-md hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+            className="lg:hidden -ml-1 p-2 rounded-md hover:bg-primary-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/40"
             aria-label="Open menu"
             aria-expanded={isDrawerOpen}
           >
             <Menu className="w-5 h-5" />
           </button>
         )}
-        <Link href="/home" className="flex items-center hover:opacity-90">
+        <Link
+          href="/home"
+          className="flex items-center hover:opacity-90 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/40"
+        >
           <AppLogo size="lg" tone="dark" />
         </Link>
       </div>

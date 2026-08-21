@@ -3,6 +3,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { extractErrorMessage, formatRelativeTime } from "@/shared/utils";
 import { useUpdateComment } from "../hooks/useUpdateComment";
@@ -74,9 +75,7 @@ export function CommentItem({ comment, postId, isAuthor, canModerate }: CommentI
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-sm font-medium text-foreground">{comment.authorId.name}</span>
           {comment.authorId.role === "teacher" && (
-            <span className="text-[11px] font-medium px-1.5 py-0.5 rounded-full bg-primary-subtle text-primary">
-              Teacher
-            </span>
+            <Badge variant="subtle">Teacher</Badge>
           )}
           <span className="text-xs text-muted-foreground">
             {formatRelativeTime(comment.createdAt)}

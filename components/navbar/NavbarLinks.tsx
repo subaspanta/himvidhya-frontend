@@ -21,6 +21,7 @@ export const NavbarLinks = ({
         href={link.href}
         className={cn(
           "text-sm font-medium transition-colors px-3 py-2 rounded-md",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           // base link styles (hover behaviour included)
           theme.link ?? theme.text,
           // active state: sage text + sage-tinted bg (theme.linkActive)

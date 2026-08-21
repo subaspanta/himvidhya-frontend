@@ -379,6 +379,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
           </Button>
           <Button
             type="button"
+            variant="destructive"
             onClick={confirmRegenerate}
             disabled={regenerateJoinCode.isPending}
           >

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MessageSquare } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { CommentList } from "@/features/comments/components/CommentList";
@@ -26,11 +27,7 @@ export function PostCard({ post, isOwner, onPin, onUnpin }: PostCardProps) {
         <div className="min-w-0 space-y-1">
           <div className="flex items-center gap-2 flex-wrap">
             <CardTitle className="text-base">{post.title}</CardTitle>
-            {post.isPinned && (
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-primary-subtle text-primary">
-                Pinned
-              </span>
-            )}
+            {post.isPinned && <Badge variant="subtle">Pinned</Badge>}
           </div>
           <p className="text-xs text-muted-foreground">
             {post.authorId.name}

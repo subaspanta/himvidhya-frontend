@@ -52,7 +52,7 @@ export function ClassHeader({ classDetails, isOwner, isArchived }: ClassHeaderPr
     <div className="space-y-3">
       <div className="flex items-start gap-4">
         <div
-          className="w-14 h-14 rounded-xl flex items-center justify-center text-lg font-bold shrink-0 text-white"
+          className="w-14 h-14 rounded-xl flex items-center justify-center text-lg font-bold shrink-0 text-accent-foreground"
           style={{ backgroundColor: `var(${accentToken})` }}
           aria-hidden
         >

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { ListRowSkeletonGroup } from "@/components/ui/skeleton";
@@ -68,9 +69,9 @@ export function ClassMembersModal({
                 {batch.owner.email}
               </p>
             </div>
-            <span className="text-xs font-medium px-2 py-1 rounded bg-primary/10 text-primary shrink-0 ml-3">
+            <Badge variant="subtle" className="shrink-0 ml-3">
               Teacher
-            </span>
+            </Badge>
           </div>
         )}
 

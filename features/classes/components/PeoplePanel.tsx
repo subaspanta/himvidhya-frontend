@@ -56,7 +56,7 @@ export function PeoplePanel() {
               <p className="text-sm text-muted-foreground truncate">{classDetails.owner.email}</p>
             </div>
           </div>
-          <Badge>Teacher</Badge>
+          <Badge variant="subtle">Teacher</Badge>
         </div>
       </section>
 

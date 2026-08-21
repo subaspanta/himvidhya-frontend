@@ -71,7 +71,7 @@ export default function RightAside() {
         {isLoading ? (
           <ListRowSkeletonGroup count={2} />
         ) : isError ? (
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-destructive">
             Unable to load requests.
           </p>
         ) : requests.length === 0 ? (
@@ -119,7 +119,7 @@ export default function RightAside() {
                       onClick={() => handleReject(req._id)}
                       disabled={isBusy}
                       aria-label="Reject request"
-                      className="p-1.5 rounded-full text-muted-foreground hover:text-destructive hover:bg-destructive/10 active:scale-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+                      className="p-1.5 rounded-full text-muted-foreground hover:text-destructive hover:bg-destructive/10 active:scale-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       <XCircle className="w-4 h-4" />
                     </button>
@@ -128,7 +128,7 @@ export default function RightAside() {
                       onClick={() => handleApprove(req._id)}
                       disabled={isBusy}
                       aria-label="Approve request"
-                      className="p-1.5 rounded-full text-primary-foreground bg-primary shadow-sm hover:bg-primary-hover hover:shadow-md active:scale-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+                      className="p-1.5 rounded-full text-primary-foreground bg-primary shadow-sm hover:bg-primary-hover hover:shadow-md active:scale-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       <CheckCircle2 className="w-4 h-4" />
                     </button>

@@ -72,7 +72,7 @@ export default function StudentDashboardPage() {
             <ClassCardSkeletonGrid />
           ) : isError ? (
             <div className="flex flex-col items-center justify-center py-20 bg-card rounded-xl border border-dashed border-border text-center gap-4">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-destructive">
                 Unable to load your classes.
               </p>
               <Button variant="outline" onClick={() => refetch()}>
