@@ -15,11 +15,11 @@ const joinClassSchema = z.object({
   batchCode: z
     .string()
     .trim()
-    .min(6, "Batch code must be at least 6 characters.")
-    .max(10, "Batch code cannot exceed 10 characters.")
+    .min(6, "Class code must be at least 6 characters.")
+    .max(10, "Class code cannot exceed 10 characters.")
     .regex(
       /^[A-Za-z0-9]+$/,
-      "Batch code can only contain letters and numbers.",
+      "Class code can only contain letters and numbers.",
     ),
 });
 
@@ -82,7 +82,7 @@ export function JoinClassForm({ isOpen, onClose }: JoinClassFormProps) {
       <form onSubmit={handleSubmit(submitJoinCode)} className="space-y-4">
         <div>
           <TextField
-            label="Enter batch code"
+            label="Enter class code"
             placeholder="e.g., ABC123XYZ"
             maxLength={10}
             required

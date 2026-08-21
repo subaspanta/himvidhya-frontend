@@ -20,7 +20,7 @@ const sourceSerif = Source_Serif_4({
 export const metadata: Metadata = {
   title: "HimVidhya",
   description:
-    "HimVidhya is a classroom platform for managing batches, learning workflows, and student-teacher collaboration.",
+    "HimVidhya is a classroom platform for managing classes, learning workflows, and student-teacher collaboration.",
   icons: {
     icon: "/HimVidhya.svg",
   },

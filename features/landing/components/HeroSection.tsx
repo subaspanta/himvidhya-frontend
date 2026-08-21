@@ -21,7 +21,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <span className="block mb-2">
             तिम्रो{" "}
             <span className="relative inline-block">
-              Batch
+              Class
               {/* Underline accent */}
               <svg
                 className="absolute w-full h-3 -bottom-1 left-0 text-accent opacity-80"

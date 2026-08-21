@@ -46,13 +46,6 @@
   --popover: #ffffff;
   --popover-foreground: #1a1a1a;
 
-  /* ── Dark Surface (landing hero only) ── */
-  --surface-dark: #12281d;
-  --surface-dark-elevated: #17331f;
-  --surface-dark-border: #234534;
-  --surface-dark-foreground: #f4f6f4;
-  --surface-dark-muted: #8fa396;
-
   /* ── Text ── */
   --foreground: #1a1a1a; /* near-black — primary text */
   --foreground-secondary: #3d423d; /* secondary text, body prose */

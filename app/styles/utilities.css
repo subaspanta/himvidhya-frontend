@@ -27,13 +27,6 @@
     background-color: var(--border-strong);
   }
 
-  /* Surface dark utility — for navbar, sidebar */
-  .surface-dark {
-    background: var(--surface-dark);
-    color: var(--surface-dark-foreground);
-    border-color: var(--surface-dark-border);
-  }
-
   /* Primary badge utility */
   .badge-primary {
     background: var(--primary-subtle);
