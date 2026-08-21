@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import TextField from "@/components/ui/text-field";
@@ -18,9 +19,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     register,
     handleSubmit,
     formState: { errors },
-    setError,
   } = useForm<LoginFormData>();
-  const { mutate, isPending: isLoading } = useLogin();
+  const { mutate, isPending: isLoading, error: authError } = useLogin();
 
   const onSubmit = (data: LoginFormData) => {
     mutate(data, {
@@ -29,8 +29,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         navigation.close();
         onSuccess?.(userData);
       },
-      onError: () => {
-        setError("root", { message: "Login failed" });
+      onError: (error) => {
+        toast.error(
+          error instanceof AxiosError
+            ? error.response?.data?.message || error.message
+            : "Login failed. Please try again.",
+        );
       },
     });
   };
@@ -59,6 +63,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           error={errors.password?.message}
           required
         />
+        {authError && (
+          <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-md text-sm text-destructive text-center font-medium">
+            {authError instanceof AxiosError
+              ? authError.response?.data?.message || authError.message
+              : "An unexpected error occurred"}
+          </div>
+        )}
+
         <Button type="submit" disabled={isLoading}>
           {isLoading ? "Signing In..." : "Sign In"}
         </Button>

@@ -33,7 +33,7 @@ export const useLogout = () => {
     },
     onError: async (error: AxiosError<{ message?: string }>) => {
       console.error("Logout failed on server:", error?.response?.data || error.message);
-      toast.success("Logout successful!");
+      toast.error("Logged out locally, but server logout failed.");
     },
   });
 };
