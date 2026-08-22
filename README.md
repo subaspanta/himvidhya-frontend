@@ -68,6 +68,7 @@ App default: `http://localhost:3000`
 - `npm run start` - Run production build
 - `npm run lint` - Run ESLint
 - `npm run typecheck` - Run TypeScript type checks
+- `npm run test` - Run Vitest suite
 - `npm run audit:deps` - Run npm audit with high severity threshold
 - `npm run outdated:deps` - Show outdated dependencies
 - `npm run health:deps` - Run dependency health checks
@@ -84,7 +85,7 @@ client/
   shared/             # Shared api client, hooks, types, utils
   config/             # Constants and app-wide config
   public/             # Static assets and fonts
-  docs/               # Architecture and refactor documentation
+  tests/              # Vitest unit/component tests
 ```
 
 ## Architecture Notes
@@ -121,14 +122,6 @@ Or all-in-one:
 ```bash
 npm run health:all
 ```
-
-## Docs
-
-For deeper architecture and audits, see the `docs/` folder:
-
-- `docs/FRONTEND_ARCHITECTURE_AUDIT.md`
-- `docs/DESIGN_SYSTEM_GUIDE.md`
-- `docs/PROJECT_STRUCTURE.md`
 
 ## Notes
 
