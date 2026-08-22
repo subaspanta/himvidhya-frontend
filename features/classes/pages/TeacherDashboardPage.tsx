@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import DashboardHeader from "@/components/layout/DashboardHeader";
@@ -25,21 +25,21 @@ export default function TeacherDashboardPage() {
     refetch,
   } = useGetEnrolledClasses();
 
-  let filteredBatches: ClassCard[] = (enrolledClasses || [])
-    .filter(Boolean)
-    .filter((cls: ClassCard): boolean =>
-      showArchived ? cls.status === "archived" : cls.status === "active",
-    );
+  const filteredBatches: ClassCard[] = useMemo(() => {
+    const filtered = (enrolledClasses || [])
+      .filter(Boolean)
+      .filter((cls: ClassCard): boolean =>
+        showArchived ? cls.status === "archived" : cls.status === "active",
+      );
 
-  filteredBatches = filteredBatches.sort((a: ClassCard, b: ClassCard) => {
+    return filtered.sort((a: ClassCard, b: ClassCard) => {
       if (sortBy === "name") {
         return (a.name || "").localeCompare(b.name || "");
       }
 
-      return (
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
+  }, [enrolledClasses, showArchived, sortBy]);
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 w-full text-foreground pb-8">

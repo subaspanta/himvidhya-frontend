@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   MoreHorizontal,
@@ -52,6 +52,16 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   const [isRegenerateConfirmOpen, setIsRegenerateConfirmOpen] =
     useState(false);
   const [isLeaveConfirmOpen, setIsLeaveConfirmOpen] = useState(false);
+
+  const closeArchiveConfirm = useCallback(
+    () => setIsArchiveConfirmOpen(false),
+    [],
+  );
+  const closeRegenerateConfirm = useCallback(
+    () => setIsRegenerateConfirmOpen(false),
+    [],
+  );
+  const closeLeaveConfirm = useCallback(() => setIsLeaveConfirmOpen(false), []);
 
   const archiveClass = useArchiveClass();
   const restoreClass = useRestoreClass();
@@ -332,7 +342,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
       />
       <Modal
         isOpen={isArchiveConfirmOpen}
-        onClose={() => setIsArchiveConfirmOpen(false)}
+        onClose={closeArchiveConfirm}
         title="Archive this class?"
       >
         <p className="text-sm text-muted-foreground mb-6">
@@ -343,7 +353,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
           <Button
             type="button"
             variant="outline"
-            onClick={() => setIsArchiveConfirmOpen(false)}
+            onClick={closeArchiveConfirm}
             disabled={archiveClass.isPending}
           >
             Cancel
@@ -360,7 +370,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
       </Modal>
       <Modal
         isOpen={isRegenerateConfirmOpen}
-        onClose={() => setIsRegenerateConfirmOpen(false)}
+        onClose={closeRegenerateConfirm}
         title="Regenerate join code?"
       >
         <p className="text-sm text-muted-foreground mb-6">
@@ -372,7 +382,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
           <Button
             type="button"
             variant="outline"
-            onClick={() => setIsRegenerateConfirmOpen(false)}
+            onClick={closeRegenerateConfirm}
             disabled={regenerateJoinCode.isPending}
           >
             Cancel
@@ -389,7 +399,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
       </Modal>
       <Modal
         isOpen={isLeaveConfirmOpen}
-        onClose={() => setIsLeaveConfirmOpen(false)}
+        onClose={closeLeaveConfirm}
         title="Leave this class?"
       >
         <p className="text-sm text-muted-foreground mb-6">
@@ -399,7 +409,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
           <Button
             type="button"
             variant="outline"
-            onClick={() => setIsLeaveConfirmOpen(false)}
+            onClick={closeLeaveConfirm}
             disabled={leaveClass.isPending}
           >
             Cancel
