@@ -4,13 +4,7 @@ import React from "react";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { Sidebar } from "@/components/layout/Sidebar";
 
-// The two-column content+RightAside composition used to live here,
-// forcing every protected page (including the class page) into a ~60%
-// column. Only the teacher dashboard actually needs RightAside (pending
-// join requests) — it now owns that composition itself, and every other
-// page gets the full content width.
-//
-// No Footer here -- it's marketing/landing-only (see (public)/layout.tsx).
+// Dashboard layout: full-width content. RightAside is owned by pages that need it.
 export default function DashboardLayout({
   children,
 }: {
