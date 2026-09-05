@@ -1,5 +1,3 @@
-// Comment types — matches API response shapes exactly (Comment.model.js)
-
 export interface CommentAuthor {
   _id: string;
   name: string;
@@ -8,14 +6,12 @@ export interface CommentAuthor {
   avatar: string | null;
 }
 
-// Shape returned by GET /posts/:postId/comments and every comment mutation
-// response. authorId is populated on every one of these endpoints
-// (comment.service.js).
+// Returned by GET /posts/:postId/comments and all comment mutation endpoints
 export interface Comment {
   id: string;
   postId: string;
   content: string;
-  authorId: CommentAuthor;
+  authorId: CommentAuthor; // Always populated
   deletedAt: string | null;
   createdAt: string;
   updatedAt: string;

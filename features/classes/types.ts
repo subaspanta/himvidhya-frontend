@@ -2,9 +2,7 @@
  * Class/Batch Types — matches API response shapes exactly
  */
 
-// Shape returned by every class-returning endpoint: GET /classes and all
-// five class-mutation endpoints (create/update/archive/restore/regenerate
-// join code) — the server returns this same card DTO from all of them.
+// Returned by GET /classes and all class mutation endpoints
 export interface ClassCard {
   id: string;
   name: string;
@@ -26,15 +24,12 @@ export interface ClassCard {
   };
 }
 
-// Shape returned by GET /classes/:id — the card DTO plus membersCount. The
-// roster itself lives at GET /classes/:classId/members (item 13); this
-// response carries only the count, not the full member list.
+// GET /classes/:id — card DTO plus members count (roster at separate endpoint)
 export interface ClassDetails extends ClassCard {
   membersCount: number;
 }
 
-// ClassMember is student-only — the class owner is never a member row
-// (ownership is read from ClassDetails.owner / ClassCard.owner).
+// Student-only members (owner excluded, available via ClassDetails.owner)
 export interface ClassMember {
   user: {
     _id: string;
@@ -46,8 +41,7 @@ export interface ClassMember {
   joinedAt: string;
 }
 
-// Shape returned by POST /classes/join and the approve/reject mutations —
-// class/user are unpopulated ids in all three of those responses.
+// Raw join request response (class/user as unpopulated ids)
 export interface JoinRequest {
   _id: string;
   class: string;
@@ -58,8 +52,7 @@ export interface JoinRequest {
   createdAt: string;
 }
 
-// Shape returned by GET /classes/requests — the teacher-facing queue, with
-// class and user populated (unlike JoinRequest above).
+// Teacher-facing queue (class and user populated)
 export interface TeacherJoinRequest {
   _id: string;
   class: {
