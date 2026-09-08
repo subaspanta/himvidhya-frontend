@@ -1,132 +1,125 @@
-# HimVidhya Client
+# HimVidhya Web Client
 
-Frontend for the HimVidhya platform, built with Next.js App Router, TypeScript, React Query, Zustand, and Tailwind CSS.
+The web application for HimVidhya, a classroom collaboration and learning-
+material platform. Teachers manage classes and course content; students join
+classes, follow discussions, and access shared materials.
 
-## What This App Includes
+This repository is an independent Next.js application. Its API is provided by
+the sibling `server/` repository through the versioned `/api/v1` endpoints.
 
-- Public auth flows (login, register, forgot/reset password)
-- Protected dashboard shell
-- Class/batch enrollment and management flows (in-progress)
-- Shared API layer with cookie-based auth and refresh handling
-- Feature-first folder organization for scalable frontend work
+## Product Surface
 
-## Tech Stack
+- Public authentication flows for login, registration, and password recovery
+- Role-aware protected dashboards for teachers and students
+- Class membership and join-request workflows
+- Posts, comments, and learning-material views
+- Cookie-based sessions with automatic access-token refresh
+- Responsive UI built around feature-first domain modules
 
-- Next.js 16 (App Router)
-- React 19 + TypeScript 5
-- @tanstack/react-query v5
-- Zustand
-- Axios
-- Tailwind CSS 4
-- shadcn/ui + Radix primitives
+## Technology
 
-## Prerequisites
+- Next.js 16 App Router
+- React 19 and TypeScript 5
+- TanStack React Query for server state
+- Zustand for session state
+- Axios for API transport
+- Tailwind CSS 4, shadcn/ui, and Radix primitives
+
+## Requirements
 
 - Node.js `>=24 <25`
 - npm `>=11 <12`
+- A running HimVidhya API for authenticated workflows
 
-If you use nvm:
+With nvm, select the project version before installing dependencies:
 
 ```bash
 nvm use 24
 ```
 
-## Getting Started
+## Local Setup
 
 1. Install dependencies:
 
-```bash
-npm ci
-```
+   ```bash
+   npm ci
+   ```
 
-2. Create your local environment file:
+2. Create `.env.local` in the project root:
 
-```bash
-cp .env.local.example .env.local
-```
+   ```env
+   NEXT_PUBLIC_API_BASE_URL=http://localhost:5000/api/v1
+   ```
 
-If `.env.local.example` is not present, create `.env.local` manually.
+3. Start the backend from the sibling `server/` repository:
 
-3. Set at least this variable:
+   ```bash
+   cd ../server
+   npm run dev
+   ```
 
-```env
-NEXT_PUBLIC_API_BASE_URL=http://localhost:5000/api/v1
-```
+4. Start the frontend in a second terminal:
 
-4. Start the development server:
+   ```bash
+   cd ../client
+   npm run dev
+   ```
 
-```bash
-npm run dev
-```
+The application runs at `http://localhost:3000`.
 
-App default: `http://localhost:3000`
+## Scripts
 
-For the complete local stack, start the backend from the sibling `server/`
-repository with `npm run dev` before using authenticated features.
-
-## Available Scripts
-
-- `npm run dev` - Start Next.js dev server (webpack mode)
-- `npm run build` - Create production build
-- `npm run start` - Run production build
-- `npm run lint` - Run ESLint
-- `npm run typecheck` - Run TypeScript type checks
-- `npm run test` - Run Vitest suite
-- `npm run audit:deps` - Run npm audit with high severity threshold
-- `npm run outdated:deps` - Show outdated dependencies
-- `npm run health:deps` - Run dependency health checks
-- `npm run health:all` - Run lint + typecheck + build + dependency checks
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start Next.js in development mode with Webpack |
+| `npm run build` | Create a production build |
+| `npm run start` | Serve the production build |
+| `npm run test` | Run the Vitest suite |
+| `npm run lint` | Run ESLint |
+| `npm run typecheck` | Run TypeScript checks |
+| `npm run audit:deps` | Audit dependencies for high-severity vulnerabilities |
+| `npm run outdated:deps` | List outdated dependencies |
+| `npm run health:deps` | Run dependency audit and outdated checks |
+| `npm run health:all` | Run lint, typecheck, build, and dependency checks |
 
 ## Project Structure
 
 ```text
-client/
-  app/                # Next.js routes (public and protected segments)
-  components/         # Reusable UI and layout components
-  features/           # Domain modules (auth, home, batches, etc.)
-  providers/          # App-level providers (React Query, toaster, root)
-  shared/             # Shared api client, hooks, types, utils
-  config/             # Constants and app-wide config
-  public/             # Static assets and fonts
-  tests/              # Vitest unit/component tests
+app/            Next.js routes and layouts
+components/     Shared presentational components and UI primitives
+config/         Application constants and configuration
+features/       Domain modules: auth, classes, comments, landing, and posts
+providers/      React Query, session, and application providers
+shared/         API transport, shared hooks, loading, types, and utilities
+public/         Static assets and fonts
+tests/          Vitest unit and component tests
 ```
 
-## Architecture Notes
+## Client Architecture
 
-- API requests go through `shared/api/axiosClient.ts`.
-- Auth state is coordinated between React Query and Zustand.
-- App routing is split into:
-  - `app/(public)` for unauthenticated pages
-  - `app/(protected)` for authenticated pages
+- API modules normalize server responses; hooks own queries, mutations, and
+  invalidation.
+- React Query owns server state. Zustand stores session flags and the current
+  user context.
+- Requests flow through `shared/api/axiosClient.ts`, including single-flight
+  token refresh handling.
+- Public and authenticated routes are separated under `app/(public)` and
+  `app/(protected)`.
 - Shared providers are mounted from `providers/root-provider.tsx`.
 
-## Backend Expectations
+## Verification
 
-This client expects the HimVidhya server to be running and reachable at `NEXT_PUBLIC_API_BASE_URL`.
-
-Typical local backend URL:
-
-```text
-http://localhost:5000/api/v1
-```
-
-## Recommended Local Health Check
-
-Run before opening a PR:
+Run the standard pre-review checks:
 
 ```bash
 npm run lint
 npm run typecheck
+npm test
 npm run build
 ```
 
-Or all-in-one:
+Or run the complete health check:
 
 ```bash
 npm run health:all
 ```
-
-## Notes
-
-- Dev script uses webpack (`next dev --webpack`) by design.
-- The codebase is actively evolving; some protected routes are still under active implementation.
