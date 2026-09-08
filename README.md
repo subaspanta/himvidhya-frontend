@@ -61,6 +61,9 @@ npm run dev
 
 App default: `http://localhost:3000`
 
+For the complete local stack, start the backend from the sibling `server/`
+repository with `npm run dev` before using authenticated features.
+
 ## Available Scripts
 
 - `npm run dev` - Start Next.js dev server (webpack mode)
