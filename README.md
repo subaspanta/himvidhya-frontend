@@ -69,18 +69,18 @@ The application runs at `http://localhost:3000`.
 
 ## Scripts
 
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Start Next.js in development mode with Webpack |
-| `npm run build` | Create a production build |
-| `npm run start` | Serve the production build |
-| `npm run test` | Run the Vitest suite |
-| `npm run lint` | Run ESLint |
-| `npm run typecheck` | Run TypeScript checks |
-| `npm run audit:deps` | Audit dependencies for high-severity vulnerabilities |
-| `npm run outdated:deps` | List outdated dependencies |
-| `npm run health:deps` | Run dependency audit and outdated checks |
-| `npm run health:all` | Run lint, typecheck, build, and dependency checks |
+| Command                 | Purpose                                              |
+| ----------------------- | ---------------------------------------------------- |
+| `npm run dev`           | Start Next.js in development mode with Webpack       |
+| `npm run build`         | Create a production build                            |
+| `npm run start`         | Serve the production build                           |
+| `npm run test`          | Run the Vitest suite                                 |
+| `npm run lint`          | Run ESLint                                           |
+| `npm run typecheck`     | Run TypeScript checks                                |
+| `npm run audit:deps`    | Audit dependencies for high-severity vulnerabilities |
+| `npm run outdated:deps` | List outdated dependencies                           |
+| `npm run health:deps`   | Run dependency audit and outdated checks             |
+| `npm run health:all`    | Run lint, typecheck, build, and dependency checks    |
 
 ## Project Structure
 
