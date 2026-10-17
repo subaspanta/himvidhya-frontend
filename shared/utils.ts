@@ -17,10 +17,10 @@ export function formatFileSize(bytes: number): string {
 
 export function extractErrorMessage(error: unknown, fallback: string): string {
   if (error instanceof AxiosError) {
-    return (
-      (error.response?.data as { message?: string } | undefined)?.message ||
-      error.message
-    );
+    const responseData = error.response?.data as
+      | { message?: string; error?: string }
+      | undefined;
+    return responseData?.message || responseData?.error || error.message || fallback;
   }
   return fallback;
 }

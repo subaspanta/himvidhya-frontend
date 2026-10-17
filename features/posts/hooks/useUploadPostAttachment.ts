@@ -26,7 +26,12 @@ export const useUploadPostAttachment = (classId: string) => {
       return { storageKey, fileName: file.name };
     },
     onError: (error) => {
-      console.error("Upload attachment failed:", error?.response?.data || error.message);
+      console.error("Upload attachment failed:", {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+        url: error.config?.url,
+      });
     },
   });
 };
