@@ -12,6 +12,9 @@
 # testing
 /coverage
 
+# local design audit artifacts
+/.hallmark/
+
 # next.js
 /.next/
 /out/
