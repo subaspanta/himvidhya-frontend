@@ -1,0 +1,37 @@
+/* Hallmark · macrostructure: Workbench · tone: utilitarian-editorial · anchor hue: forest green */
+@import "../tokens.css";
+
+.panel {
+  min-width: 0;
+  color: var(--color-material-ink);
+  font-family: var(--font-material-body);
+}
+
+.panel h2,
+.panel h3 {
+  overflow-wrap: anywhere;
+  min-width: 0;
+  font-family: var(--font-material-display);
+  font-style: normal;
+}
+
+.materialRow {
+  border-bottom: var(--rule-material) solid var(--color-material-rule);
+  transition: background-color var(--dur-material-short) var(--ease-material-out);
+}
+
+.materialRow:last-child {
+  border-bottom: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .materialRow:hover {
+    background: var(--background-secondary);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .materialRow {
+    transition-duration: 0ms;
+  }
+}

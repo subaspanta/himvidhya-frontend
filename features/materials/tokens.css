@@ -1,0 +1,19 @@
+.panel {
+  --color-material-paper: var(--card);
+  --color-material-ink: var(--foreground);
+  --color-material-muted: var(--muted-foreground);
+  --color-material-rule: var(--border);
+  --color-material-accent: var(--primary);
+  --font-material-display: var(--fontSerif);
+  --font-material-body: var(--fontSans);
+  --space-material-xs: 0.5rem;
+  --space-material-sm: 0.75rem;
+  --space-material-md: 1rem;
+  --space-material-lg: 1.5rem;
+  --text-material-sm: 0.875rem;
+  --text-material-base: 1rem;
+  --ease-material-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-material-short: 180ms;
+  --rule-material: 1px;
+  --radius-material: var(--radius);
+}

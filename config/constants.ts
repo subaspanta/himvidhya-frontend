@@ -19,6 +19,13 @@ export const QUERY_KEYS = {
   // Posts
   classPosts: (classId: string) => ["classPosts", classId],
 
+  // Materials
+  classMaterials: (classId: string, query = "") => [
+    "classMaterials",
+    classId,
+    { query },
+  ],
+
   // Comments
   postComments: (postId: string) => ["postComments", postId],
 };
