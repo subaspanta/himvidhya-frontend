@@ -17,11 +17,14 @@ export type UploadedPostAttachment = {
 export const useUploadPostAttachment = (classId: string) => {
   return useMutation<UploadedPostAttachment, AxiosError, File>({
     mutationFn: async (file) => {
-      const { uploadUrl, storageKey } = await requestPostAttachmentUploadUrlApi(classId, {
-        fileName: file.name,
-        mimeType: file.type,
-        size: file.size,
-      });
+      const { uploadUrl, storageKey } = await requestPostAttachmentUploadUrlApi(
+        classId,
+        {
+          fileName: file.name,
+          mimeType: file.type,
+          size: file.size,
+        },
+      );
       await putFileToStorageApi(uploadUrl, file);
       return { storageKey, fileName: file.name };
     },

@@ -20,7 +20,9 @@ export function extractErrorMessage(error: unknown, fallback: string): string {
     const responseData = error.response?.data as
       | { message?: string; error?: string }
       | undefined;
-    return responseData?.message || responseData?.error || error.message || fallback;
+    return (
+      responseData?.message || responseData?.error || error.message || fallback
+    );
   }
   return fallback;
 }
@@ -39,7 +41,9 @@ const RELATIVE_TIME_UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
   ["minute", 60],
 ];
 
-const relativeTimeFormatter = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+const relativeTimeFormatter = new Intl.RelativeTimeFormat("en", {
+  numeric: "auto",
+});
 
 // "3 hours ago", "yesterday", "just now" -- used by comment timestamps.
 export function formatRelativeTime(isoDate: string): string {
@@ -49,7 +53,10 @@ export function formatRelativeTime(isoDate: string): string {
 
   for (const [unit, secondsInUnit] of RELATIVE_TIME_UNITS) {
     if (Math.abs(diffSeconds) >= secondsInUnit) {
-      return relativeTimeFormatter.format(Math.round(diffSeconds / secondsInUnit), unit);
+      return relativeTimeFormatter.format(
+        Math.round(diffSeconds / secondsInUnit),
+        unit,
+      );
     }
   }
 
