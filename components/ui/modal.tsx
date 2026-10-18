@@ -26,7 +26,6 @@ export const Modal: React.FC<ModalProps> = memo(
     const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 
     useEffect(() => {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setMounted(true);
     }, []);
 
@@ -101,7 +100,7 @@ export const Modal: React.FC<ModalProps> = memo(
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-0 z-100"
           >
             <FullScreenContainer>
@@ -114,9 +113,9 @@ export const Modal: React.FC<ModalProps> = memo(
                 initial={{ opacity: 0, scale: 0.95, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                transition={{ type: "spring", damping: 25, stiffness: 400 }}
+                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
                 className={cn(
-                  "relative w-full max-w-md bg-card border border-border rounded-xl shadow-xl pointer-events-auto flex flex-col max-h-[90vh] overflow-hidden focus:outline-none",
+                  "relative w-full max-w-md bg-card rounded-2xl shadow-overlay pointer-events-auto flex flex-col max-h-[90vh] overflow-hidden focus:outline-none",
                   className,
                 )}
                 onClick={(e) => e.stopPropagation()}

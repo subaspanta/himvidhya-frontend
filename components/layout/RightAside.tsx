@@ -89,10 +89,10 @@ export default function RightAside() {
                 <div
                   key={req._id}
                   style={{ animationDelay: `${index * 60}ms` }}
-                  className="group motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-right-2 fill-mode-both flex items-center justify-between p-3 rounded-lg border border-border transition-all duration-300 hover:border-primary/40 hover:shadow-sm hover:bg-primary/[0.03]"
+                  className="group motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-right-2 fill-mode-both flex items-center justify-between p-3 rounded-xl bg-card shadow-xs transition-[background-color,box-shadow] duration-200 ease-out hover:shadow-card hover:bg-primary/[0.03]"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <Avatar className="w-9 h-9 shrink-0 ring-2 ring-primary/15 group-hover:ring-primary/30 transition-all">
+                    <Avatar className="w-9 h-9 shrink-0 ring-2 ring-primary/15 group-hover:ring-primary/30 transition-all duration-200 ease-out">
                       {req.user.avatar ? (
                         <AvatarImage
                           src={req.user.avatar}

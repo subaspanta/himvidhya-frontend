@@ -34,6 +34,7 @@
     line-height: 1.25;
     letter-spacing: 0;
     color: var(--foreground);
+    text-wrap: balance;
   }
 
   h1 {
@@ -58,13 +59,14 @@
   p {
     line-height: 1.7;
     color: var(--foreground-secondary, var(--foreground));
+    text-wrap: pretty;
   }
 
   /* Links */
   a {
     color: var(--primary);
     text-decoration: none;
-    transition: color 0.15s ease;
+    transition: color var(--duration-ui) var(--ease-out-ui);
   }
 
   a:hover {
@@ -90,6 +92,17 @@
   ::selection {
     background: var(--primary-subtle);
     color: var(--primary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      scroll-behavior: auto !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 

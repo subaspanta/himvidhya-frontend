@@ -63,9 +63,18 @@
   /* Smooth transitions */
   .transition-base {
     transition:
-      background-color 0.15s ease,
-      border-color 0.15s ease,
-      color 0.15s ease,
-      box-shadow 0.15s ease;
+      background-color var(--duration-ui) var(--ease-out-ui),
+      border-color var(--duration-ui) var(--ease-out-ui),
+      color var(--duration-ui) var(--ease-out-ui),
+      box-shadow var(--duration-ui) var(--ease-out-ui);
+  }
+
+  .transition,
+  .transition-all,
+  .transition-colors,
+  .transition-opacity,
+  .transition-shadow,
+  .transition-transform {
+    transition-timing-function: var(--ease-out-ui);
   }
 }

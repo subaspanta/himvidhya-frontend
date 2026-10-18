@@ -15,7 +15,7 @@ function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
 
 function ClassCardSkeleton() {
   return (
-    <div className="bg-card border border-border rounded-xl flex flex-col gap-0 py-0 overflow-hidden">
+    <div className="bg-card rounded-2xl shadow-card flex flex-col gap-0 py-0 overflow-hidden">
       <div className="px-6 pt-5 pb-3 flex items-start gap-3">
         <Skeleton className="w-12 h-12 rounded-lg shrink-0" />
         <div className="flex-1 min-w-0 space-y-2 pt-1">
@@ -43,7 +43,7 @@ function ClassCardSkeletonGrid({ count = 3 }: { count?: number }) {
 
 function PostCardSkeleton() {
   return (
-    <div className="bg-card border border-border rounded-xl p-5 flex flex-col gap-3">
+    <div className="bg-card rounded-2xl shadow-card p-5 flex flex-col gap-3">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 space-y-2 flex-1">
           <Skeleton className="h-4 w-2/5" />

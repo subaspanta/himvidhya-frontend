@@ -173,12 +173,12 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch }) => {
   return (
     <Card
       className={cn(
-        "group relative overflow-hidden transition-colors duration-300",
-        "bg-card border rounded-xl",
+        "group relative overflow-hidden transition-[background-color,box-shadow] duration-200 ease-out",
+        "bg-card rounded-2xl shadow-card",
         "flex flex-col gap-0 py-0",
         isArchived
-          ? "border-border/70"
-          : "border-border hover:shadow-sm hover:border-primary/40",
+          ? "shadow-xs"
+          : "hover:bg-primary/[0.015] hover:shadow-elevated",
       )}
     >
       {/* Header: Icon, title, kebab */}
