@@ -89,12 +89,13 @@ export function CreatePostForm({ classId }: CreatePostFormProps) {
   const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files ?? []);
     event.target.value = "";
+    const remainingSlots = MAX_POST_ATTACHMENTS - attachments.length;
 
-    for (const file of files) {
-      if (attachments.length >= MAX_POST_ATTACHMENTS) {
-        toast.error(`Cannot attach more than ${MAX_POST_ATTACHMENTS} items`);
-        break;
-      }
+    if (files.length > remainingSlots) {
+      toast.error(`Cannot attach more than ${MAX_POST_ATTACHMENTS} items`);
+    }
+
+    for (const file of files.slice(0, remainingSlots)) {
       const validationError = validateAttachmentFile(file);
       if (validationError) {
         toast.error(validationError);
@@ -119,6 +120,10 @@ export function CreatePostForm({ classId }: CreatePostFormProps) {
 
   const confirmLinkDraft = () => {
     if (!linkDraft) return;
+    if (attachments.length >= MAX_POST_ATTACHMENTS) {
+      toast.error(`Cannot attach more than ${MAX_POST_ATTACHMENTS} items`);
+      return;
+    }
     const value = linkDraft.value.trim();
     if (!value) {
       setLinkDraft(null);
@@ -288,7 +293,7 @@ export function CreatePostForm({ classId }: CreatePostFormProps) {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              disabled={isBusy}
+              disabled={isBusy || attachments.length >= MAX_POST_ATTACHMENTS}
               aria-label="Attach a file"
               title="Attach a file"
               className="p-2 text-muted-foreground hover:text-foreground hover:bg-accent-subtle/40 rounded-md transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -298,7 +303,7 @@ export function CreatePostForm({ classId }: CreatePostFormProps) {
             <button
               type="button"
               onClick={() => setLinkDraft({ kind: "link", value: "" })}
-              disabled={isBusy}
+              disabled={isBusy || attachments.length >= MAX_POST_ATTACHMENTS}
               aria-label="Attach a link"
               title="Attach a link"
               className="p-2 text-muted-foreground hover:text-foreground hover:bg-accent-subtle/40 rounded-md transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -308,7 +313,7 @@ export function CreatePostForm({ classId }: CreatePostFormProps) {
             <button
               type="button"
               onClick={() => setLinkDraft({ kind: "youtube", value: "" })}
-              disabled={isBusy}
+              disabled={isBusy || attachments.length >= MAX_POST_ATTACHMENTS}
               aria-label="Attach a YouTube video"
               title="Attach a YouTube video"
               className="p-2 text-muted-foreground hover:text-foreground hover:bg-accent-subtle/40 rounded-md transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"

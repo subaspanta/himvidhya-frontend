@@ -12,7 +12,8 @@ the sibling `server/` repository through the versioned `/api/v1` endpoints.
 - Public authentication flows for login, registration, and password recovery
 - Role-aware protected dashboards for teachers and students
 - Class membership and join-request workflows
-- Posts, comments, and learning-material views
+- Announcement posts with private file, link, and YouTube attachments
+- A searchable Materials workspace for reusable class resources
 - Cookie-based sessions with automatic access-token refresh
 - Responsive UI built around feature-first domain modules
 
@@ -51,12 +52,18 @@ nvm use 24
    NEXT_PUBLIC_API_BASE_URL=http://localhost:5000/api/v1
    ```
 
-3. Start the backend from the sibling `server/` repository:
+3. Start MongoDB and private object storage from the sibling `server/`
+   repository:
 
    ```bash
    cd ../server
+   docker compose up -d mongo minio minio-init
    npm run dev
    ```
+
+   This runs infrastructure in Docker and the API through Nodemon. Do not also
+   start the Compose `server` service in this mode; both API processes would
+   try to use port `5000`.
 
 4. Start the frontend in a second terminal:
 
@@ -65,7 +72,29 @@ nvm use 24
    npm run dev
    ```
 
-The application runs at `http://localhost:3000`.
+The application runs at `http://localhost:3000`. MinIO's local console is at
+`http://localhost:9001`.
+
+Alternatively, run the complete containerized stack from `server/` and skip
+both `npm run dev` commands:
+
+```bash
+docker compose --profile fullstack up -d
+```
+
+## Portfolio Workflows
+
+- A teacher creates a private class and approves a student's join request.
+- A teacher publishes an announcement with up to 10 contextual attachments:
+  allowed files up to 25 MB, HTTP(S) links, and YouTube videos.
+- File uploads go directly from the browser to private object storage through
+  a short-lived presigned URL. The API verifies the uploaded object before it
+  stores attachment metadata.
+- Active class members request a fresh authorized download URL; raw storage
+  keys are never exposed in post responses.
+- A teacher manages durable resources in Materials with upload, search,
+  download, replace, and delete actions. Use Materials for resources students
+  should find again; use post attachments for announcement-specific context.
 
 ## Scripts
 
@@ -88,7 +117,7 @@ The application runs at `http://localhost:3000`.
 app/            Next.js routes and layouts
 components/     Shared presentational components and UI primitives
 config/         Application constants and configuration
-features/       Domain modules: auth, classes, comments, landing, and posts
+features/       Domain modules: auth, classes, comments, landing, materials, and posts
 providers/      React Query, session, and application providers
 shared/         API transport, shared hooks, loading, types, and utilities
 public/         Static assets and fonts

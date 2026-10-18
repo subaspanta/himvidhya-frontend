@@ -19,13 +19,27 @@ export function validateAttachmentFile(file: File): string | null {
   return null;
 }
 
-// Matches watch?v=, youtu.be/, embed/, and shorts/ URL forms -- mirrors
-// post.service.js's YOUTUBE_ID_PATTERN. Client-side only, for an instant
-// composer preview; the server re-derives and verifies this independently.
-const YOUTUBE_ID_PATTERN =
-  /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
+const YOUTUBE_ID_PATTERN = /^[A-Za-z0-9_-]{11}$/;
 
 export function extractYoutubeThumbnail(url: string): string | null {
-  const match = YOUTUBE_ID_PATTERN.exec(url);
-  return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null;
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return null;
+
+    const hostname = parsed.hostname.toLowerCase();
+    let videoId: string | null = null;
+    if (hostname === "youtu.be") {
+      videoId = parsed.pathname.split("/").filter(Boolean)[0] ?? null;
+    } else if (hostname === "youtube.com" || hostname.endsWith(".youtube.com")) {
+      const [route, id] = parsed.pathname.split("/").filter(Boolean);
+      if (route === "watch") videoId = parsed.searchParams.get("v");
+      if (route === "embed" || route === "shorts") videoId = id ?? null;
+    }
+
+    return videoId && YOUTUBE_ID_PATTERN.test(videoId)
+      ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+      : null;
+  } catch {
+    return null;
+  }
 }
